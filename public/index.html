@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerCopilot - 职业推演助手</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .confidence-bar { transition: width 0.8s ease-out; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-3xl mx-auto px-4 py-4">
+            <h1 class="text-2xl font-bold text-gray-800">CareerCopilot</h1>
+            <p class="text-sm text-gray-500">AI 职业推演助手 · OPC 参赛项目</p>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="max-w-3xl mx-auto px-4 py-8">
+        <!-- Input Area -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">你的职业方向问题</label>
+            <textarea id="question" rows="3" 
+                class="w-full border border-gray-300 rounded-lg p-3 text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                placeholder="例如：我是土地资源管理专业应届生，想转产品经理方向，该不该投腾讯的产品经理岗位？"></textarea>
+            <button id="submit-btn" onclick="submitQuestion()"
+                class="mt-3 w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                开始推演
+            </button>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading" class="hidden text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p class="mt-3 text-gray-500">推演引擎分析中...</p>
+        </div>
+
+        <!-- Report -->
+        <div id="report" class="hidden fade-in">
+            <!-- Recommendation -->
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-4">
+                <h2 class="text-lg font-bold text-gray-800 mb-2">推演结论</h2>
+                <p id="recommendation" class="text-gray-700 leading-relaxed"></p>
+            </div>
+
+            <!-- Confidence -->
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-4">
+                <h2 class="text-lg font-bold text-gray-800 mb-4">置信度分析</h2>
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-600">技能匹配度</span>
+                            <span id="skill-pct" class="font-medium"></span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div id="skill-bar" class="confidence-bar bg-blue-600 h-2.5 rounded-full" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-600">市场需求度</span>
+                            <span id="market-pct" class="font-medium"></span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div id="market-bar" class="confidence-bar bg-green-600 h-2.5 rounded-full" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-600">时机合适度</span>
+                            <span id="timing-pct" class="font-medium"></span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div id="timing-bar" class="confidence-bar bg-purple-600 h-2.5 rounded-full" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <div class="pt-2 border-t">
+                        <div class="flex justify-between">
+                            <span class="font-medium text-gray-800">综合评分</span>
+                            <span id="overall-pct" class="font-bold text-lg text-blue-600"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evidence -->
+            <div id="evidence-section" class="bg-white rounded-xl shadow-sm p-6 mb-4 hidden">
+                <h2 class="text-lg font-bold text-gray-800 mb-3">证据支撑</h2>
+                <div id="evidence-list" class="space-y-2"></div>
+            </div>
+
+            <!-- Risks -->
+            <div id="risks-section" class="bg-white rounded-xl shadow-sm p-6 mb-4 hidden">
+                <h2 class="text-lg font-bold text-gray-800 mb-3">风险因素</h2>
+                <ul id="risks-list" class="space-y-2 text-gray-700"></ul>
+            </div>
+
+            <!-- Next Steps -->
+            <div id="steps-section" class="bg-white rounded-xl shadow-sm p-6 mb-4 hidden">
+                <h2 class="text-lg font-bold text-gray-800 mb-3">下一步建议</h2>
+                <ul id="steps-list" class="space-y-2 text-gray-700"></ul>
+            </div>
+
+            <!-- Raw Response (debug) -->
+            <details class="bg-gray-100 rounded-xl p-4 mb-4">
+                <summary class="text-sm text-gray-500 cursor-pointer">原始响应（调试用）</summary>
+                <pre id="raw-response" class="mt-2 text-xs text-gray-600 whitespace-pre-wrap"></pre>
+            </details>
+        </div>
+
+        <!-- Error -->
+        <div id="error" class="hidden bg-red-50 border border-red-200 rounded-xl p-6 text-red-700"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-gray-400 py-6">
+        CareerCopilot · 吉林大学 × 武汉大学 · OPC 先锋创新挑战赛
+    </footer>
+
+    <script>
+    // Backend URL - update this for deployment
+    const API_BASE = 'http://localhost:8000';
+    const API_KEY = 'dev-process-key-change-in-prod';
+    const USER_ID = 'demo-user';
+
+    async function submitQuestion() {
+        const question = document.getElementById('question').value.trim();
+        if (!question) return;
+
+        const btn = document.getElementById('submit-btn');
+        const loading = document.getElementById('loading');
+        const report = document.getElementById('report');
+        const error = document.getElementById('error');
+
+        btn.disabled = true;
+        btn.textContent = '推演中...';
+        loading.classList.remove('hidden');
+        report.classList.add('hidden');
+        error.classList.add('hidden');
+
+        try {
+            const resp = await fetch(`${API_BASE}/process`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-API-Key': API_KEY,
+                    'X-User-Id': USER_ID,
+                },
+                body: JSON.stringify({
+                    input: [
+                        { role: 'user', content: [{ type: 'text', text: question }] }
+                    ],
+                    session_id: 'demo-session'
+                })
+            });
+
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const data = await resp.json();
+            const text = data.output?.[0]?.content?.[0]?.text || '';
+            renderReport(text);
+
+        } catch (e) {
+            error.textContent = `请求失败: ${e.message}。请确认后端运行在 ${API_BASE}`;
+            error.classList.remove('hidden');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = '开始推演';
+            loading.classList.add('hidden');
+        }
+    }
+
+    function renderReport(text) {
+        const report = document.getElementById('report');
+        document.getElementById('raw-response').textContent = text;
+
+        // Parse the structured text report
+        const lines = text.split('\n');
+        let section = '';
+        let recommendation = '';
+        let confidence = { skill: 0, market: 0, timing: 0, overall: 0 };
+        let evidence = [];
+        let risks = [];
+        let steps = [];
+
+        for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed) continue;
+
+            if (trimmed.startsWith('推荐:') || trimmed.startsWith('推荐：')) {
+                recommendation = trimmed.replace(/^推荐[:：]\s*/, '');
+            } else if (trimmed.startsWith('技能匹配度:')) {
+                confidence.skill = parsePercent(trimmed);
+            } else if (trimmed.startsWith('市场需求度:')) {
+                confidence.market = parsePercent(trimmed);
+            } else if (trimmed.startsWith('时机合适度:')) {
+                confidence.timing = parsePercent(trimmed);
+            } else if (trimmed.startsWith('综合评分:')) {
+                confidence.overall = parsePercent(trimmed);
+            } else if (trimmed.startsWith('证据支撑')) {
+                section = 'evidence';
+            } else if (trimmed.startsWith('风险因素')) {
+                section = 'risks';
+            } else if (trimmed.startsWith('下一步建议')) {
+                section = 'steps';
+            } else if (trimmed.startsWith('置信度分析')) {
+                section = 'confidence';
+            } else if (section === 'evidence' && /^\d+\./.test(trimmed)) {
+                evidence.push(trimmed.replace(/^\d+\.\s*/, ''));
+            } else if (section === 'risks' && trimmed.startsWith('-')) {
+                risks.push(trimmed.replace(/^-\s*/, ''));
+            } else if (section === 'steps' && trimmed.startsWith('-')) {
+                steps.push(trimmed.replace(/^-\s*/, ''));
+            }
+        }
+
+        // Render
+        document.getElementById('recommendation').textContent = recommendation || text;
+
+        // Confidence bars
+        setBar('skill', confidence.skill);
+        setBar('market', confidence.market);
+        setBar('timing', confidence.timing);
+        document.getElementById('overall-pct').textContent = confidence.overall + '%';
+
+        // Evidence
+        if (evidence.length) {
+            document.getElementById('evidence-section').classList.remove('hidden');
+            document.getElementById('evidence-list').innerHTML = evidence.map(e =>
+                `<div class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">●</span><span class="text-sm text-gray-700">${escHtml(e)}</span></div>`
+            ).join('');
+        }
+
+        // Risks
+        if (risks.length) {
+            document.getElementById('risks-section').classList.remove('hidden');
+            document.getElementById('risks-list').innerHTML = risks.map(r =>
+                `<li class="flex items-start gap-2"><span class="text-yellow-500 mt-0.5">⚠</span><span class="text-sm">${escHtml(r)}</span></li>`
+            ).join('');
+        }
+
+        // Steps
+        if (steps.length) {
+            document.getElementById('steps-section').classList.remove('hidden');
+            document.getElementById('steps-list').innerHTML = steps.map(s =>
+                `<li class="flex items-start gap-2"><span class="text-green-500 mt-0.5">→</span><span class="text-sm">${escHtml(s)}</span></li>`
+            ).join('');
+        }
+
+        report.classList.remove('hidden');
+    }
+
+    function parsePercent(text) {
+        const m = text.match(/(\d+)%/);
+        return m ? parseInt(m[1]) : 0;
+    }
+
+    function setBar(name, value) {
+        document.getElementById(`${name}-pct`).textContent = value + '%';
+        setTimeout(() => {
+            document.getElementById(`${name}-bar`).style.width = value + '%';
+        }, 100);
+    }
+
+    function escHtml(s) {
+        const d = document.createElement('div');
+        d.textContent = s;
+        return d.innerHTML;
+    }
+
+    // Enter to submit
+    document.getElementById('question').addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            submitQuestion();
+        }
+    });
+    </script>
+</body>
+</html>
