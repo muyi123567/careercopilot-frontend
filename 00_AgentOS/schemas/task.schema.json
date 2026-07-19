@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.careercopilot.dev/schemas/task.schema.json",
+  "title": "Obsidian Agent OS Task",
+  "description": "Canonical machine-readable fields for one Agent task note.",
+  "type": "object",
+  "required": [
+    "id",
+    "type",
+    "project",
+    "title",
+    "status",
+    "priority",
+    "risk",
+    "acceptance",
+    "verification",
+    "created",
+    "updated"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9]*-[0-9]{3,}$"
+    },
+    "type": {
+      "const": "task"
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "backlog",
+        "ready",
+        "claimed",
+        "in_progress",
+        "review",
+        "verified",
+        "done",
+        "blocked",
+        "cancelled"
+      ]
+    },
+    "priority": {
+      "enum": ["P0", "P1", "P2", "P3"]
+    },
+    "risk": {
+      "enum": ["L0", "L1", "L2", "L3"]
+    },
+    "owner": {
+      "type": ["string", "null"]
+    },
+    "reviewer": {
+      "type": ["string", "null"]
+    },
+    "claimed_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "lease_until": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "branch": {
+      "type": ["string", "null"],
+      "pattern": "^agent/[A-Za-z0-9._/-]+$"
+    },
+    "worktree": {
+      "type": ["string", "null"]
+    },
+    "spec": {
+      "type": ["string", "null"]
+    },
+    "adr": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "files_expected": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "acceptance": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "verification": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "commit": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-fA-F]{7,40}$"
+    },
+    "pr": {
+      "type": ["string", "null"]
+    },
+    "created": {
+      "type": "string",
+      "format": "date"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": ["claimed", "in_progress", "review"]
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["owner", "claimed_at", "lease_until", "branch", "worktree"],
+        "properties": {
+          "owner": {"type": "string", "minLength": 1},
+          "claimed_at": {"type": "string", "format": "date-time"},
+          "lease_until": {"type": "string", "format": "date-time"},
+          "branch": {"type": "string", "pattern": "^agent/[A-Za-z0-9._/-]+$"},
+          "worktree": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {"const": "review"}
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["commit"],
+        "properties": {
+          "commit": {"type": "string", "pattern": "^[0-9a-fA-F]{7,40}$"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": ["verified", "done"]
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["reviewer", "commit"],
+        "properties": {
+          "reviewer": {"type": "string", "minLength": 1},
+          "commit": {"type": "string", "pattern": "^[0-9a-fA-F]{7,40}$"}
+        }
+      }
+    }
+  ],
+  "additionalProperties": true
+}
