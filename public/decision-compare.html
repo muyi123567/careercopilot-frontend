@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerCopilot · 三路径比较工作台</title>
+    <style>
+        :root {
+            --bg: #0f1419; --surface: #1a2028; --border: #2d3748;
+            --text: #e2e8f0; --muted: #8899a6; --accent: #4a9eff;
+            --green: #34d399; --yellow: #fbbf24; --red: #f87171; --purple: #a78bfa;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+        h1 { font-size: 1.4rem; margin-bottom: 4px; }
+        .subtitle { color: var(--muted); font-size: 0.85rem; margin-bottom: 20px; }
+        .demo-badge { background: var(--yellow); color: #000; font-size: 0.65rem; padding: 2px 6px; border-radius: 3px; font-weight: 700; vertical-align: middle; }
+
+        /* 问题输入 */
+        .question-bar { display: flex; gap: 12px; margin-bottom: 24px; }
+        .question-bar input { flex: 1; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 10px 16px; border-radius: 6px; font-size: 0.9rem; }
+        .question-bar input:focus { outline: 2px solid var(--accent); }
+        .question-bar button { background: var(--accent); color: #fff; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
+
+        /* 三列比较 */
+        .paths-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        @media (max-width: 768px) { .paths-grid { grid-template-columns: 1fr; } }
+
+        .path-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+            padding: 20px; display: flex; flex-direction: column; gap: 12px;
+        }
+        .path-card:focus-within { border-color: var(--accent); }
+        .path-header { display: flex; align-items: center; gap: 8px; }
+        .path-type-badge { font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; font-weight: 600; text-transform: uppercase; }
+        .badge-deepen { background: rgba(52,211,153,0.15); color: var(--green); }
+        .badge-adjacent { background: rgba(74,158,255,0.15); color: var(--accent); }
+        .badge-explore { background: rgba(167,139,250,0.15); color: var(--purple); }
+        .path-target { font-weight: 600; font-size: 1rem; }
+
+        /* 四层评分条 */
+        .score-layers { display: flex; flex-direction: column; gap: 6px; }
+        .score-row { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; }
+        .score-label { width: 72px; color: var(--muted); flex-shrink: 0; }
+        .score-bar { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+        .score-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+        .score-value { width: 36px; text-align: right; font-size: 0.75rem; }
+        .score-na { color: var(--yellow); font-style: italic; font-size: 0.75rem; }
+
+        /* 证据等级 */
+        .grade-badge { display: inline-block; width: 24px; height: 24px; line-height: 24px; text-align: center; border-radius: 4px; font-weight: 700; font-size: 0.8rem; }
+        .grade-A { background: var(--green); color: #000; }
+        .grade-B { background: var(--accent); color: #fff; }
+        .grade-C { background: var(--yellow); color: #000; }
+        .grade-D { background: var(--border); color: var(--muted); }
+
+        /* 详情区 */
+        .path-details { font-size: 0.8rem; color: var(--muted); }
+        .path-details dt { font-weight: 500; color: var(--text); margin-top: 8px; }
+        .path-details dd { margin-left: 0; margin-top: 2px; }
+        .gap-item { color: var(--yellow); }
+        .action-item { color: var(--green); }
+
+        /* 来源抽屉 */
+        .source-drawer { font-size: 0.7rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 8px; margin-top: 8px; }
+        .source-drawer summary { cursor: pointer; }
+
+        /* 选择理由 */
+        .selection-area { margin-top: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+        .selection-area h2 { font-size: 1rem; margin-bottom: 12px; }
+        .selection-area textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 4px; min-height: 80px; font-size: 0.85rem; resize: vertical; }
+        .selection-area textarea:focus { outline: 2px solid var(--accent); }
+
+        .skip-link { position: absolute; top: -40px; left: 0; background: var(--accent); color: #fff; padding: 8px 16px; z-index: 100; }
+        .skip-link:focus { top: 0; }
+    </style>
+</head>
+<body>
+    <a href="#paths-region" class="skip-link">跳到路径比较</a>
+    <div class="container">
+        <h1>三路径比较工作台 <span class="demo-badge">DEMO</span></h1>
+        <p class="subtitle">同屏比较三条职业路径的四层证据、成本、收益与验证行动。所有数字可追溯来源。</p>
+
+        <div class="question-bar" role="search">
+            <input type="text" id="question-input" placeholder="描述你的职业选择问题，如：我该从 GIS 转 AI 产品还是留本行业？"
+                   aria-label="职业决策问题" value="GIS工程师该深化还是转行？">
+            <button id="btn-generate" aria-label="生成三路径比较">生成比较</button>
+        </div>
+
+        <div id="paths-region" class="paths-grid" tabindex="-1" aria-label="三路径比较结果" aria-live="polite">
+            <!-- JS 渲染 -->
+        </div>
+
+        <div class="selection-area" id="selection-area" style="display:none;">
+            <h2>记录你的选择</h2>
+            <p style="font-size:0.8rem;color:var(--muted);margin-bottom:8px;">选择一条路径（或暂不选），记录理由和未决问题。这些只对你自己可见。</p>
+            <textarea id="selection-notes" placeholder="我倾向于...因为...还没想清楚的是..." aria-label="选择理由与未决问题"></textarea>
+        </div>
+    </div>
+
+    <script>
+    const DEMO_DECISION = {
+        paths: [
+            {
+                path_type: 'deepen', target: 'GIS 高级工程师（本行业深化）',
+                grade: 'B', data_status: '单源可靠（2 条确认，3/4 层可用）',
+                scores: { historical: 0.35, market: null, personal: 0.6, preference: 0.5 },
+                benefit: '技能积累连续，3年内可达高级/专家岗',
+                cost: '天花板可能受限于行业增速',
+                gaps: ['缺乏管理层经验证据'],
+                action: '在当前岗位主动承担一个跨部门项目，记录成果',
+                counter: ['行业整体需求增速放缓（数据有限）'],
+                sources: ['群体轨迹: JobHop CC BY 4.0, N=30', '个人证据: 简历上传 2 条已确认']
+            },
+            {
+                path_type: 'adjacent', target: '数据分析师（邻近迁移）',
+                grade: 'B', data_status: '单源可靠（2 条确认，3/4 层可用）',
+                scores: { historical: 0.4, market: 0.65, personal: 0.45, preference: 0.5 },
+                benefit: '技能桥梁短（Python/SQL 已有基础），市场需求稳定',
+                cost: '需 3-6 个月补充统计/业务分析能力',
+                gaps: ['统计分析项目经验不足', '缺乏业务场景作品'],
+                action: '找 2-3 位数据分析师做 20 分钟信息访谈',
+                counter: ['入门竞争加剧（样本有限）'],
+                sources: ['群体轨迹: JobHop CC BY 4.0, N=30, freq=0.4', '市场信号: 演示数据']
+            },
+            {
+                path_type: 'explore', target: 'AI 产品经理（跨行业探索）',
+                grade: 'C', data_status: '弱证据（2 条确认，仅 2/4 层）',
+                scores: { historical: null, market: 0.7, personal: 0.3, preference: null },
+                benefit: '高成长赛道，交叉背景（GIS+AI）有差异化',
+                cost: '需 6-12 个月建立产品思维 + 作品集',
+                gaps: ['无产品项目经验', '缺乏群体轨迹数据，可达性未知', '偏好数据不足'],
+                action: '用 7 天完成一个 AI 产品最小原型（如需求文档 + 低保真设计）',
+                counter: ['跨行失败率数据不足，无法量化风险'],
+                sources: ['市场信号: 演示数据', '个人证据: 2 条确认（技能类）']
+            }
+        ]
+    };
+
+    function renderScoreBar(label, value) {
+        if (value === null || value === undefined) {
+            return `<div class="score-row"><span class="score-label">${label}</span><span class="score-na">数据不足</span></div>`;
+        }
+        const pct = Math.round(value * 100);
+        const color = pct >= 60 ? 'var(--green)' : pct >= 30 ? 'var(--yellow)' : 'var(--red)';
+        return `<div class="score-row">
+            <span class="score-label">${label}</span>
+            <div class="score-bar"><div class="score-fill" style="width:${pct}%;background:${color}"></div></div>
+            <span class="score-value">${pct}%</span>
+        </div>`;
+    }
+
+    function renderPaths(data) {
+        const grid = document.getElementById('paths-region');
+        grid.innerHTML = data.paths.map(p => `
+            <div class="path-card" tabindex="0" role="article" aria-label="${p.target}，证据等级${p.grade}">
+                <div class="path-header">
+                    <span class="path-type-badge badge-${p.path_type}">${p.path_type === 'deepen' ? '深化' : p.path_type === 'adjacent' ? '邻近' : '探索'}</span>
+                    <span class="grade-badge grade-${p.grade}">${p.grade}</span>
+                </div>
+                <div class="path-target">${p.target}</div>
+                <div class="score-layers" aria-label="四层证据评分">
+                    ${renderScoreBar('历史可达', p.scores.historical)}
+                    ${renderScoreBar('中文市场', p.scores.market)}
+                    ${renderScoreBar('个人匹配', p.scores.personal)}
+                    ${renderScoreBar('偏好约束', p.scores.preference)}
+                </div>
+                <div style="font-size:0.75rem;color:var(--muted);">${p.data_status}</div>
+                <dl class="path-details">
+                    <dt>收益</dt><dd>${p.benefit}</dd>
+                    <dt>成本</dt><dd>${p.cost}</dd>
+                    <dt>关键差距</dt><dd>${p.gaps.map(g => `<span class="gap-item">• ${g}</span>`).join('<br>')}</dd>
+                    <dt>最小验证行动</dt><dd class="action-item">${p.action}</dd>
+                    <dt>反证</dt><dd>${p.counter.join('；')}</dd>
+                </dl>
+                <details class="source-drawer">
+                    <summary>数据来源 (${p.sources.length})</summary>
+                    ${p.sources.map(s => `<div>• ${s}</div>`).join('')}
+                </details>
+            </div>
+        `).join('');
+        document.getElementById('selection-area').style.display = 'block';
+    }
+
+    document.getElementById('btn-generate').addEventListener('click', () => renderPaths(DEMO_DECISION));
+    document.getElementById('question-input').addEventListener('keydown', e => { if (e.key === 'Enter') renderPaths(DEMO_DECISION); });
+    </script>
+</body>
+</html>
