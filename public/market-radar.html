@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerCopilot · 职业市场雷达</title>
+    <style>
+        :root { --bg:#0f1419;--surface:#1a2028;--border:#2d3748;--text:#e2e8f0;--muted:#8899a6;--accent:#4a9eff;--green:#34d399;--yellow:#fbbf24;--red:#f87171; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+        .container{max-width:900px;margin:0 auto;padding:24px 16px}
+        h1{font-size:1.3rem;margin-bottom:4px}
+        .subtitle{color:var(--muted);font-size:.8rem;margin-bottom:20px}
+        .demo-badge{background:var(--yellow);color:#000;font-size:.6rem;padding:2px 6px;border-radius:3px;font-weight:700}
+        .search-bar{display:flex;gap:12px;margin-bottom:24px}
+        .search-bar input{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:6px}
+        .search-bar input:focus{outline:2px solid var(--accent)}
+        .search-bar button{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:6px;cursor:pointer}
+        .radar-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+        @media(max-width:600px){.radar-grid{grid-template-columns:1fr}}
+        .metric-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px}
+        .metric-name{font-size:.75rem;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+        .metric-value{font-size:1.5rem;font-weight:700}
+        .metric-meta{font-size:.7rem;color:var(--muted);margin-top:8px}
+        .direction-up{color:var(--green)} .direction-down{color:var(--red)} .direction-stable{color:var(--muted)} .direction-unknown{color:var(--yellow)}
+        .not-judgeable{color:var(--yellow);font-style:italic;font-size:.85rem}
+        .disclaimer{font-size:.7rem;color:var(--muted);margin-top:16px;padding:12px;background:var(--surface);border-radius:6px;border-left:3px solid var(--yellow)}
+        .skip-link{position:absolute;top:-40px;left:0;background:var(--accent);color:#fff;padding:8px 16px;z-index:100}.skip-link:focus{top:0}
+    </style>
+</head>
+<body>
+    <a href="#radar-region" class="skip-link">跳到雷达数据</a>
+    <div class="container">
+        <h1>职业市场雷达 <span class="demo-badge">DEMO</span></h1>
+        <p class="subtitle">展示岗位需求量、薪资、技能增速与竞争度的历史观察值。每项含样本数与时间窗，低覆盖显示"不可判断"。</p>
+        <div class="search-bar" role="search">
+            <input type="text" id="occ-input" value="数据分析师" aria-label="职业名称" placeholder="输入职业名称">
+            <button id="btn-radar">查询雷达</button>
+        </div>
+        <div id="radar-region" class="radar-grid" tabindex="-1" aria-live="polite" aria-label="市场雷达结果"></div>
+        <div class="disclaimer" id="disclaimer" style="display:none">
+            ⚠️ 以上均为历史观察值，不代表录用概率或个人适合度。数据覆盖有限时显示"不可判断"，不猜测。
+        </div>
+    </div>
+    <script>
+    const DEMO_RADAR = [
+        { metric: '需求量 (demand_count)', value: '1,240 条/月', sample: 'N=6,200', window: '2025-01 ~ 2026-06', direction: 'up', status: 'sufficient' },
+        { metric: '薪资中位数 (salary_p50)', value: '¥18,500', sample: 'N=3,800', window: '2025-06 ~ 2026-06', direction: 'stable', status: 'sufficient' },
+        { metric: '技能增速 (skill_growth)', value: '+12% YoY', sample: 'N=2,100', window: '2024 ~ 2026', direction: 'up', status: 'limited' },
+        { metric: '竞争度 (competition_ratio)', value: null, sample: 'N=18', window: '2026-Q2', direction: 'unknown', status: 'not_judgeable' },
+    ];
+    function render(radar) {
+        const grid = document.getElementById('radar-region');
+        grid.innerHTML = radar.map(m => `
+            <div class="metric-card" role="article" aria-label="${m.metric}">
+                <div class="metric-name">${m.metric}</div>
+                ${m.status === 'not_judgeable'
+                    ? `<div class="not-judgeable">不可判断（${m.sample} 低于阈值）</div>`
+                    : `<div class="metric-value">${m.value}</div>`}
+                <div class="metric-meta">
+                    ${m.sample} · ${m.window} ·
+                    <span class="direction-${m.direction}">${m.direction === 'up' ? '↑ 上升' : m.direction === 'down' ? '↓ 下降' : m.direction === 'stable' ? '→ 平稳' : '? 未知'}</span>
+                </div>
+            </div>
+        `).join('');
+        document.getElementById('disclaimer').style.display = 'block';
+    }
+    document.getElementById('btn-radar').addEventListener('click', () => render(DEMO_RADAR));
+    document.getElementById('occ-input').addEventListener('keydown', e => { if (e.key === 'Enter') render(DEMO_RADAR); });
+    </script>
+</body>
+</html>

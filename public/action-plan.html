@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerCopilot · 行动计划与证据更新</title>
+    <style>
+        :root{--bg:#0f1419;--surface:#1a2028;--border:#2d3748;--text:#e2e8f0;--muted:#8899a6;--accent:#4a9eff;--green:#34d399;--yellow:#fbbf24;--red:#f87171}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+        .container{max-width:800px;margin:0 auto;padding:24px 16px}
+        h1{font-size:1.3rem;margin-bottom:4px}
+        .subtitle{color:var(--muted);font-size:.8rem;margin-bottom:20px}
+        .demo-badge{background:var(--yellow);color:#000;font-size:.6rem;padding:2px 6px;border-radius:3px;font-weight:700}
+        .action-list{display:flex;flex-direction:column;gap:12px;margin-bottom:24px}
+        .action-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;position:relative}
+        .action-card.completed{border-left:3px solid var(--green)}
+        .action-card.in_progress{border-left:3px solid var(--accent)}
+        .action-card.not_started{border-left:3px solid var(--border)}
+        .action-title{font-weight:600;margin-bottom:4px}
+        .action-meta{font-size:.75rem;color:var(--muted)}
+        .action-criteria{font-size:.8rem;color:var(--green);margin-top:6px}
+        .action-status{position:absolute;top:16px;right:16px;font-size:.7rem;padding:3px 8px;border-radius:4px}
+        .status-completed{background:rgba(52,211,153,.15);color:var(--green)}
+        .status-in_progress{background:rgba(74,158,255,.15);color:var(--accent)}
+        .status-not_started{background:var(--border);color:var(--muted)}
+        .checkin-section{margin-top:24px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px}
+        .checkin-section h2{font-size:1rem;margin-bottom:12px}
+        .checkin-form{display:flex;flex-direction:column;gap:8px}
+        .checkin-form textarea{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:4px;min-height:60px;resize:vertical}
+        .checkin-form textarea:focus{outline:2px solid var(--accent)}
+        .checkin-form button{align-self:flex-end;background:var(--accent);color:#fff;border:none;padding:8px 16px;border-radius:4px;cursor:pointer}
+        .evidence-note{font-size:.75rem;color:var(--muted);margin-top:8px;font-style:italic}
+        .skip-link{position:absolute;top:-40px;left:0;background:var(--accent);color:#fff;padding:8px 16px;z-index:100}.skip-link:focus{top:0}
+    </style>
+</head>
+<body>
+    <a href="#actions-region" class="skip-link">跳到行动计划</a>
+    <div class="container">
+        <h1>行动计划与证据更新 <span class="demo-badge">DEMO</span></h1>
+        <p class="subtitle">选择路径后生成可编辑行动。完成行动可上传证据，看到新证据如何改变路径判断。提醒默认关闭。</p>
+
+        <div id="actions-region" class="action-list" tabindex="-1" aria-label="行动计划列表" aria-live="polite">
+            <div class="action-card completed" role="article" aria-label="信息访谈已完成">
+                <span class="action-status status-completed">已完成</span>
+                <div class="action-title">找 3 位数据分析师做信息访谈</div>
+                <div class="action-meta">截止: 2026-07-20 · 证据: 访谈笔记 ×2</div>
+                <div class="action-criteria">✓ 最小成功标准: 完成 2 次以上访谈并记录关键发现</div>
+            </div>
+            <div class="action-card in_progress" role="article" aria-label="SQL项目进行中">
+                <span class="action-status status-in_progress">进行中</span>
+                <div class="action-title">完成一个 SQL 数据分析小项目</div>
+                <div class="action-meta">截止: 2026-08-01 · 证据: 暂无</div>
+                <div class="action-criteria">最小成功标准: 用公开数据集产出一份分析报告</div>
+            </div>
+            <div class="action-card not_started" role="article" aria-label="Python作品未开始">
+                <span class="action-status status-not_started">未开始</span>
+                <div class="action-title">用 Python 做一个自动化脚本并开源</div>
+                <div class="action-meta">截止: 2026-08-15 · 证据: 暂无</div>
+                <div class="action-criteria">最小成功标准: GitHub 有可运行的 repo + README</div>
+            </div>
+        </div>
+
+        <div class="checkin-section">
+            <h2>检查点记录</h2>
+            <p style="font-size:.8rem;color:var(--muted);margin-bottom:12px">记录进展、阻塞或新发现。这些会更新你的能力年轮。</p>
+            <div class="checkin-form">
+                <textarea id="checkin-note" placeholder="今天做了什么？有什么意外发现？遇到了什么阻塞？" aria-label="检查点内容"></textarea>
+                <button id="btn-checkin">提交检查点</button>
+            </div>
+            <p class="evidence-note">完成行动后，新证据会入账并可能改变三路径比较的置信度。提醒功能默认关闭，由你选择开启。</p>
+        </div>
+    </div>
+    <script>
+    document.getElementById('btn-checkin').addEventListener('click', () => {
+        const note = document.getElementById('checkin-note').value.trim();
+        if (!note) return;
+        alert('检查点已记录（Demo 模式）。正式版会更新能力年轮和路径置信度。');
+        document.getElementById('checkin-note').value = '';
+    });
+    </script>
+</body>
+</html>
