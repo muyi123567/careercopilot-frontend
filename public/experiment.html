@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerCopilot · 职业实验</title>
+    <style>
+        :root{--bg:#0f1419;--surface:#1a2028;--border:#2d3748;--text:#e2e8f0;--muted:#8899a6;--accent:#4a9eff;--green:#34d399;--yellow:#fbbf24;--red:#f87171;--purple:#a78bfa}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+        .container{max-width:800px;margin:0 auto;padding:24px 16px}
+        h1{font-size:1.3rem;margin-bottom:4px}
+        .subtitle{color:var(--muted);font-size:.8rem;margin-bottom:20px}
+        .demo-badge{background:var(--yellow);color:#000;font-size:.6rem;padding:2px 6px;border-radius:3px;font-weight:700}
+
+        /* 假设卡片 */
+        .hypothesis-card{background:var(--surface);border:1px solid var(--accent);border-radius:8px;padding:20px;margin-bottom:20px}
+        .hypothesis-card h2{font-size:1rem;color:var(--accent);margin-bottom:8px}
+        .hypothesis-statement{font-size:1.1rem;font-weight:600;margin-bottom:12px}
+        .unknown-box{background:rgba(251,191,36,.08);border:1px solid var(--yellow);border-radius:6px;padding:12px;margin-top:12px}
+        .unknown-box .label{font-size:.7rem;color:var(--yellow);text-transform:uppercase;font-weight:700}
+        .unknown-box .text{font-size:.9rem;margin-top:4px}
+
+        /* 实验进度 */
+        .progress-bar{height:8px;background:var(--border);border-radius:4px;margin:16px 0;overflow:hidden}
+        .progress-fill{height:100%;background:var(--green);border-radius:4px;transition:width .3s}
+        .progress-label{font-size:.75rem;color:var(--muted);text-align:right}
+
+        /* 任务列表 */
+        .task-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+        .task{display:flex;gap:12px;padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;align-items:flex-start}
+        .task.completed{border-left:3px solid var(--green);opacity:.7}
+        .task.active{border-left:3px solid var(--accent)}
+        .task.upcoming{border-left:3px solid var(--border)}
+        .task-day{font-size:.7rem;color:var(--muted);white-space:nowrap;min-width:40px}
+        .task-content{flex:1}
+        .task-desc{font-size:.9rem}
+        .task-criteria{font-size:.75rem;color:var(--green);margin-top:4px}
+        .task-evidence{font-size:.7rem;color:var(--purple);margin-top:2px}
+        .task-check{width:20px;height:20px;border:2px solid var(--border);border-radius:50%;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+        .task-check.done{background:var(--green);border-color:var(--green);color:#000}
+
+        /* 检查点 */
+        .checkpoint{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px}
+        .checkpoint h3{font-size:.9rem;color:var(--accent);margin-bottom:8px}
+        .checkpoint textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:4px;min-height:60px;resize:vertical;font-size:.85rem}
+        .checkpoint textarea:focus{outline:2px solid var(--accent)}
+        .checkpoint button{margin-top:8px;background:var(--accent);color:#fff;border:none;padding:6px 16px;border-radius:4px;cursor:pointer;font-size:.8rem}
+
+        /* 结果 */
+        .result-section{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-top:24px}
+        .result-section h2{font-size:1rem;margin-bottom:12px}
+        .result-options{display:flex;flex-wrap:wrap;gap:8px}
+        .result-btn{padding:8px 16px;border:1px solid var(--border);border-radius:6px;background:none;color:var(--text);cursor:pointer;font-size:.8rem}
+        .result-btn:hover{border-color:var(--accent)}
+        .result-btn.selected{border-color:var(--green);background:rgba(52,211,153,.1)}
+
+        .skip-link{position:absolute;top:-40px;left:0;background:var(--accent);color:#fff;padding:8px 16px;z-index:100}.skip-link:focus{top:0}
+    </style>
+</head>
+<body>
+    <a href="#experiment-region" class="skip-link">跳到实验内容</a>
+    <div class="container" id="experiment-region">
+        <h1>职业实验 <span class="demo-badge">DEMO</span></h1>
+        <p class="subtitle">用 7 天真实行动验证你的职业假设。不是"去上课"，是"去做一次真的"。</p>
+
+        <!-- 假设 -->
+        <div class="hypothesis-card" role="article" aria-label="职业假设">
+            <h2>你的假设</h2>
+            <div class="hypothesis-statement">"我适合从 GIS 转向数据分析师"</div>
+            <div class="unknown-box">
+                <div class="label">最大未知</div>
+                <div class="text">你以为你喜欢数据分析，但你从未验证过"在模糊业务需求下做取舍并说服非技术同事"这件事。这是你和数据分析师之间最大的未知。</div>
+            </div>
+        </div>
+
+        <!-- 进度 -->
+        <div class="progress-bar"><div class="progress-fill" style="width:43%"></div></div>
+        <div class="progress-label">Day 3 / 7 · 3/7 任务完成</div>
+
+        <!-- 任务 -->
+        <div class="task-list" role="list" aria-label="实验任务">
+            <div class="task completed" role="listitem">
+                <div class="task-check done">✓</div>
+                <div class="task-day">Day 1</div>
+                <div class="task-content">
+                    <div class="task-desc">找 2-3 位数据分析师，约 20 分钟信息访谈</div>
+                    <div class="task-criteria">✓ 完成 2 次访谈</div>
+                    <div class="task-evidence">证据: 访谈笔记 ×2</div>
+                </div>
+            </div>
+            <div class="task completed" role="listitem">
+                <div class="task-check done">✓</div>
+                <div class="task-day">Day 2</div>
+                <div class="task-content">
+                    <div class="task-desc">整理访谈发现：最让你意外的 3 件事</div>
+                    <div class="task-criteria">✓ 写出 3 条意外发现</div>
+                    <div class="task-evidence">证据: 反思笔记</div>
+                </div>
+            </div>
+            <div class="task completed" role="listitem">
+                <div class="task-check done">✓</div>
+                <div class="task-day">Day 3</div>
+                <div class="task-content">
+                    <div class="task-desc">用 SQL 对一个公开数据集做一份分析报告</div>
+                    <div class="task-criteria">✓ 产出可展示的报告截图</div>
+                    <div class="task-evidence">证据: 分析报告 ×1</div>
+                </div>
+            </div>
+            <div class="task active" role="listitem">
+                <div class="task-check"></div>
+                <div class="task-day">Day 4</div>
+                <div class="task-content">
+                    <div class="task-desc">把报告发到目标社区（即刻/V2EX），收集反馈</div>
+                    <div class="task-criteria">获得至少 1 条外部反馈</div>
+                    <div class="task-evidence">待提交: 外部反馈</div>
+                </div>
+            </div>
+            <div class="task upcoming" role="listitem">
+                <div class="task-check"></div>
+                <div class="task-day">Day 5</div>
+                <div class="task-content">
+                    <div class="task-desc">对比你当前岗位和数据分析的一天：哪些兴奋，哪些抗拒</div>
+                    <div class="task-criteria">写出对比分析</div>
+                </div>
+            </div>
+            <div class="task upcoming" role="listitem">
+                <div class="task-check"></div>
+                <div class="task-day">Day 6</div>
+                <div class="task-content">
+                    <div class="task-desc">找一位数据分析招聘方，问"我转过来最大的风险是什么"</div>
+                    <div class="task-criteria">获得 1 条招聘方视角</div>
+                </div>
+            </div>
+            <div class="task upcoming" role="listitem">
+                <div class="task-check"></div>
+                <div class="task-day">Day 7</div>
+                <div class="task-content">
+                    <div class="task-desc">写实验总结：假设验证/推翻/意外？置信度从 50% 变成了多少？</div>
+                    <div class="task-criteria">完成总结并标注结果</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 检查点 -->
+        <div class="checkpoint" role="form" aria-label="Day 4 检查点">
+            <h3>Day 4 检查点</h3>
+            <p style="font-size:.85rem;color:var(--muted);margin-bottom:8px">今天把报告发出去了吗？收到了什么反馈？有什么和你预期不一样的？</p>
+            <textarea placeholder="记录你的回答..." aria-label="检查点回答"></textarea>
+            <button>提交检查点</button>
+        </div>
+
+        <!-- 结果 -->
+        <div class="result-section" role="form" aria-label="实验结果">
+            <h2>实验结束后：你的判断是？</h2>
+            <div class="result-options">
+                <button class="result-btn">✓ 假设验证（确实适合）</button>
+                <button class="result-btn">≈ 部分验证</button>
+                <button class="result-btn">✗ 假设推翻（不适合）</button>
+                <button class="result-btn">! 意外发现</button>
+                <button class="result-btn">? 无法判断</button>
+            </div>
+            <p style="font-size:.75rem;color:var(--muted);margin-top:12px">实验结果会入账到你的能力年轮，并更新三路径比较的置信度。"这棵树只在你真的做过事情后才会长。"</p>
+        </div>
+    </div>
+    <script>
+    document.querySelectorAll('.result-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.result-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        });
+    });
+    </script>
+</body>
+</html>
