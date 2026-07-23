@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerCopilot · 群体职业轨迹地图</title>
+    <style>
+        :root {
+            --bg: #0f1419;
+            --surface: #1a2028;
+            --border: #2d3748;
+            --text: #e2e8f0;
+            --text-muted: #8899a6;
+            --accent: #4a9eff;
+            --accent-dim: #2563eb;
+            --success: #34d399;
+            --warning: #fbbf24;
+            --danger: #f87171;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
+        h1 { font-size: 1.5rem; font-weight: 600; margin-bottom: 8px; }
+        .subtitle { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 24px; }
+
+        /* 筛选栏 */
+        .filters {
+            display: flex; gap: 12px; flex-wrap: wrap;
+            margin-bottom: 24px; padding: 16px;
+            background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+        }
+        .filter-group { display: flex; flex-direction: column; gap: 4px; }
+        .filter-group label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+        .filter-group select, .filter-group input {
+            background: var(--bg); border: 1px solid var(--border); color: var(--text);
+            padding: 6px 12px; border-radius: 4px; font-size: 0.875rem;
+        }
+        .filter-group select:focus, .filter-group input:focus {
+            outline: 2px solid var(--accent); outline-offset: 1px;
+        }
+
+        /* 主布局 */
+        .main-layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; }
+        @media (max-width: 768px) { .main-layout { grid-template-columns: 1fr; } }
+
+        /* 图区域 */
+        .graph-panel {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 8px; padding: 24px; min-height: 400px; position: relative;
+        }
+        .graph-empty {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 300px; color: var(--text-muted); text-align: center;
+        }
+        .graph-empty .icon { font-size: 2rem; margin-bottom: 12px; }
+
+        /* 节点 */
+        .node-list { display: flex; flex-direction: column; gap: 12px; }
+        .node {
+            padding: 12px 16px; background: var(--bg); border: 1px solid var(--border);
+            border-radius: 6px; cursor: pointer; transition: border-color 0.2s;
+        }
+        .node:hover, .node:focus { border-color: var(--accent); outline: none; }
+        .node[aria-selected="true"] { border-color: var(--accent); background: rgba(74, 158, 255, 0.08); }
+        .node-name { font-weight: 500; }
+        .node-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+
+        /* 边 */
+        .edge-list { margin-top: 16px; }
+        .edge {
+            display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+            border-left: 3px solid var(--accent-dim); margin-bottom: 8px;
+            background: var(--bg); border-radius: 0 4px 4px 0;
+        }
+        .edge-arrow { color: var(--accent); font-size: 0.875rem; }
+        .edge-target { font-weight: 500; flex: 1; }
+        .edge-stats { font-size: 0.75rem; color: var(--text-muted); text-align: right; }
+        .edge-stats .sample { color: var(--success); }
+        .edge-stats .freq { color: var(--warning); }
+        .edge.suppressed { opacity: 0.4; border-left-color: var(--danger); }
+        .edge-suppress-note { font-size: 0.7rem; color: var(--danger); }
+
+        /* 比较面板 */
+        .compare-panel {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 8px; padding: 16px; align-self: start;
+        }
+        .compare-panel h2 { font-size: 1rem; margin-bottom: 12px; }
+        .compare-item {
+            padding: 8px 12px; background: var(--bg); border: 1px solid var(--border);
+            border-radius: 4px; margin-bottom: 8px; font-size: 0.875rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .compare-item button {
+            background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1rem;
+        }
+        .compare-empty { color: var(--text-muted); font-size: 0.875rem; }
+
+        /* 数据不足状态 */
+        .insufficient { color: var(--warning); font-size: 0.875rem; font-style: italic; }
+
+        /* 可访问性：跳过链接 */
+        .skip-link {
+            position: absolute; top: -40px; left: 0; background: var(--accent);
+            color: #fff; padding: 8px 16px; z-index: 100; transition: top 0.2s;
+        }
+        .skip-link:focus { top: 0; }
+
+        /* Demo 标识 */
+        .demo-badge {
+            display: inline-block; background: var(--warning); color: #000;
+            font-size: 0.7rem; padding: 2px 8px; border-radius: 3px; font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <a href="#graph-region" class="skip-link">跳到轨迹图</a>
+    <div class="container">
+        <h1>群体职业轨迹地图 <span class="demo-badge">DEMO 数据</span></h1>
+        <p class="subtitle">展示历史职业转移频率与可达性。数据标注样本量与覆盖范围，不称"成功率"。</p>
+
+        <!-- 筛选栏 -->
+        <div class="filters" role="search" aria-label="轨迹筛选">
+            <div class="filter-group">
+                <label for="filter-occupation">起点职业</label>
+                <input type="text" id="filter-occupation" placeholder="输入职业名称" value="GIS工程师"
+                       aria-describedby="filter-help">
+            </div>
+            <div class="filter-group">
+                <label for="filter-region">地域</label>
+                <select id="filter-region">
+                    <option value="CN">全国</option>
+                    <option value="CN-Beijing">北京</option>
+                    <option value="CN-Shanghai">上海</option>
+                    <option value="CN-Shenzhen">深圳</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter-depth">路径深度</label>
+                <select id="filter-depth">
+                    <option value="1">1 步（邻近）</option>
+                    <option value="2">2 步</option>
+                    <option value="3" selected>3 步（含跨行业）</option>
+                </select>
+            </div>
+            <div class="filter-group" style="justify-content: flex-end;">
+                <button id="btn-search" style="background:var(--accent);color:#fff;border:none;padding:8px 20px;border-radius:4px;cursor:pointer;font-size:0.875rem;">
+                    查询路径
+                </button>
+            </div>
+            <span id="filter-help" hidden>输入起点职业后点击查询，展示从该职业出发的历史转移路径</span>
+        </div>
+
+        <!-- 主布局 -->
+        <div class="main-layout">
+            <!-- 图区域 -->
+            <div class="graph-panel" id="graph-region" tabindex="-1" aria-label="职业轨迹图结果">
+                <div class="graph-empty" id="graph-empty">
+                    <div class="icon">🗺️</div>
+                    <p>输入起点职业，查看群体历史转移路径</p>
+                    <p class="insufficient" style="margin-top:8px;">当前为 Demo 模式，展示合成示例数据</p>
+                </div>
+                <div id="graph-results" style="display:none;" aria-live="polite">
+                    <div class="node-list" id="node-list" role="listbox" aria-label="可达职业列表"></div>
+                    <div class="edge-list" id="edge-list" aria-label="转移边详情"></div>
+                </div>
+            </div>
+
+            <!-- 比较面板 -->
+            <div class="compare-panel" aria-label="路径比较">
+                <h2>路径比较 (<span id="compare-count">0</span>)</h2>
+                <div id="compare-list">
+                    <p class="compare-empty">点击路径旁的 "+" 加入比较</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // F13: 群体职业轨迹地图前端
+    // F00 合规：Demo 模式，不伪造身份
+    const API_BASE = 'http://localhost:8000';
+    const SESSION_ID = (typeof crypto.randomUUID === 'function')
+        ? crypto.randomUUID()
+        : 'sess-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+
+    // Demo 数据（后端不可用时的 fallback）
+    const DEMO_PATHS = [
+        { path_type: 'adjacent', target: '数据分析师', total_sample: 30, data_status: 'sufficient',
+          edges: [{ from: 'GIS工程师', to: '数据分析师', sample_size: 30, frequency: 0.4, coverage: 'N=30, CN, cn', suppressed: false }] },
+        { path_type: 'adjacent', target: '遥感工程师', total_sample: 15, data_status: 'limited',
+          edges: [{ from: 'GIS工程师', to: '遥感工程师', sample_size: 15, frequency: 0.2, coverage: 'N=15, CN, cn', suppressed: false }] },
+        { path_type: 'explore', target: '产品经理', total_sample: 25, data_status: 'sufficient',
+          edges: [{ from: 'GIS工程师', to: '数据分析师', sample_size: 30, frequency: 0.4, coverage: 'N=30', suppressed: false },
+                  { from: '数据分析师', to: '产品经理', sample_size: 25, frequency: 0.3, coverage: 'N=25', suppressed: false }] },
+        { path_type: 'explore', target: 'AI算法工程师', total_sample: 3, data_status: 'insufficient_data',
+          edges: [{ from: 'GIS工程师', to: 'AI算法工程师', sample_size: 3, frequency: null, coverage: 'N=3, 样本不足', suppressed: true }] },
+    ];
+
+    let compareList = [];
+
+    function renderPaths(paths) {
+        const emptyEl = document.getElementById('graph-empty');
+        const resultsEl = document.getElementById('graph-results');
+        const nodeList = document.getElementById('node-list');
+        const edgeList = document.getElementById('edge-list');
+
+        if (!paths || paths.length === 0 || (paths.length === 1 && paths[0].path_type === 'unknown')) {
+            emptyEl.style.display = 'flex';
+            emptyEl.innerHTML = '<div class="icon">🔍</div><p class="insufficient">该职业暂无足够群体轨迹数据（数据不足）</p>';
+            resultsEl.style.display = 'none';
+            return;
+        }
+
+        emptyEl.style.display = 'none';
+        resultsEl.style.display = 'block';
+
+        // 渲染节点
+        nodeList.innerHTML = paths.map((p, i) => `
+            <div class="node" role="option" tabindex="0" aria-selected="false"
+                 data-index="${i}" aria-label="${p.target}，${p.path_type === 'adjacent' ? '邻近迁移' : '跨行业探索'}，样本${p.total_sample}">
+                <div class="node-name">${p.target}</div>
+                <div class="node-meta">
+                    ${p.path_type === 'adjacent' ? '邻近迁移' : '跨行业探索'} ·
+                    样本 N=${p.total_sample} ·
+                    ${p.data_status === 'sufficient' ? '数据充分' : p.data_status === 'limited' ? '数据有限' : '<span class="insufficient">数据不足</span>'}
+                </div>
+            </div>
+        `).join('');
+
+        // 渲染边
+        edgeList.innerHTML = '<h3 style="font-size:0.875rem;color:var(--text-muted);margin-bottom:8px;">转移边详情</h3>' +
+            paths.flatMap(p => p.edges.map(e => `
+                <div class="edge ${e.suppressed ? 'suppressed' : ''}" aria-label="${e.from}到${e.to}，样本${e.sample_size}">
+                    <span class="edge-arrow">→</span>
+                    <span class="edge-target">${e.from} → ${e.to}</span>
+                    <span class="edge-stats">
+                        <span class="sample">N=${e.sample_size}</span>
+                        ${e.frequency != null ? `<span class="freq"> · 频率 ${(e.frequency * 100).toFixed(0)}%</span>` : ''}
+                        ${e.suppressed ? '<br><span class="edge-suppress-note">小样本已抑制</span>' : ''}
+                    </span>
+                    <button onclick="addToCompare('${p.target}', ${p.total_sample}, '${p.path_type}')"
+                            aria-label="将${p.target}加入比较" style="background:none;border:1px solid var(--border);color:var(--accent);border-radius:4px;padding:2px 8px;cursor:pointer;">+</button>
+                </div>
+            `)).join('');
+
+        // 键盘导航
+        nodeList.querySelectorAll('.node').forEach(node => {
+            node.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    node.setAttribute('aria-selected', node.getAttribute('aria-selected') !== 'true');
+                }
+            });
+        });
+    }
+
+    function addToCompare(target, sample, type) {
+        if (compareList.find(c => c.target === target)) return;
+        compareList.push({ target, sample, type });
+        renderCompare();
+    }
+
+    function removeFromCompare(target) {
+        compareList = compareList.filter(c => c.target !== target);
+        renderCompare();
+    }
+
+    function renderCompare() {
+        const el = document.getElementById('compare-list');
+        document.getElementById('compare-count').textContent = compareList.length;
+        if (compareList.length === 0) {
+            el.innerHTML = '<p class="compare-empty">点击路径旁的 "+" 加入比较</p>';
+            return;
+        }
+        el.innerHTML = compareList.map(c => `
+            <div class="compare-item">
+                <span>${c.target} <small style="color:var(--text-muted)">N=${c.sample} · ${c.type === 'adjacent' ? '邻近' : '探索'}</small></span>
+                <button onclick="removeFromCompare('${c.target}')" aria-label="移除${c.target}">×</button>
+            </div>
+        `).join('');
+    }
+
+    // 查询
+    async function searchPaths() {
+        const occupation = document.getElementById('filter-occupation').value.trim();
+        if (!occupation) return;
+
+        // 尝试调用后端 API（F12 路径服务）
+        try {
+            const resp = await fetch(`${API_BASE}/api/v2/career-map?from=${encodeURIComponent(occupation)}&region=CN`, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (resp.ok) {
+                const data = await resp.json();
+                renderPaths(data.data?.paths || data.paths || []);
+                return;
+            }
+        } catch (e) {
+            // 后端不可用，使用 Demo 数据
+        }
+
+        // Demo fallback
+        renderPaths(DEMO_PATHS);
+    }
+
+    document.getElementById('btn-search').addEventListener('click', searchPaths);
+    document.getElementById('filter-occupation').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') searchPaths();
+    });
+    </script>
+</body>
+</html>
