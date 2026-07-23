@@ -128,7 +128,9 @@
     const API_KEY = 'dev-process-key-change-in-prod';
     // F00: 不再使用固定 demo-user/demo-session 身份。
     // 未登录用户以 mode=demo 访问只读演示数据，session_id 仅用于会话连续性。
-    const SESSION_ID = crypto.randomUUID();
+    const SESSION_ID = (typeof crypto.randomUUID === 'function')
+        ? crypto.randomUUID()
+        : 'sess-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
 
     async function submitQuestion() {
         const question = document.getElementById('question').value.trim();
