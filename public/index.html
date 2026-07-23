@@ -126,7 +126,9 @@
     // Backend URL - update this for deployment
     const API_BASE = 'http://localhost:8000';
     const API_KEY = 'dev-process-key-change-in-prod';
-    const USER_ID = 'demo-user';
+    // F00: 不再使用固定 demo-user/demo-session 身份。
+    // 未登录用户以 mode=demo 访问只读演示数据，session_id 仅用于会话连续性。
+    const SESSION_ID = crypto.randomUUID();
 
     async function submitQuestion() {
         const question = document.getElementById('question').value.trim();
@@ -149,13 +151,13 @@
                 headers: {
                     'Content-Type': 'application/json',
                     'X-API-Key': API_KEY,
-                    'X-User-Id': USER_ID,
                 },
                 body: JSON.stringify({
                     input: [
                         { role: 'user', content: [{ type: 'text', text: question }] }
                     ],
-                    session_id: 'demo-session'
+                    session_id: SESSION_ID,
+                    mode: 'demo'
                 })
             });
 
