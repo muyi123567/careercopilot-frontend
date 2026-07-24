@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerCopilot · AI 陪跑</title>
+    <style>
+        :root{--bg:#0f1419;--surface:#1a2028;--border:#2d3748;--text:#e2e8f0;--muted:#8899a6;--accent:#4a9eff;--green:#34d399;--yellow:#fbbf24;--purple:#a78bfa}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+        .container{max-width:700px;margin:0 auto;padding:24px 16px}
+        h1{font-size:1.3rem;margin-bottom:4px}
+        .subtitle{color:var(--muted);font-size:.8rem;margin-bottom:20px}
+        .demo-badge{background:var(--yellow);color:#000;font-size:.6rem;padding:2px 6px;border-radius:3px;font-weight:700}
+
+        /* 对话流 */
+        .chat-flow{display:flex;flex-direction:column;gap:16px;margin-bottom:24px}
+        .msg{max-width:85%;padding:12px 16px;border-radius:12px;font-size:.9rem}
+        .msg-ai{background:var(--surface);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px}
+        .msg-user{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+        .msg-label{font-size:.65rem;color:var(--muted);margin-bottom:4px}
+        .msg-ai .msg-label{color:var(--purple)}
+
+        /* 里程碑 */
+        .milestones{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:20px}
+        .milestones h2{font-size:.9rem;margin-bottom:12px}
+        .milestone{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+        .milestone:last-child{border-bottom:none}
+        .milestone-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+        .dot-done{background:var(--green)} .dot-active{background:var(--accent)} .dot-todo{background:var(--border)}
+        .milestone-text{font-size:.85rem;flex:1}
+        .milestone-date{font-size:.7rem;color:var(--muted)}
+
+        /* 输入区 */
+        .input-area{display:flex;gap:8px}
+        .input-area input{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:8px}
+        .input-area input:focus{outline:2px solid var(--accent)}
+        .input-area button{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer}
+
+        /* 记忆提示 */
+        .memory-hint{font-size:.7rem;color:var(--purple);margin-top:12px;padding:8px 12px;background:rgba(167,139,250,.06);border-radius:4px}
+        .skip-link{position:absolute;top:-40px;left:0;background:var(--accent);color:#fff;padding:8px 16px;z-index:100}.skip-link:focus{top:0}
+    </style>
+</head>
+<body>
+    <a href="#chat-region" class="skip-link">跳到对话</a>
+    <div class="container">
+        <h1>AI 陪跑 <span class="demo-badge">DEMO</span></h1>
+        <p class="subtitle">每周主动 check-in，记住你上次说了什么，追踪里程碑。不是"加油"，是"你上次也卡在这一步，后来怎么过的？"</p>
+
+        <!-- 里程碑 -->
+        <div class="milestones" role="list" aria-label="里程碑追踪">
+            <h2>你的里程碑</h2>
+            <div class="milestone" role="listitem"><div class="milestone-dot dot-done"></div><span class="milestone-text">完成 2 次信息访谈</span><span class="milestone-date">7/18</span></div>
+            <div class="milestone" role="listitem"><div class="milestone-dot dot-done"></div><span class="milestone-text">SQL 分析报告产出</span><span class="milestone-date">7/20</span></div>
+            <div class="milestone" role="listitem"><div class="milestone-dot dot-active"></div><span class="milestone-text">收集外部反馈（进行中）</span><span class="milestone-date">7/24</span></div>
+            <div class="milestone" role="listitem"><div class="milestone-dot dot-todo"></div><span class="milestone-text">实验总结 + 路径决策</span><span class="milestone-date">7/27</span></div>
+        </div>
+
+        <!-- 对话 -->
+        <div class="chat-flow" id="chat-region" tabindex="-1" aria-label="陪跑对话" aria-live="polite">
+            <div class="msg msg-ai">
+                <div class="msg-label">CareerCopilot · 周三 check-in</div>
+                嗨，这周实验进展怎么样？你上次说要发报告到即刻收集反馈——发了吗？收到了什么？
+            </div>
+            <div class="msg msg-user">
+                发了，有 2 个人评论了。一个说"分析角度不错但可视化太丑"，另一个问"你是做这个工作的吗"
+            </div>
+            <div class="msg msg-ai">
+                <div class="msg-label">CareerCopilot</div>
+                两条反馈都很有价值。"可视化太丑"说明分析能力被认可了，这是你的优势；"你是做这个工作的吗"说明你的作品已经像那么回事了。<br><br>
+                你 3 周前说过最担心的是"没有真实项目经验"。现在你有了一个可以展示的分析报告 + 外部反馈。这算不算一条新证据？要不要入账？
+            </div>
+            <div class="msg msg-user">
+                算，入账吧
+            </div>
+            <div class="msg msg-ai">
+                <div class="msg-label">CareerCopilot</div>
+                已入账 ✓ 你的"数据分析"方向置信度从 55% 升到 62%。<br><br>
+                下一步：Day 6 的任务是找一位招聘方问"我转过来最大的风险是什么"。你有人选了吗？需要我帮你想怎么开口？
+            </div>
+        </div>
+
+        <!-- 记忆提示 -->
+        <div class="memory-hint">
+            🧠 记忆贯通：我记得你 3 周前的担忧、上周的访谈发现、昨天的反馈。这些都不会丢失，越用越懂你。
+        </div>
+
+        <!-- 输入 -->
+        <div class="input-area" style="margin-top:16px" role="form" aria-label="回复">
+            <input type="text" placeholder="回复..." aria-label="回复陪跑消息">
+            <button aria-label="发送">发送</button>
+        </div>
+    </div>
+</body>
+</html>
