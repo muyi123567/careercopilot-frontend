@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "status": "data_insufficient",
+  "request_id": "req-example-insufficient",
+  "generated_at": "2026-07-24T08:00:00Z",
+  "data": {
+    "current_occupation": null,
+    "paths": [],
+    "evidence": [],
+    "sources": [],
+    "coverage_gaps": [
+      "缺少当前职业或目标职业",
+      "缺少用户确认的个人证据"
+    ]
+  },
+  "error": null
+}

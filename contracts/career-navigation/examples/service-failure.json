@@ -1,0 +1,13 @@
+{
+  "schema_version": "2.0.0",
+  "status": "service_failure",
+  "request_id": "req-example-failure",
+  "generated_at": "2026-07-24T08:00:00Z",
+  "data": null,
+  "error": {
+    "code": "UPSTREAM_UNAVAILABLE",
+    "message": "轨迹数据服务暂时不可用。",
+    "retryable": true,
+    "trace_id": "trace-example-failure"
+  }
+}
