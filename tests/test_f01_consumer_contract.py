@@ -18,8 +18,9 @@ CANONICAL_SHA256 = (
 
 class StructuredConsumerTests(unittest.TestCase):
     def test_vendored_contract_matches_b_canonical_pin(self):
+        canonical_bytes = SCHEMA.read_bytes().replace(b"\r\n", b"\n")
         self.assertEqual(
-            hashlib.sha256(SCHEMA.read_bytes()).hexdigest(),
+            hashlib.sha256(canonical_bytes).hexdigest(),
             CANONICAL_SHA256,
         )
 
