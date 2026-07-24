@@ -22,6 +22,27 @@
 
     <!-- Main -->
     <main class="max-w-3xl mx-auto px-4 py-8">
+        <!-- F00 access mode: Demo is explicit; authenticated mode uses a user token. -->
+        <div class="bg-white rounded-xl shadow-sm p-5 mb-4">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                <label for="access-mode" class="text-sm font-medium text-gray-700">访问模式</label>
+                <select id="access-mode"
+                    class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                    <option value="demo">只读演示</option>
+                    <option value="authenticated">已登录用户</option>
+                </select>
+                <div id="token-row" class="hidden flex-1">
+                    <label for="bearer-token" class="sr-only">访问令牌</label>
+                    <input id="bearer-token" type="password" autocomplete="off"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                        placeholder="粘贴短期 Bearer Token（仅保存在本页内存）">
+                </div>
+            </div>
+            <p id="mode-note" class="mt-3 text-sm text-amber-700" role="status">
+                当前为只读演示：不读取、不保存个人画像、简历或会话记忆。
+            </p>
+        </div>
+
         <!-- Input Area -->
         <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
             <label class="block text-sm font-medium text-gray-700 mb-2">你的职业方向问题</label>
@@ -43,7 +64,7 @@
         <!-- Report -->
         <div id="report" class="hidden fade-in">
             <!-- Recommendation -->
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-4">
+            <div id="confidence-section" class="hidden bg-white rounded-xl shadow-sm p-6 mb-4">
                 <h2 class="text-lg font-bold text-gray-800 mb-2">推演结论</h2>
                 <p id="recommendation" class="text-gray-700 leading-relaxed"></p>
             </div>
@@ -123,19 +144,50 @@
     </footer>
 
     <script>
-    // Backend URL - update this for deployment
-    const API_BASE = 'http://localhost:8000';
-    const API_KEY = 'dev-process-key-change-in-prod';
-    const USER_ID = 'demo-user';
+    // Deployment injects window.CAREERCOPILOT_CONFIG = { apiBase: "..." }.
+    // Without an override the frontend uses the same origin; no server secret is
+    // ever embedded in browser code.
+    const RUNTIME_CONFIG = Object.freeze(window.CAREERCOPILOT_CONFIG || {});
+    const API_BASE = String(RUNTIME_CONFIG.apiBase || window.location.origin)
+        .replace(/\/$/, '');
+    let sessionId = createClientSessionId();
+
+    function createClientSessionId() {
+        return (typeof crypto.randomUUID === 'function')
+            ? crypto.randomUUID()
+            : 'sess-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    }
+
+    function updateModeUI() {
+        const authenticated = document.getElementById('access-mode').value === 'authenticated';
+        document.getElementById('token-row').classList.toggle('hidden', !authenticated);
+        document.getElementById('mode-note').textContent = authenticated
+            ? '已登录模式：请求必须携带服务端签发的短期令牌。会话由后端绑定到当前用户。'
+            : '当前为只读演示：不读取、不保存个人画像、简历或会话记忆。';
+        sessionId = createClientSessionId();
+    }
 
     async function submitQuestion() {
         const question = document.getElementById('question').value.trim();
         if (!question) return;
+        const mode = document.getElementById('access-mode').value;
+        const token = document.getElementById('bearer-token').value.trim();
 
         const btn = document.getElementById('submit-btn');
         const loading = document.getElementById('loading');
         const report = document.getElementById('report');
         const error = document.getElementById('error');
+
+        if (!API_BASE || API_BASE === 'null') {
+            error.textContent = '未配置后端地址。请通过 CAREERCOPILOT_CONFIG.apiBase 注入部署地址。';
+            error.classList.remove('hidden');
+            return;
+        }
+        if (mode === 'authenticated' && !token) {
+            error.textContent = '已登录模式需要有效的短期访问令牌。';
+            error.classList.remove('hidden');
+            return;
+        }
 
         btn.disabled = true;
         btn.textContent = '推演中...';
@@ -144,28 +196,41 @@
         error.classList.add('hidden');
 
         try {
+            const headers = {'Content-Type': 'application/json'};
+            if (mode === 'authenticated') {
+                headers.Authorization = `Bearer ${token}`;
+            }
+            const payload = {
+                input: [
+                    { role: 'user', content: [{ type: 'text', text: question }] }
+                ],
+                session_id: sessionId
+            };
+            if (mode === 'demo') {
+                payload.mode = 'demo';
+            }
+
             const resp = await fetch(`${API_BASE}/process`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-API-Key': API_KEY,
-                    'X-User-Id': USER_ID,
-                },
-                body: JSON.stringify({
-                    input: [
-                        { role: 'user', content: [{ type: 'text', text: question }] }
-                    ],
-                    session_id: 'demo-session'
-                })
+                headers,
+                body: JSON.stringify(payload)
             });
 
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
             const data = await resp.json();
+            if (!resp.ok) {
+                throw new Error(data.detail || `HTTP ${resp.status}`);
+            }
+            if (mode === 'demo' && data.mode !== 'demo') {
+                throw new Error('后端未确认只读演示模式');
+            }
+            if (typeof data.session_id === 'string' && data.session_id) {
+                sessionId = data.session_id;
+            }
             const text = data.output?.[0]?.content?.[0]?.text || '';
-            renderReport(text);
+            renderReport(text, data);
 
         } catch (e) {
-            error.textContent = `请求失败: ${e.message}。请确认后端运行在 ${API_BASE}`;
+            error.textContent = `请求失败：${e.message}`;
             error.classList.remove('hidden');
         } finally {
             btn.disabled = false;
@@ -174,7 +239,7 @@
         }
     }
 
-    function renderReport(text) {
+    function renderReport(text, responseData = {}) {
         const report = document.getElementById('report');
         document.getElementById('raw-response').textContent = text;
 
@@ -226,6 +291,11 @@
         setBar('market', confidence.market);
         setBar('timing', confidence.timing);
         document.getElementById('overall-pct').textContent = confidence.overall + '%';
+        const hasLegacyScores = Object.values(confidence).some(value => value > 0);
+        document.getElementById('confidence-section').classList.toggle(
+            'hidden',
+            responseData.mode === 'demo' || !hasLegacyScores
+        );
 
         // Evidence
         if (evidence.length) {
@@ -279,6 +349,8 @@
             submitQuestion();
         }
     });
+    document.getElementById('access-mode').addEventListener('change', updateModeUI);
+    updateModeUI();
     </script>
 </body>
 </html>
