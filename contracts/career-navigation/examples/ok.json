@@ -1,0 +1,115 @@
+{
+  "schema_version": "2.0.0",
+  "status": "ok",
+  "request_id": "req-example-ok",
+  "generated_at": "2026-07-24T08:00:00Z",
+  "data": {
+    "current_occupation": {
+      "occupation_id": "cn:land-resource-assistant",
+      "name": "土地资源管理助理"
+    },
+    "paths": [
+      {
+        "path_id": "path-adjacent-product",
+        "path_type": "adjacent",
+        "target_occupation": {
+          "occupation_id": "cn:product-assistant",
+          "name": "产品助理"
+        },
+        "summary": "先通过研究与需求分析项目验证邻近迁移。",
+        "benefits": [
+          "已有调研与数据分析经验可迁移"
+        ],
+        "costs": [
+          "需要补充真实产品交付证据"
+        ],
+        "key_gaps": [
+          "缺少面向用户的产品迭代记录"
+        ],
+        "minimum_validation_actions": [
+          {
+            "action_id": "action-portfolio-test",
+            "title": "完成一次真实需求访谈与原型迭代",
+            "expected_signal": "能否在两周内获得至少三名目标用户的可复核反馈",
+            "timebox_days": 14
+          }
+        ],
+        "counterevidence": [
+          "若连续两次真实项目都无法完成需求闭环，应降低该路径优先级"
+        ],
+        "evidence_ids": [
+          "ev-project-research"
+        ],
+        "source_ids": [
+          "src-user-project"
+        ],
+        "uncertainty": {
+          "kind": "data_coverage",
+          "level": "high",
+          "basis": "目前只有一条用户确认的项目证据，尚无真实产品岗位结果数据。",
+          "interval": null,
+          "interpretation": "不确定性来自证据覆盖不足，不代表转岗成功概率。"
+        }
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "ev-project-research",
+        "claim": "用户完成过包含访谈和数据分析的研究项目。",
+        "classification": "fact",
+        "evidence_grade": "B",
+        "source_ids": [
+          "src-user-project"
+        ],
+        "user_confirmation": "confirmed",
+        "extraction_confidence": 0.92,
+        "uncertainty": {
+          "kind": "extraction_quality",
+          "level": "low",
+          "basis": "原文与用户修订一致。",
+          "interval": null,
+          "interpretation": "该数值只描述信息抽取质量，不描述职业适配或成功概率。"
+        }
+      }
+    ],
+    "sources": [
+      {
+        "source_id": "src-user-project",
+        "source_type": "user_confirmed",
+        "title": "用户确认的项目经历",
+        "url": null,
+        "license": "user-provided-private",
+        "version": "1",
+        "observed_at": "2026-07-24T07:30:00Z",
+        "sample_size": 1,
+        "scope": {
+          "geographies": [
+            "CN"
+          ],
+          "industries": [
+            "public-sector-research"
+          ],
+          "experience_levels": [
+            "student"
+          ],
+          "population": "single authenticated user",
+          "time_window": {
+            "start": "2025-01-01",
+            "end": "2026-07-24"
+          }
+        },
+        "methodology": {
+          "method_id": "user-confirmation-v1",
+          "name": "用户确认",
+          "description": "从项目原文抽取后由用户逐项确认。",
+          "version": "1.0.0",
+          "parameters": {
+            "requires_confirmation": true
+          }
+        }
+      }
+    ],
+    "coverage_gaps": []
+  },
+  "error": null
+}

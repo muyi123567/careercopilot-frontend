@@ -1,0 +1,90 @@
+{
+  "schema_version": "2.0.0",
+  "required_by_pointer": {
+    "#": [
+      "schema_version",
+      "status",
+      "request_id",
+      "generated_at",
+      "data",
+      "error"
+    ],
+    "#/$defs/navigation_result": [
+      "current_occupation",
+      "paths",
+      "evidence",
+      "sources",
+      "coverage_gaps"
+    ],
+    "#/$defs/path": [
+      "path_id",
+      "path_type",
+      "target_occupation",
+      "summary",
+      "benefits",
+      "costs",
+      "key_gaps",
+      "minimum_validation_actions",
+      "counterevidence",
+      "evidence_ids",
+      "source_ids",
+      "uncertainty"
+    ],
+    "#/$defs/evidence": [
+      "evidence_id",
+      "claim",
+      "classification",
+      "evidence_grade",
+      "source_ids",
+      "user_confirmation",
+      "extraction_confidence",
+      "uncertainty"
+    ],
+    "#/$defs/source": [
+      "source_id",
+      "source_type",
+      "title",
+      "license",
+      "version",
+      "observed_at",
+      "scope",
+      "methodology"
+    ],
+    "#/$defs/error": [
+      "code",
+      "message",
+      "retryable",
+      "trace_id"
+    ]
+  },
+  "enums_by_pointer": {
+    "#/properties/status": [
+      "ok",
+      "data_insufficient",
+      "service_failure"
+    ],
+    "#/$defs/path/properties/path_type": [
+      "deepen",
+      "adjacent",
+      "explore"
+    ],
+    "#/$defs/evidence/properties/classification": [
+      "fact",
+      "inference",
+      "recommendation"
+    ],
+    "#/$defs/evidence/properties/evidence_grade": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "U"
+    ],
+    "#/$defs/evidence/properties/user_confirmation": [
+      "not_required",
+      "pending",
+      "confirmed",
+      "rejected"
+    ]
+  }
+}
