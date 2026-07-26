@@ -40,17 +40,18 @@ export function AnonymousChat({ events, initialQuestion, onClose }: AnonymousCha
   const [turn, setTurn] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const initialized = useRef(false);
+  const sendMessageRef = useRef<(text: string, history: ChatMessage[]) => Promise<void>>();
 
   // 自动滚动到底部
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // 初始化：发送第一条消息
+  // 初始化：发送第一条消息（仅一次）
   useEffect(() => {
-    if (!initialized.current && initialQuestion) {
+    if (!initialized.current && initialQuestion && sendMessageRef.current) {
       initialized.current = true;
-      void sendMessage(initialQuestion, []);
+      void sendMessageRef.current(initialQuestion, []);
     }
   }, [initialQuestion]);
 
@@ -117,6 +118,8 @@ export function AnonymousChat({ events, initialQuestion, onClose }: AnonymousCha
       setBusy(false);
     }
   }
+  // 保持 ref 最新，供初始化 useEffect 调用
+  sendMessageRef.current = sendMessage;
 
   function handleSend() {
     if (input.trim() && !isFinal) {
