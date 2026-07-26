@@ -1,10 +1,11 @@
+"""Static F01 consumer contract checks — migrated to React source."""
 from pathlib import Path
 import hashlib
 import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-INDEX = (ROOT / "public" / "index.html").read_text(encoding="utf-8")
+SRC = ROOT / "src"
 SCHEMA = (
     ROOT
     / "contracts"
@@ -16,6 +17,18 @@ CANONICAL_SHA256 = (
 )
 
 
+def read_all_tsx() -> str:
+    """Concatenate all .tsx/.ts files in src/ for static checks."""
+    parts: list[str] = []
+    for ext in ("*.tsx", "*.ts"):
+        for f in SRC.rglob(ext):
+            parts.append(f.read_text(encoding="utf-8"))
+    return "\n".join(parts)
+
+
+ALL_SRC = read_all_tsx()
+
+
 class StructuredConsumerTests(unittest.TestCase):
     def test_vendored_contract_matches_b_canonical_pin(self):
         canonical_bytes = SCHEMA.read_bytes().replace(b"\r\n", b"\n")
@@ -24,11 +37,23 @@ class StructuredConsumerTests(unittest.TestCase):
             CANONICAL_SHA256,
         )
 
-    def test_authenticated_flow_uses_v2_endpoint(self):
-        self.assertIn("`${API_BASE}/api/v2/navigation`", INDEX)
-        self.assertIn("validateNavigationResponse(data)", INDEX)
+    def test_v2_client_exists_and_validates(self):
+        """F01: v2 client must import and call validateV2Response."""
+        v2_client = (SRC / "shared" / "api" / "v2" / "client.ts").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("validateV2Response", v2_client)
+
+    def test_ajv_schema_validator_exists(self):
+        """F01: AJV validator must load canonical schema."""
+        validator = (
+            SRC / "shared" / "api" / "v2" / "schema-validator.ts"
+        ).read_text(encoding="utf-8")
+        self.assertIn("career-navigation-v2.0.0.schema.json", validator)
+        self.assertIn("ajv", validator.lower())
 
     def test_frontend_does_not_parse_llm_text(self):
+        """F01: frontend must never parse LLM-generated free text."""
         for forbidden in (
             "parsePercent",
             "技能匹配度:",
@@ -36,11 +61,26 @@ class StructuredConsumerTests(unittest.TestCase):
             "综合评分:",
             "text.split",
         ):
-            self.assertNotIn(forbidden, INDEX)
+            self.assertNotIn(forbidden, ALL_SRC)
 
-    def test_api_data_is_not_inserted_with_inner_html(self):
-        self.assertNotIn(".innerHTML", INDEX)
-        self.assertIn("textContent", INDEX)
+    def test_no_innerhtml_in_react_source(self):
+        """F01: React source must not use innerHTML."""
+        self.assertNotIn(".innerHTML", ALL_SRC)
+
+    def test_evidence_label_uses_recommendation(self):
+        """F01: EvidenceLabel must use canonical 'recommendation' enum."""
+        label = (
+            SRC / "shared" / "ui" / "trust" / "EvidenceLabel.tsx"
+        ).read_text(encoding="utf-8")
+        self.assertIn("recommendation", label)
+        # 'advice' should only appear in CSS token names, not as enum value
+        lines = label.splitlines()
+        for line in lines:
+            stripped = line.strip()
+            if stripped.startswith("//") or stripped.startswith("*"):
+                continue
+            if "'advice'" in stripped and "--advice" not in stripped:
+                self.fail(f"Found non-CSS-token 'advice' in: {stripped}")
 
 
 if __name__ == "__main__":

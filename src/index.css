@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+/* ── V2 §8.2 颜色 Token ────────────────────────────────── */
+:root {
+  --canvas: #F5F7FA;
+  --surface: #FFFFFF;
+  --ink: #172033;
+  --muted: #5C667A;
+  --border: #D7DEE8;
+
+  --primary: #2457D6;
+  --primary-hover: #1946B8;
+  --primary-soft: #E8EFFF;
+
+  --success: #116B4F;
+  --success-soft: #E4F4EE;
+  --warning: #8A4B00;
+  --warning-soft: #FFF2D6;
+  --danger: #B42318;
+  --danger-soft: #FDECEA;
+
+  --fact: #1F5AA6;
+  --fact-soft: #E8F1FC;
+  --inference: #6B3FA0;
+  --inference-soft: #F2EAFB;
+  --advice: #0B6B66;
+  --advice-soft: #E3F4F2;
+  --unknown: #596275;
+  --unknown-soft: #EEF1F5;
+}
+
+/* ── V2 §8.3 字体 ──────────────────────────────────────── */
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink);
+  background-color: var(--canvas);
+}
+
+code, .font-mono {
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", monospace;
+}
+
+/* ── V2 WCAG 2.2 AA 焦点与可访问性 ─────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 50;
+  padding: 8px 16px;
+  background: var(--surface);
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--primary);
+}
+.skip-link:focus {
+  top: 8px;
+}
+
+/* ── V2 §8.6 无障碍：减弱动画 ─────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
