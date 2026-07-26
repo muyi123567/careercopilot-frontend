@@ -1,5 +1,7 @@
 import { useRef, useState, type ChangeEvent, type CSSProperties, type DragEvent } from 'react';
 import { getRuntimeConfig } from '../../shared/api/client';
+import { parsePdfLocally, isPdfFile, isDocxFile, isSupportedTextFile } from '../../lib/pdf-parser';
+import { AnonymousChat } from './AnonymousChat';
 
 type Mode = 'demo' | 'anonymous';
 type EventKind = 'skill' | 'experience' | 'education' | 'preference' | 'constraint';
@@ -20,7 +22,6 @@ interface TemporaryResult {
 }
 
 const PII = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}|(?<!\d)1[3-9]\d{9}(?!\d)|(?<!\d)\d{17}[\dXx](?![\dXx])/i;
-const SUPPORTED_TEXT = /\.(txt|md|csv|json)$/i;
 
 const GLYPHS = Array.from({ length: 44 }, (_, index) => ({
   id: index,
@@ -85,22 +86,49 @@ export function MatrixLandingPage() {
   const [error, setError] = useState('');
   const [demoVisible, setDemoVisible] = useState(false);
   const [temporaryResult, setTemporaryResult] = useState<TemporaryResult | null>(null);
+  const [chatVisible, setChatVisible] = useState(false);
 
   async function parseFile(file: File) {
     setError('');
     setTemporaryResult(null);
-    if (!SUPPORTED_TEXT.test(file.name)) {
-      setError('P0 仅在浏览器本地解析 TXT、MD、CSV 或 JSON 文本版简历；PDF/DOCX 支持将在下一阶段以同样的本地解析方式加入。');
+
+    // DOCX 暂不支持
+    if (isDocxFile(file)) {
+      setError('DOCX 支持即将加入。请先将简历导出为 PDF 或 TXT 格式。');
       return;
     }
-    if (file.size > 1024 * 1024) {
-      setError('为保护浏览器性能，请选择不超过 1 MB 的文本版简历。');
+
+    let localText: string;
+
+    // PDF 解析
+    if (isPdfFile(file)) {
+      try {
+        const result = await parsePdfLocally(file);
+        localText = result.text;
+        if (result.truncated) {
+          setError(`PDF 共 ${result.pages} 页，已解析前 20 页。`);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'PDF 解析失败，请尝试使用 TXT 格式。');
+        return;
+      }
+    }
+    // 文本文件解析
+    else if (isSupportedTextFile(file)) {
+      if (file.size > 1024 * 1024) {
+        setError('为保护浏览器性能，请选择不超过 1 MB 的文本版简历。');
+        return;
+      }
+      localText = await file.text();
+    }
+    else {
+      setError('支持的文件格式：PDF、TXT、MD、CSV、JSON。所有解析均在浏览器本地完成。');
       return;
     }
-    const localText = await file.text();
+
     const extracted = extractStructuredEvents(localText);
     if (!extracted.length) {
-      setError('没有识别到可安全发送的结构化信号。请使用条目化的文本版简历，或手动补充后再试。');
+      setError('没有识别到可安全发送的结构化信号。请使用条目化的简历，或手动补充后再试。');
       return;
     }
     setEvents(extracted);
@@ -246,10 +274,10 @@ export function MatrixLandingPage() {
               <p className="console-label">EPHEMERAL / CONSENT REQUIRED</p>
               <button className="drop-zone" type="button" onClick={() => inputRef.current?.click()} onDragOver={(event) => event.preventDefault()} onDrop={onDrop}>
                 <span className="drop-icon">⇩</span>
-                <strong>{fileName || '选择或拖入文本版简历'}</strong>
-                <small>TXT · MD · CSV · JSON，浏览器本地解析，最大 1 MB</small>
+                <strong>{fileName || '选择或拖入简历文件'}</strong>
+                <small>PDF · TXT · MD · CSV · JSON，浏览器本地解析，原始文件不上传</small>
               </button>
-              <input ref={inputRef} className="sr-only" type="file" accept=".txt,.md,.csv,.json,text/plain,text/markdown,text/csv,application/json" onChange={onFileChange} />
+              <input ref={inputRef} className="sr-only" type="file" accept=".pdf,.txt,.md,.csv,.json,application/pdf,text/plain,text/markdown,text/csv,application/json" onChange={onFileChange} />
               {events.length > 0 && (
                 <div className="event-tray">
                   <div><span>已提取 {events.length} 个可发送信号</span><button type="button" onClick={() => { setEvents([]); setFileName(''); }}>清除</button></div>
@@ -270,6 +298,19 @@ export function MatrixLandingPage() {
         <section className="matrix-result" aria-live="polite">
           <div><p className="console-label">{temporaryResult ? 'TEMPORARY PREVIEW / RETENTION: NONE' : 'SYNTHETIC PREVIEW / READ ONLY'}</p><h2>{temporaryResult ? '本次临时信号已整理。' : DEMO_RESULT.title}</h2><p>{temporaryResult ? `本次共收到 ${Object.values(temporaryResult.event_counts).reduce((sum, count) => sum + count, 0)} 个经授权结构化事件；原始文件没有离开浏览器。` : DEMO_RESULT.detail}</p></div>
           <ol>{(temporaryResult?.next_steps ?? DEMO_RESULT.steps).map((step) => <li key={step}>{step}</li>)}</ol>
+          {temporaryResult && !chatVisible && (
+            <button className="matrix-primary" type="button" onClick={() => setChatVisible(true)} style={{ marginTop: '1.5rem' }}>继续探索对话（最多 10 轮） <span aria-hidden="true">↘</span></button>
+          )}
+        </section>
+      )}
+
+      {chatVisible && temporaryResult && (
+        <section className="matrix-navigator" style={{ paddingBottom: '3rem' }}>
+          <AnonymousChat
+            events={events}
+            initialQuestion={question}
+            onClose={() => setChatVisible(false)}
+          />
         </section>
       )}
 
