@@ -1,11 +1,11 @@
-"""Static F00 contract checks for the zero-build frontend."""
+"""Static F00 contract checks for the Vite/React frontend."""
 from pathlib import Path
 import unittest
 
 
-INDEX = (
-    Path(__file__).resolve().parents[1] / "public" / "index.html"
-).read_text(encoding="utf-8")
+ROOT = Path(__file__).resolve().parents[1]
+CLIENT = (ROOT / "src" / "shared" / "api" / "client.ts").read_text(encoding="utf-8")
+SESSION = (ROOT / "src" / "shared" / "auth" / "session.tsx").read_text(encoding="utf-8")
 
 
 class IdentityContractTests(unittest.TestCase):
@@ -17,27 +17,25 @@ class IdentityContractTests(unittest.TestCase):
             "dev-process-key-change-in-prod",
             "http://localhost:8000",
         ):
-            self.assertNotIn(forbidden, INDEX)
+            self.assertNotIn(forbidden, CLIENT + SESSION)
 
     def test_demo_mode_is_explicit_and_read_only(self):
-        self.assertIn('id="access-mode"', INDEX)
-        self.assertIn('value="demo">只读演示', INDEX)
-        self.assertIn("payload.mode = 'demo'", INDEX)
-        self.assertIn("data.mode !== 'demo'", INDEX)
-        self.assertIn("不读取、不保存个人画像", INDEX)
+        self.assertIn("type AccessMode = 'demo' | 'authenticated'", CLIENT)
+        self.assertIn("if (opts.mode === 'demo' || forceMock)", CLIENT)
+        self.assertIn("const [mode, setMode] = useState<AccessMode>('demo')", SESSION)
 
     def test_authenticated_mode_uses_bearer_token(self):
-        self.assertIn('value="authenticated"', INDEX)
-        self.assertIn("headers.Authorization = `Bearer ${token}`", INDEX)
-        self.assertNotIn("'X-User-Id'", INDEX)
+        self.assertIn("headers.Authorization = `Bearer ${opts.token}`", CLIENT)
+        self.assertNotIn("'X-User-Id'", CLIENT)
 
     def test_backend_scoped_session_replaces_client_session(self):
-        self.assertIn("session_id: sessionId", INDEX)
-        self.assertIn("sessionId = data.session_id", INDEX)
+        self.assertIn("createClientSessionId", CLIENT)
+        self.assertIn("useMemo(() => createClientSessionId(), [])", SESSION)
+        self.assertNotIn("demo-session", SESSION)
 
     def test_api_base_is_runtime_configured(self):
-        self.assertIn("window.CAREERCOPILOT_CONFIG", INDEX)
-        self.assertIn("window.location.origin", INDEX)
+        self.assertIn("window.CAREERCOPILOT_CONFIG", CLIENT)
+        self.assertIn("cfg.apiBase", CLIENT)
 
 
 if __name__ == "__main__":

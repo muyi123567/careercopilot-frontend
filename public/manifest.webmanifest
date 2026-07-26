@@ -1,0 +1,15 @@
+{
+  "name": "CareerCopilot · 职业路径参照系",
+  "short_name": "CareerCopilot",
+  "description": "证据优先的职业导航：职业地图、三路径比较、行动闭环",
+  "theme_color": "#fbfaf7",
+  "background_color": "#fbfaf7",
+  "display": "standalone",
+  "start_url": "./",
+  "scope": "./",
+  "icons": [
+    { "src": "./pwa-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./pwa-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "./pwa-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

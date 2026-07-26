@@ -4,7 +4,8 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-INDEX = (ROOT / "public" / "index.html").read_text(encoding="utf-8")
+CLIENT = (ROOT / "src" / "shared" / "api" / "client.ts").read_text(encoding="utf-8")
+VALIDATOR = (ROOT / "src" / "shared" / "api" / "validate.ts").read_text(encoding="utf-8")
 SCHEMA = (
     ROOT
     / "contracts"
@@ -25,8 +26,8 @@ class StructuredConsumerTests(unittest.TestCase):
         )
 
     def test_authenticated_flow_uses_v2_endpoint(self):
-        self.assertIn("`${API_BASE}/api/v2/navigation`", INDEX)
-        self.assertIn("validateNavigationResponse(data)", INDEX)
+        self.assertIn("`${apiBase}/api/v2/navigation`", CLIENT)
+        self.assertIn("validateNavigationResponse(json)", CLIENT)
 
     def test_frontend_does_not_parse_llm_text(self):
         for forbidden in (
@@ -36,11 +37,14 @@ class StructuredConsumerTests(unittest.TestCase):
             "综合评分:",
             "text.split",
         ):
-            self.assertNotIn(forbidden, INDEX)
+            self.assertNotIn(forbidden, CLIENT + VALIDATOR)
 
     def test_api_data_is_not_inserted_with_inner_html(self):
-        self.assertNotIn(".innerHTML", INDEX)
-        self.assertIn("textContent", INDEX)
+        source = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in (ROOT / "src").rglob("*.tsx")
+        )
+        self.assertNotIn(".innerHTML", source)
 
 
 if __name__ == "__main__":

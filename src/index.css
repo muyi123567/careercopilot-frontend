@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-paper text-ink-800 antialiased;
+    margin: 0;
+    min-height: 100vh;
+    font-feature-settings: 'cv11', 'ss01';
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    @apply bg-brand-100 text-brand-800;
+  }
+  /* 全局键盘焦点可见性（WCAG 2.4.7） */
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-paper;
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* 编辑式卡片：纸白表面 + 发丝边框 + 柔和投影 */
+  .card {
+    @apply rounded-2xl border border-line bg-surface shadow-card;
+  }
+  .card-hover {
+    @apply transition-[transform,box-shadow] duration-300 ease-out-quart hover:-translate-y-0.5 hover:shadow-lift;
+  }
+  /* 规划/占位骨架 */
+  .skeleton {
+    @apply animate-pulse rounded-md bg-ink-900/5;
+  }
+  /* 小标签：大写字距，克制的眉题 */
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.14em] text-ink-500;
+  }
+  /* 展示体标题（Fraunces） */
+  .display {
+    @apply font-display tracking-tight text-ink-900;
+  }
+  /* 表单控件统一外观 */
+  .field {
+    @apply w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-sm text-ink-800
+           placeholder:text-ink-400 transition-colors duration-200
+           focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/30;
+  }
+  .visually-hidden {
+    @apply sr-only;
+  }
+  /* 抽屉滑入（覆盖默认 keyframes，使用 out-expo 缓动） */
+  .drawer-enter {
+    animation: drawer-in 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+@layer utilities {
+  /* 入场节奏：子元素错落上浮 */
+  .stagger > * {
+    animation: slide-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .stagger > *:nth-child(2) { animation-delay: 0.06s; }
+  .stagger > *:nth-child(3) { animation-delay: 0.12s; }
+  .stagger > *:nth-child(4) { animation-delay: 0.18s; }
+  .stagger > *:nth-child(5) { animation-delay: 0.24s; }
+  .stagger > *:nth-child(6) { animation-delay: 0.30s; }
+  .text-balance { text-wrap: balance; }
+}
