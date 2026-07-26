@@ -28,7 +28,18 @@ declare global {
 }
 
 export function getRuntimeConfig(): RuntimeConfig {
-  return Object.freeze(window.CAREERCOPILOT_CONFIG ?? {});
+  // 优先使用 window.CAREERCOPILOT_CONFIG（运行时注入）
+  // 其次使用 Vite 环境变量（构建时注入）
+  const windowConfig = window.CAREERCOPILOT_CONFIG ?? {};
+  const envApiBase = import.meta.env.VITE_API_BASE_URL;
+  const envUseMock = import.meta.env.VITE_USE_MOCK === 'true';
+  const envMockScenario = import.meta.env.VITE_MOCK_SCENARIO as MockScenario | undefined;
+
+  return Object.freeze({
+    apiBase: windowConfig.apiBase ?? envApiBase ?? undefined,
+    useMock: windowConfig.useMock ?? envUseMock ?? undefined,
+    mockScenario: windowConfig.mockScenario ?? envMockScenario ?? undefined,
+  });
 }
 
 /** 随机匿名会话 id；绝不使用固定 web-session。 */
