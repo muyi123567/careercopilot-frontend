@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareerCopilot · 证据型职业导航</title>
+  <meta name="description" content="上传简历，系统在浏览器本地跨阶段抽取你的真实经历，生成带证据引用的职业推演。数据不出本机。" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./assets/css/style.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</head>
+
+<body id="top">
+  <!-- ============ 顶栏 ============ -->
+  <header class="nav" id="nav">
+    <div class="nav-inner container">
+      <a class="brand" href="#top">CareerCopilot<span class="brand-dot">.</span></a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="#why">产品理念</a>
+        <a href="#workspace">亲自体验</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn btn-primary btn-sm" href="#workspace">上传简历</a>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="切换深浅色">
+          <svg class="ic-moon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <svg class="ic-sun" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ Hero ============ -->
+    <section class="hero">
+      <div class="bg-stage" aria-hidden="true">
+        <canvas class="digital-earth" id="digitalEarth"></canvas>
+        <svg class="data-tree" id="dataTree" viewBox="0 0 480 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="treeGrad" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0%" stop-color="#3A8DFF"/>
+              <stop offset="55%" stop-color="#46D6B0"/>
+              <stop offset="100%" stop-color="#2BFF88"/>
+            </linearGradient>
+            <radialGradient id="leafGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#BFFFE0"/>
+              <stop offset="45%" stop-color="#7DFFB4"/>
+              <stop offset="100%" stop-color="#2BFF88"/>
+            </radialGradient>
+            <radialGradient id="groundGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="rgba(43,255,136,0.20)"/>
+              <stop offset="60%" stop-color="rgba(43,255,136,0.07)"/>
+              <stop offset="100%" stop-color="rgba(43,255,136,0)"/>
+            </radialGradient>
+          </defs>
+        </svg>
+      </div>
+      <div class="scrim" aria-hidden="true"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <span class="eyebrow">证据型职业导航 · EVIDENCE-BASED</span>
+          <h1 class="hero-title">把散落各处的经历，<br />连成一条<span class="ac">职业路径</span></h1>
+          <p class="hero-sub">上传简历，系统在浏览器本地跨阶段抽取你的真实经历，生成带证据引用的职业推演。数据不出本机，刷新即清空。</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#workspace">上传简历，开始推演</a>
+            <button class="btn btn-text" id="demoBtn" type="button">看演示 <span class="arr">→</span></button>
+          </div>
+          <p class="hero-trust">
+            <span class="tick">本地解析</span>
+            <span class="tick">零上传</span>
+            <span class="tick">免费演示</span>
+          </p>
+        </div>
+
+        <div class="hero-visual reveal" aria-hidden="true">
+          <div class="appwin">
+            <div class="aw-bar">
+              <span class="aw-dot"></span>
+              <span class="aw-title">经历时间线</span>
+              <span class="aw-badge">本地</span>
+            </div>
+            <div class="aw-body">
+              <div class="aw-row">
+                <span class="aw-stage">大二</span>
+                <div class="aw-card">
+                  <div class="aw-card-title">校学生会新媒体部副部长</div>
+                  <div class="aw-chips"><i>内容策划</i><i>公众号运营</i><i>团队协作</i></div>
+                </div>
+              </div>
+              <div class="aw-row">
+                <span class="aw-stage">大三</span>
+                <div class="aw-card">
+                  <div class="aw-card-title">市场调研实习生 · 某互联网公司</div>
+                  <div class="aw-chips"><i>数据分析</i><i>报告撰写</i></div>
+                </div>
+              </div>
+              <div class="aw-row">
+                <span class="aw-stage">工作</span>
+                <div class="aw-card">
+                  <div class="aw-card-title">产品经理 · 某科技公司</div>
+                  <div class="aw-chips"><i>需求分析</i><i>原型设计</i><i>跨部门协作</i></div>
+                </div>
+              </div>
+              <div class="aw-foot">跨阶段调取 3 段真实经历 → 推演报告</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 产品理念 ============ -->
+    <section class="why" id="why">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">产品能力 · CAPABILITIES</span>
+          <h2 class="section-title">不止简历解析，而是一套证据型职业推演系统</h2>
+          <p class="section-desc">以下能力均已在仓库实现（含未合并 PR 与功能分支）。本页当前可交互的是<strong>基础三件套</strong>；进阶与特色能力已在对应分支完成工程实现，尚未合并至主干。</p>
+        </div>
+
+        <!-- 四大引擎：特色 / 进阶（视觉主角） -->
+        <div class="pillars">
+          <article class="pillar reveal">
+            <div class="pillar-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.6 13l1.7 1.7L15 11"/></svg>
+            </div>
+            <h3>证据引擎</h3>
+            <p class="pillar-desc">每一句结论都绑定你经历中的原文证据，并给出证据等级与置信区间。</p>
+            <ul class="feat-list">
+              <li><span>个人证据账本</span><code>F20</code></li>
+              <li><span>四层证据评分</span><code>F21</code></li>
+              <li><span>源血缘门禁</span><code>merged</code></li>
+              <li><span>不可变运行快照</span><code>merged</code></li>
+            </ul>
+          </article>
+
+          <article class="pillar reveal">
+            <div class="pillar-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="5" cy="19" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M5 17V11a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v8"/></svg>
+            </div>
+            <h3>决策引擎</h3>
+            <p class="pillar-desc">给出深耕 / 拓展 / 转型三条路径，并列比较优劣与置信，并拆成可执行检查点。</p>
+            <ul class="feat-list">
+              <li><span>三路径决策生成</span><code>F22</code></li>
+              <li><span>三路径比较工作台</span><code>F23</code></li>
+              <li><span>职业图路径服务</span><code>F12</code></li>
+              <li><span>行动计划与检查点</span><code>F40</code></li>
+            </ul>
+          </article>
+
+          <article class="pillar reveal">
+            <div class="pillar-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="7" r="2"/><circle cx="9" cy="18" r="2"/><circle cx="17" cy="17" r="2"/><path d="M7.5 7l8.5 9M8 17l8-8M7 7h9"/></svg>
+            </div>
+            <h3>群体智能</h3>
+            <p class="pillar-desc">聚合匿名群体真实职业轨迹，让你看见「前人怎么走」，并模拟不同选择的结果。</p>
+            <ul class="feat-list">
+              <li><span>群体轨迹聚合</span><code>F11</code></li>
+              <li><span>职业轨迹地图</span><code>F13</code></li>
+              <li><span>市场雷达</span><code>F41</code></li>
+              <li><span>职业实验引擎</span><code>F24</code></li>
+            </ul>
+          </article>
+
+          <article class="pillar reveal">
+            <div class="pillar-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 5v8l-8 5-8-5V8z"/><path d="M12 3v18M4 8l8 5 8-5"/></svg>
+            </div>
+            <h3>能力建模与可视化</h3>
+            <p class="pillar-desc">用标准化技能词典、技能树、能力雷达图与三维置信度，把「能力」讲清楚、看得见。</p>
+            <ul class="feat-list">
+              <li><span>技能标准化词典</span><code>F10</code></li>
+              <li><span>技能树</span><code>031</code></li>
+              <li><span>能力雷达图</span><code>034</code></li>
+              <li><span>三维置信度</span><code>p0-2</code></li>
+            </ul>
+          </article>
+        </div>
+
+        <!-- 完整功能矩阵 -->
+        <div class="matrix-head reveal">
+          <h3>完整功能矩阵</h3>
+          <div class="legend">
+            <span class="lg"><i class="dot dot-live"></i>本地演示可用</span>
+            <span class="lg"><i class="dot dot-branch"></i>仓库分支 / 未合并 PR</span>
+            <span class="lg"><i class="dot dot-merged"></i>已合并主干</span>
+          </div>
+        </div>
+
+        <div class="feat-matrix">
+          <div class="feat-card reveal"><div class="fc-top"><h4>本地解析 · 零上传</h4><span class="chip chip-live">本地演示</span></div><p>PDF / Word / TXT 与图片（OCR）在浏览器内解析，文件不出本机。</p><code class="fc-tag">live · 040-ocr</code></div>
+          <div class="feat-card reveal"><div class="fc-top"><h4>跨阶段时间线记忆</h4><span class="chip chip-live">本地演示</span></div><p>从校园到职场组织成线性事件链，推演时跨阶段调取真实演进。</p><code class="fc-tag">live</code></div>
+          <div class="feat-card reveal"><div class="fc-top"><h4>证据型问答推演</h4><span class="chip chip-live">本地演示</span></div><p>回答附带原文证据引用与置信区间，可核验、可信任。</p><code class="fc-tag">live · SSE</code></div>
+
+          <div class="feat-card reveal"><div class="fc-top"><h4>三路径决策生成</h4><span class="chip chip-branch">仓库分支</span></div><p>一次推演产出深耕 / 拓展 / 转型三条路径及各自依据。</p><code class="fc-tag">feat/f22-decision-service · PR#14</code></div>
+          <div class="feat-card reveal"><div class="fc-top"><h4>三路径比较工作台</h4><span class="chip chip-branch">仓库分支</span></div><p>并列对比三条路径的优劣、风险与置信度。</p><code class="fc-tag">feat/f23-decision-compare</code></div>
+          <div class="feat-card reveal"><div class="fc-top"><h4>职业图候选路径</h4><span class="chip chip-branch">仓库分支</span></div><p>基于职业图谱推荐下一步可迁移方向。</p><code class="fc-tag">feat/f12-path-service · PR#11</code></div>
+          <div class="feat-card reveal"><div class="fc-top"><h4>行动计划与检查点</h4><span class="chip chip-branch">仓库分支</span></div><p>把决策拆成可执行步骤与里程碑检查点。</p><code class="fc-tag">feat/f40-actions-checkins · PR#15</code></div>
+
+          <div class="feat-card reveal"><div class="fc-top"><h4>群体轨迹聚合</h4><span class="chip chip-branch">仓库分支</span></div><p>匿名聚合历史群体真实职业轨迹。</p><code class="fc-tag">feat/f11-trajectory-aggregation · PR#10</code></div>
+          <div class="feat-card reveal"><div class="fc-top"><h4>职业轨迹地图</h4><span class="chip chip-branch">仓库分支</span></div><p>可视化「前人怎么走」，发现可行路径。</p><code class="fc-tag">feat/f13-career-map-frontend</code></div>
+          <div class="feat-card reveal"><div class="fc-top"><h4>市场雷达</h4><span class="chip chip-branch">仓库分支</span></div><p>行业 / 岗位需求信号，校准努力方向。</p><code class="fc-tag">feat/f32-f41-market-action</code></div>
+          <div class="feat-card reveal"><div class="fc-top"><h4>职业实验引擎</h4><span class="chip chip-branch">仓库分支</span></div><p>模拟不同选择的中长期结果。</p><code class="fc-tag">feat/f24-experiment-frontend</code></div>
+          <div class="feat-card reveal"><div class="fc-top"><h4>经同意的群体学习</h4><span class="chip chip-branch">仓库分支</span></div><p>在用户授权下反哺群体模型（F42）。</p><code class="fc-tag">feat/f42-outcomes · PR#16</code></div>
+
+          <div class="feat-card reveal"><div class="fc-top"><h4>技能标准化词典</h4><span class="chip chip-branch">仓库分支</span></div><p>统一职业与技能语义，消除表述歧义。</p><code class="fc-tag">feat/f10-taxonomy · PR#9</code></div>
+          <div class="feat-card reveal"><div class="fc-top"><h4>技能树</h4><span class="chip chip-branch">仓库分支</span></div><p>可视化个人技能成长与缺口。</p><code class="fc-tag">agent/031-skilltree-route</code></div>
+          <div class="feat-card reveal"><div class="fc-top"><h4>能力雷达图</h4><span class="chip chip-branch">仓库分支</span></div><p>多维能力画像，一眼看强弱。</p><code class="fc-tag">agent/034-viz-radar-graph</code></div>
+          <div class="feat-card reveal"><div class="fc-top"><h4>三维置信度</h4><span class="chip chip-branch">仓库分支</span></div><p>推演结论带三维置信，可读性更强。</p><code class="fc-tag">agent/p0-2-three-dim-confidence</code></div>
+
+          <div class="feat-card reveal"><div class="fc-top"><h4>身份隔离（单租户）</h4><span class="chip chip-merged">已合并</span></div><p>uid 取自百炼，默认分支严格单租户隔离。</p><code class="fc-tag">feat/f00-identity-isolation · PR#4</code></div>
+          <div class="feat-card reveal"><div class="fc-top"><h4>API v2 契约</h4><span class="chip chip-merged">已合并</span></div><p>规范化生产者契约，前后端对齐。</p><code class="fc-tag">feat/f01-api-contract-v2 · PR#5</code></div>
+          <div class="feat-card reveal"><div class="fc-top"><h4>源血缘 / 不可变快照</h4><span class="chip chip-merged">已合并</span></div><p>证据可溯源、每次运行留痕可复现。</p><code class="fc-tag">F02 / F03 · PR#6,#8</code></div>
+          <div class="feat-card reveal"><div class="fc-top"><h4>KMS · 观测 · 记忆整合</h4><span class="chip chip-branch">仓库分支</span></div><p>密钥安全管理、运行观测、长期记忆整合与 Agent 编排底座。</p><code class="fc-tag">p1-2-kms · F61 · F53 · F54</code></div>
+        </div>
+
+        <p class="audit-note reveal">审计说明：以上为对 <code>careercopilot-backend</code>（master + 17 个开放 / 已合并 PR）与 <code>careercopilot-frontend</code>（main + 功能分支）的只读梳理。标注「本地演示」的为本页可交互功能；其余均在仓库对应分支实现，尚未合并至主干。</p>
+      </div>
+    </section>
+
+    <!-- ============ 亲自体验 ============ -->
+    <section class="workspace" id="workspace">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">TRY IT</span>
+          <h2 class="section-title">上传简历，看它如何思考</h2>
+          <p class="section-desc">支持 PDF / Word / TXT，或直接在下方粘贴文本。没有文件？点「看演示」用样本数据走完整流程。</p>
+        </div>
+
+        <ol class="stepper reveal" id="stepper" aria-label="流程步骤">
+          <li data-step="1"><span class="st-dot">1</span>上传</li>
+          <li data-step="2"><span class="st-dot">2</span>解析</li>
+          <li data-step="3"><span class="st-dot">3</span>时间线</li>
+          <li data-step="4"><span class="st-dot">4</span>推演</li>
+        </ol>
+
+        <!-- 上传 -->
+        <div class="panel reveal" id="uploadZone">
+          <input type="file" id="fileInput" accept=".pdf,.docx,.txt" hidden />
+          <div class="drop" id="dropArea">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+            <p class="drop-title">拖拽文件到此处，或<span class="link">点击选择</span></p>
+            <p class="drop-sub">PDF · DOCX · TXT</p>
+          </div>
+          <div class="paste">
+            <button class="btn btn-text btn-sm" id="pasteToggle" type="button">或粘贴文本</button>
+            <div class="paste-box" id="pasteBox" hidden>
+              <textarea id="pasteText" placeholder="把简历或经历文本粘贴到这里……"></textarea>
+              <button class="btn btn-primary btn-sm" id="pasteRun" type="button">解析这段文本</button>
+            </div>
+          </div>
+          <p class="hint" id="parseHint"></p>
+        </div>
+
+        <!-- 时间线 -->
+        <div class="panel timeline-wrap reveal" id="timelineWrap" hidden>
+          <div class="block-head">
+            <h3 class="block-title">你的经历时间线</h3>
+            <span class="block-meta" id="timelineMeta"></span>
+          </div>
+          <div class="timeline" id="timeline"></div>
+        </div>
+
+        <!-- 推演 -->
+        <div class="panel reason-wrap reveal" id="reasonWrap" hidden>
+          <div class="block-head">
+            <h3 class="block-title">职业推演</h3>
+          </div>
+          <div class="ask">
+            <input type="text" id="question" placeholder="问一个问题，例如：我该深耕产品还是拓展数据方向？" />
+            <button class="btn btn-primary" id="reasonBtn" type="button">生成推演</button>
+          </div>
+          <div class="report" id="report"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 可信度静默条 ============ -->
+    <section class="trust">
+      <div class="container trust-inner reveal">
+        <div class="stat"><b>0</b><span>文件上传</span></div>
+        <div class="stat"><b>≈2s</b><span>本地解析</span></div>
+        <div class="stat"><b>100%</b><span>浏览器内</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="ft-brand">CareerCopilot<span class="brand-dot">.</span></div>
+      <div class="ft-cols">
+        <div>
+          <h4>产品</h4>
+          <a href="#why">理念</a>
+          <a href="#workspace">演示</a>
+        </div>
+        <div>
+          <h4>资源</h4>
+          <a href="#workspace">使用说明</a>
+          <a href="#top">隐私</a>
+        </div>
+        <div>
+          <h4>关于</h4>
+          <a href="#why">设计</a>
+          <a href="#top">联系</a>
+        </div>
+      </div>
+    </div>
+    <div class="container ft-base">© 2026 CareerCopilot · 证据型职业导航 Demo · 数据仅在本地，刷新即清</div>
+  </footer>
+
+  <script src="./assets/js/app.js" defer></script>
+</body>
+</html>
