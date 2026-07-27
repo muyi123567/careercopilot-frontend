@@ -30,9 +30,14 @@ declare global {
 export function getRuntimeConfig(): RuntimeConfig {
   // 优先使用 window.CAREERCOPILOT_CONFIG（运行时注入）
   // 其次使用 Vite 环境变量（构建时注入）
-  const windowConfig = window.CAREERCOPILOT_CONFIG ?? {};
+  const windowConfig = typeof window === 'undefined'
+    ? {}
+    : window.CAREERCOPILOT_CONFIG ?? {};
   const envApiBase = import.meta.env.VITE_API_BASE_URL;
-  const envUseMock = import.meta.env.VITE_USE_MOCK === 'true';
+  const rawEnvUseMock = import.meta.env.VITE_USE_MOCK;
+  const envUseMock = rawEnvUseMock === undefined
+    ? undefined
+    : rawEnvUseMock === 'true';
   const envMockScenario = import.meta.env.VITE_MOCK_SCENARIO as MockScenario | undefined;
 
   return Object.freeze({
