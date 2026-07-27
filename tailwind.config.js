@@ -6,41 +6,42 @@ export default {
       colors: {
         // Warm editorial paper + ink (tinted neutrals, never pure black/white).
         // <alpha-value> keeps opacity modifiers (/10, /40 ...) working with oklch.
-        paper: 'oklch(98% 0.008 85 / <alpha-value>)',
+        paper: 'oklch(97% 0.012 85 / <alpha-value>)',
         surface: 'oklch(100% 0 0 / <alpha-value>)',
         ink: {
-          900: 'oklch(24% 0.02 264 / <alpha-value>)',
-          800: 'oklch(32% 0.02 264 / <alpha-value>)',
-          700: 'oklch(42% 0.02 264 / <alpha-value>)',
-          600: 'oklch(52% 0.02 264 / <alpha-value>)',
-          500: 'oklch(60% 0.02 264 / <alpha-value>)',
-          400: 'oklch(70% 0.02 264 / <alpha-value>)',
+          900: 'oklch(23% 0.01 50 / <alpha-value>)',
+          800: 'oklch(30% 0.01 50 / <alpha-value>)',
+          700: 'oklch(38% 0.01 50 / <alpha-value>)',
+          600: 'oklch(46% 0.015 50 / <alpha-value>)',
+          500: 'oklch(56% 0.015 50 / <alpha-value>)',
+          400: 'oklch(72% 0.01 50 / <alpha-value>)',
         },
-        // One confident accent — deep indigo, used sparingly (60-30-10)
+        // One confident accent — warm Terracotta (matches design draft, #E2725B family).
         brand: {
-          50: 'oklch(96% 0.03 264 / <alpha-value>)',
-          100: 'oklch(92% 0.05 264 / <alpha-value>)',
-          200: 'oklch(85% 0.08 264 / <alpha-value>)',
-          300: 'oklch(75% 0.11 264 / <alpha-value>)',
-          400: 'oklch(64% 0.13 264 / <alpha-value>)',
-          500: 'oklch(55% 0.14 264 / <alpha-value>)',
-          600: 'oklch(48% 0.14 264 / <alpha-value>)',
-          700: 'oklch(42% 0.13 264 / <alpha-value>)',
-          800: 'oklch(36% 0.12 264 / <alpha-value>)',
+          50: 'oklch(97% 0.02 36 / <alpha-value>)',
+          100: 'oklch(94% 0.04 36 / <alpha-value>)',
+          200: 'oklch(88% 0.07 36 / <alpha-value>)',
+          300: 'oklch(78% 0.10 36 / <alpha-value>)',
+          400: 'oklch(67% 0.13 36 / <alpha-value>)',
+          500: 'oklch(61% 0.14 36 / <alpha-value>)',
+          600: 'oklch(52% 0.15 36 / <alpha-value>)',
+          700: 'oklch(45% 0.14 36 / <alpha-value>)',
+          800: 'oklch(39% 0.13 36 / <alpha-value>)',
         },
+        // Privacy/trust semantic — warm sage green (#3E8E6B family).
         teal: {
-          50: 'oklch(96% 0.03 200 / <alpha-value>)',
-          100: 'oklch(92% 0.05 200 / <alpha-value>)',
-          600: 'oklch(50% 0.09 200 / <alpha-value>)',
-          700: 'oklch(44% 0.09 200 / <alpha-value>)',
+          50: 'oklch(94% 0.03 155 / <alpha-value>)',
+          100: 'oklch(90% 0.05 155 / <alpha-value>)',
+          600: 'oklch(58% 0.09 155 / <alpha-value>)',
+          700: 'oklch(50% 0.09 155 / <alpha-value>)',
         },
         // Flat helpers (pre-mixed alpha, no modifier needed)
-        line: 'oklch(24% 0.02 264 / 0.09)',
-        scrim: 'oklch(24% 0.02 264 / 0.45)',
+        line: 'rgba(33,29,26,0.10)',
+        scrim: 'rgba(33,29,26,0.45)',
       },
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', '"PingFang SC"', '"Microsoft YaHei"', 'system-ui', 'sans-serif'],
-        display: ['"Fraunces"', 'Georgia', 'serif'],
+        sans: ['Inter', '"Noto Sans SC"', '"PingFang SC"', '"Microsoft YaHei"', 'system-ui', 'sans-serif'],
+        display: ['Fraunces', '"Noto Serif SC"', 'Georgia', 'serif'],
       },
       borderRadius: {
         xl: '0.875rem',
@@ -48,9 +49,9 @@ export default {
         '3xl': '1.75rem',
       },
       boxShadow: {
-        card: '0 1px 2px rgba(20,22,40,0.04), 0 10px 30px -18px rgba(20,22,40,0.22)',
-        lift: '0 2px 6px rgba(20,22,40,0.05), 0 24px 50px -22px rgba(20,22,40,0.28)',
-        focus: '0 0 0 3px oklch(64% 0.13 264 / 0.45)',
+        card: '0 1px 2px rgba(33,29,26,0.04), 0 10px 30px -18px rgba(33,29,26,0.22)',
+        lift: '0 2px 6px rgba(33,29,26,0.05), 0 24px 50px -22px rgba(33,29,26,0.28)',
+        focus: '0 0 0 3px oklch(64% 0.14 36 / 0.45)',
       },
       transitionTimingFunction: {
         'out-quart': 'cubic-bezier(0.25, 1, 0.5, 1)',
