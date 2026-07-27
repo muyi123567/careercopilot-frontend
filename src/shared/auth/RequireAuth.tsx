@@ -3,10 +3,10 @@
  */
 import type { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../auth/AuthContext';
+import { useJwtAuth } from './AuthContext';
 
 export function RequireAuth({ children }: { children: ReactNode }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated } = useJwtAuth();
 
   if (!isAuthenticated) {
     return <Navigate to="/auth" replace />;

@@ -51,7 +51,7 @@ function loadInitialState(): AuthState {
   return { token: null, uid: null, isAuthenticated: false };
 }
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function JwtAuthProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AuthState>(loadInitialState);
 
   const login = useCallback(async (email: string, password: string) => {
@@ -117,8 +117,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useAuth(): AuthContextValue {
+export function useJwtAuth(): AuthContextValue {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
+  if (!ctx) throw new Error('useJwtAuth must be used within JwtAuthProvider');
   return ctx;
 }

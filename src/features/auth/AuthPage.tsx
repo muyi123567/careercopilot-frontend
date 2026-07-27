@@ -4,7 +4,7 @@
  */
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../shared/auth/AuthContext';
+import { useJwtAuth } from '../../shared/auth/AuthContext';
 
 export function AuthPage() {
   const [mode, setMode] = useState<'login' | 'register'>('login');
@@ -12,7 +12,7 @@ export function AuthPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  const { login, register } = useAuth();
+  const { login, register } = useJwtAuth();
   const navigate = useNavigate();
 
   async function handleSubmit(e: FormEvent) {
