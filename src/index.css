@@ -85,3 +85,103 @@
   .stagger > *:nth-child(6) { animation-delay: 0.30s; }
   .text-balance { text-wrap: balance; }
 }
+
+/* ── 登录/注册页 ── */
+.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #050706;
+  padding: 1rem;
+}
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  padding: 2.5rem 2rem;
+  border: 1px solid rgba(122,255,174,.18);
+  border-radius: 12px;
+  background: rgba(10,17,14,.9);
+  color: #e9f4eb;
+  font-family: "IBM Plex Mono", monospace;
+}
+.auth-card h1 {
+  margin: 0 0 .25rem;
+  font-size: 1.4rem;
+  color: #a8ff62;
+}
+.auth-subtitle {
+  margin: 0 0 1.5rem;
+  font-size: .78rem;
+  color: #91a69a;
+}
+.auth-card label {
+  display: block;
+  margin-bottom: .35rem;
+  font-size: .68rem;
+  color: #91a69a;
+}
+.auth-card input {
+  width: 100%;
+  padding: .6rem .8rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(122,255,174,.2);
+  border-radius: 6px;
+  background: rgba(5,7,6,.6);
+  color: #e9f4eb;
+  font-size: .82rem;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.auth-card input:focus {
+  outline: none;
+  border-color: #73f4b0;
+}
+.auth-card button[type="submit"] {
+  width: 100%;
+  padding: .7rem;
+  border: none;
+  border-radius: 6px;
+  background: #a8ff62;
+  color: #050706;
+  font-size: .82rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+.auth-card button[type="submit"]:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+.auth-error {
+  margin: 0 0 .75rem;
+  padding: .5rem .7rem;
+  border-radius: 4px;
+  background: rgba(255,155,141,.12);
+  color: #ff9b8d;
+  font-size: .7rem;
+}
+.auth-switch {
+  margin-top: 1.2rem;
+  font-size: .72rem;
+  color: #91a69a;
+  text-align: center;
+}
+.auth-switch button {
+  background: none;
+  border: none;
+  color: #73f4b0;
+  cursor: pointer;
+  font-size: .72rem;
+  font-family: inherit;
+  text-decoration: underline;
+}
+.auth-demo-hint {
+  margin-top: 1.5rem;
+  font-size: .65rem;
+  color: #647568;
+  text-align: center;
+}
+.auth-demo-hint a {
+  color: #73f4b0;
+}
