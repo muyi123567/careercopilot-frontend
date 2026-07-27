@@ -145,13 +145,45 @@ export function MatrixLandingPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ consent_to_temporary_processing: true, events, question: question.trim() }),
       });
+
+      // 处理限流 (429)
+      if (response.status === 429) {
+        const retryAfter = response.headers.get('Retry-After') || '60';
+        setError(`请求过于频繁，请在 ${retryAfter} 秒后再试。`);
+        return;
+      }
+
       const payload = (await response.json()) as TemporaryResult | { detail?: string };
+
+      // 处理参数校验错误 (422)
+      if (response.status === 422) {
+        const detail = 'detail' in payload ? payload.detail : '';
+        if (typeof detail === 'string' && detail.includes('personal identifiers')) {
+          setError('检测到可能的个人信息（邮箱/手机/身份证），请移除后重试。我们不会发送包含直接标识符的内容。');
+        } else if (typeof detail === 'string' && detail.includes('consent')) {
+          setError('请先勾选同意临时处理授权。');
+        } else {
+          setError(`请求参数有误：${typeof detail === 'string' ? detail : '请检查输入内容'}`);
+        }
+        return;
+      }
+
+      // 处理服务器错误 (500)
+      if (response.status >= 500) {
+        setError('服务暂时不可用，请稍后再试。如果问题持续，请联系我们。');
+        return;
+      }
+
       if (!response.ok || !('status' in payload)) {
         throw new Error('detail' in payload && payload.detail ? payload.detail : `临时推演请求失败（HTTP ${response.status}）`);
       }
       setTemporaryResult(payload);
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : '临时推演请求失败，请稍后再试。');
+      if (caught instanceof TypeError && caught.message.includes('fetch')) {
+        setError('网络连接失败，请检查网络后重试。');
+      } else {
+        setError(caught instanceof Error ? caught.message : '临时推演请求失败，请稍后再试。');
+      }
     } finally {
       setBusy(false);
     }
