@@ -6,20 +6,37 @@ import { ResultsPage } from './features/results/ResultsPage';
 import { LoginPage } from './features/auth/LoginPage';
 import { SettingsPage } from './features/settings/SettingsPage';
 import { ProfilePage } from './features/profile/ProfilePage';
+import { NotFoundPage } from './features/errors/NotFoundPage';
+import { LegalPage } from './features/legal/LegalPage';
+import { OnboardingPage } from './features/onboarding/OnboardingPage';
+import { HistoryPage } from './features/history/HistoryPage';
+import { CareerMapPage } from './features/career-map/CareerMapPage';
+import { RadarPage } from './features/radar/RadarPage';
 
 export default function App() {
   return (
     <Routes>
-      {/* 着陆页 + 登录页：全宽独立布局 */}
-      <Route path="login" element={<LoginPage />} />
+      {/* 全宽独立布局页面 */}
       <Route index element={<LandingPage />} />
-      {/* 功能页：AppShell 布局 */}
+      <Route path="login" element={<LoginPage />} />
+      <Route path="onboarding" element={<OnboardingPage />} />
+      <Route path="terms" element={<LegalPage type="terms" />} />
+      <Route path="privacy" element={<LegalPage type="privacy" />} />
+      <Route path="404" element={<NotFoundPage />} />
+
+      {/* AppShell 布局页面 */}
       <Route element={<AppShell />}>
         <Route path="workspace" element={<WorkspacePage />} />
         <Route path="results" element={<ResultsPage />} />
         <Route path="settings" element={<SettingsPage />} />
         <Route path="profile" element={<ProfilePage />} />
+        <Route path="history" element={<HistoryPage />} />
+        <Route path="career-map" element={<CareerMapPage />} />
+        <Route path="radar" element={<RadarPage />} />
       </Route>
+
+      {/* 404 兜底 */}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }
