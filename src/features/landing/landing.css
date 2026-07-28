@@ -45,7 +45,7 @@
   --cx: 50%;
   --cy: 50%;
   background:
-    radial-gradient(ellipse 90% 70% at 15% 85%, rgba(226,114,91,0.28), transparent),
+    radial-gradient(ellipse 90% 70% at 15% 85%, rgba(212,85,59,0.32), transparent),
     radial-gradient(ellipse 50% 40% at 90% 15%, rgba(62,142,107,0.14), transparent),
     radial-gradient(ellipse 120% 90% at 50% -10%, rgba(244,238,228,0.95), transparent);
 }
@@ -81,7 +81,7 @@
   position: relative;
   white-space: nowrap;
   z-index: 0;
-  background: linear-gradient(135deg, #A63A22, #E2725B);
+  background: linear-gradient(135deg, #8B2E18, #D4553B);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -93,7 +93,7 @@
   right: -4px;
   bottom: 0.02em;
   height: 0.38em;
-  background: linear-gradient(90deg, rgba(226,114,91,0.35), rgba(226,114,91,0.18));
+  background: linear-gradient(90deg, rgba(212,85,59,0.40), rgba(226,114,91,0.22));
   border-radius: 4px;
   z-index: -1;
   transform-origin: left center;
@@ -109,7 +109,7 @@
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s;
   border: 1px solid transparent;
-  background-image: linear-gradient(white, white), linear-gradient(160deg, rgba(226,114,91,0.3), rgba(62,142,107,0.2), rgba(226,114,91,0.1));
+  background-image: linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.92)), linear-gradient(160deg, rgba(212,85,59,0.45), rgba(62,142,107,0.30), rgba(212,85,59,0.20));
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
@@ -162,11 +162,11 @@
 /* === Buttons === */
 .hero-btn-primary {
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 14px -4px rgba(181, 71, 46, 0.3);
+  box-shadow: 0 4px 16px -4px rgba(181, 71, 46, 0.45), 0 0 0 1px rgba(226,114,91,0.15);
 }
 .hero-btn-primary:hover {
   transform: scale(1.07) translateY(-2px);
-  box-shadow: 0 16px 40px -8px rgba(181, 71, 46, 0.4);
+  box-shadow: 0 16px 48px -8px rgba(181, 71, 46, 0.50), 0 0 0 1px rgba(226,114,91,0.20);
 }
 .hero-btn-primary:active { transform: scale(0.95); }
 .hero-btn-secondary {
@@ -284,7 +284,7 @@
 
 /* Eyebrow badge: subtle inner glow */
 .eyebrow-badge {
-  box-shadow: 0 0 0 1px rgba(226,114,91,0.12), 0 2px 8px -2px rgba(226,114,91,0.15);
+  box-shadow: 0 0 0 1.5px rgba(212,85,59,0.20), 0 2px 12px -2px rgba(212,85,59,0.25);
 }
 
 /* Progress node dots: enhanced tracer glow */
@@ -345,11 +345,104 @@
   left: -60px;
   width: 280px;
   height: 280px;
-  background: radial-gradient(circle, rgba(226,114,91,0.16), transparent 70%);
+  background: radial-gradient(circle, rgba(212,85,59,0.22), transparent 70%);
   pointer-events: none;
   z-index: -1;
 }
 
 
 
+
+
+
+/* === V2 Visual Upgrade: Glassmorphism + Brand Dominance === */
+
+/* Route card: glassmorphism overlay */
+.route-card {
+  backdrop-filter: blur(12px) saturate(1.3);
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+}
+
+/* Hero CTA: gradient background for stronger brand presence */
+.hero-btn-primary {
+  background: linear-gradient(135deg, oklch(52% 0.21 36), oklch(45% 0.20 36)) !important;
+  border: 1px solid rgba(226,114,91,0.3);
+}
+.hero-btn-primary:hover {
+  background: linear-gradient(135deg, oklch(48% 0.22 36), oklch(40% 0.20 36)) !important;
+}
+
+/* Navigation CTA in header: gradient + glow */
+header a.bg-brand-700,
+header .bg-brand-700 {
+  background: linear-gradient(135deg, oklch(52% 0.21 36), oklch(42% 0.19 36)) !important;
+  box-shadow: 0 2px 12px -3px rgba(181,71,46,0.4), 0 0 0 1px rgba(226,114,91,0.15);
+}
+
+/* Hero left border: thicker brand accent with glow */
+.landing-hero .border-l-\[3px\] {
+  border-left-width: 4px !important;
+  border-image: linear-gradient(180deg, oklch(52% 0.21 36), oklch(61% 0.20 36), oklch(50% 0.09 155)) 1;
+  box-shadow: -4px 0 16px -4px rgba(212,85,59,0.25);
+}
+
+/* Accordion active: stronger brand inset + bg gradient */
+#accordion-section .bg-brand-50\/60 {
+  background: linear-gradient(90deg, rgba(226,114,91,0.10), rgba(226,114,91,0.04)) !important;
+  box-shadow: inset 4px 0 0 0 oklch(52% 0.21 36);
+}
+
+/* Card system: gradient border highlight for premium feel */
+.card {
+  position: relative;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(160deg, rgba(226,114,91,0.15), transparent 40%, transparent 60%, rgba(62,142,107,0.10));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Responsive: Hero grid stacking on tablet/mobile */
+@media (max-width: 1024px) {
+  .landing-hero .mx-auto.grid {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem;
+  }
+  .landing-hero {
+    min-height: auto;
+    padding-top: 2.5rem;
+    padding-bottom: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .landing-hero .mx-auto.grid {
+    gap: 1.5rem;
+  }
+  .hero-btn-primary,
+  .hero-btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+  .landing-hero .flex.flex-wrap.gap-3 {
+    flex-direction: column;
+  }
+}
+
+/* Typography: stronger hierarchy contrast */
+.landing-hero h1 {
+  letter-spacing: -0.03em;
+}
+
+/* Trust bar: brand-tinted gradient */
+.trust-bar-gradient {
+  background: linear-gradient(90deg, oklch(22% 0.02 40), oklch(26% 0.03 36), oklch(22% 0.02 40));
+}
 
