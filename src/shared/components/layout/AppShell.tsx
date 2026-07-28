@@ -1,5 +1,4 @@
 import { NavLink, Outlet, Link, useLocation } from 'react-router';
-import { useAuth } from '../../auth/session';
 
 const STEPS = [
   { to: '/workspace', label: '推演工作台', num: '01' },
@@ -7,7 +6,6 @@ const STEPS = [
 ];
 
 export function AppShell() {
-  const { mode } = useAuth();
   const location = useLocation();
 
   return (
@@ -19,9 +17,9 @@ export function AppShell() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <Link to="/" className="display text-lg font-semibold transition-colors hover:text-brand-700">CareerCopilot</Link>
-            <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-medium ${mode === 'demo' ? 'bg-amber-50 text-amber-700' : 'bg-brand-50 text-brand-700'}`}>
-              <span className={`h-1.5 w-1.5 rounded-full ${mode === 'demo' ? 'bg-amber-500' : 'bg-brand-500'}`} />
-              {mode === 'demo' ? '演示' : '已登录'}
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2.5 py-0.5 text-[11px] font-medium text-brand-700">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
+              临时会话
             </span>
           </div>
 

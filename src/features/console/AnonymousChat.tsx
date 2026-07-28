@@ -4,7 +4,7 @@
  */
 import { useState, useRef, useEffect } from 'react';
 import { getRuntimeConfig } from '../../shared/api/client';
-import type { StructuredEvent } from '../matrix/MatrixLandingPage';
+import type { StructuredEvent } from '../../shared/privacy/structured-events';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
