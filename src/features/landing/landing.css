@@ -230,3 +230,78 @@
   .rt-detail { max-height: 96px; opacity: 1; transform: none; margin-top: 7px; }
   .rt-node { opacity: 1; filter: none; }
 }
+
+/* === Impeccable Bolder: Hero presence amplification === */
+.landing-hero h1 {
+  text-shadow: 0 2px 40px rgba(226,114,91,0.06);
+}
+
+/* Route card: deeper elevation + warm ambient glow */
+.route-card {
+  box-shadow:
+    0 1px 2px rgba(33,29,26,0.04),
+    0 8px 24px -8px rgba(33,29,26,0.10),
+    0 24px 64px -16px rgba(181,71,46,0.08);
+}
+.route-card:hover {
+  box-shadow:
+    0 2px 4px rgba(33,29,26,0.05),
+    0 12px 32px -8px rgba(33,29,26,0.12),
+    0 32px 80px -16px rgba(181,71,46,0.12);
+}
+
+/* Accordion section: stronger container presence */
+#accordion-section > div {
+  box-shadow:
+    0 1px 3px rgba(33,29,26,0.04),
+    0 12px 40px -12px rgba(33,29,26,0.08);
+}
+
+/* Accordion header: bolder active state */
+#accordion-section button[aria-expanded="true"],
+#accordion-section .bg-brand-50\/60 {
+  box-shadow: inset 3px 0 0 0 oklch(61% 0.14 36);
+}
+
+/* Trust bar: subtle gradient for depth */
+.trust-bar-gradient {
+  background: linear-gradient(90deg, oklch(21% 0.012 50), oklch(24% 0.015 40), oklch(21% 0.012 50));
+}
+
+/* CTA button: layered shadow for premium feel */
+.hero-btn-primary {
+  box-shadow:
+    0 2px 8px -2px rgba(181,71,46,0.35),
+    0 8px 24px -6px rgba(181,71,46,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.hero-btn-primary:hover {
+  box-shadow:
+    0 4px 12px -2px rgba(181,71,46,0.4),
+    0 16px 48px -8px rgba(181,71,46,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+/* Eyebrow badge: subtle inner glow */
+.eyebrow-badge {
+  box-shadow: 0 0 0 1px rgba(226,114,91,0.12), 0 2px 8px -2px rgba(226,114,91,0.15);
+}
+
+/* Progress node dots: enhanced tracer glow */
+.rt-tracer {
+  filter: drop-shadow(0 0 6px rgba(226,114,91,0.5));
+}
+
+/* Section reveal: staggered children */
+#accordion-section.reveal.in > div > div {
+  animation: accordionChildIn 0.5s cubic-bezier(0.16,1,0.3,1) backwards;
+}
+#accordion-section.reveal.in > div > div:nth-child(2) { animation-delay: 0.08s; }
+#accordion-section.reveal.in > div > div:nth-child(3) { animation-delay: 0.16s; }
+#accordion-section.reveal.in > div > div:nth-child(4) { animation-delay: 0.24s; }
+#accordion-section.reveal.in > div > div:nth-child(5) { animation-delay: 0.32s; }
+@keyframes accordionChildIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+

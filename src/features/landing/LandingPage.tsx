@@ -99,7 +99,7 @@ export function LandingPage() {
       </svg>
 
       {/* Trust Bar */}
-      <div className="flex items-center justify-center gap-2 bg-ink-900 px-4 py-[7px] text-[12.5px] tracking-wide text-[#B6ABA0]">
+      <div className="trust-bar-gradient flex items-center justify-center gap-2 px-4 py-[7px] text-[12.5px] tracking-wide text-[#B6ABA0]">
         <ShieldIcon /><span>原始文件本地解析 · 授权后仅发送结构化信号</span>
         <span className="h-[3px] w-[3px] rounded-full bg-[#B6ABA0] opacity-50" />
         <span>随时关闭，不留任何痕迹</span>
@@ -156,7 +156,7 @@ export function LandingPage() {
         </div>
         <div className="mx-auto grid w-full max-w-[1120px] items-center gap-12 lg:grid-cols-[1.5fr_1fr]">
           <div className="reveal border-l-2 border-brand-500 pl-[14px]">
-            <span className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-[13px] py-1.5 text-[13px] font-semibold tracking-wide text-brand-700"><ShieldIcon /> 隐私优先 · 明确授权 · 临时处理</span>
+            <span className="eyebrow-badge inline-flex items-center gap-2 rounded-full bg-brand-50 px-[13px] py-1.5 text-[13px] font-semibold tracking-wide text-brand-700"><ShieldIcon /> 隐私优先 · 明确授权 · 临时处理</span>
             <h1 className="mt-5 font-display text-[clamp(2.4rem,5vw,3.7rem)] font-semibold leading-[1.1] tracking-tight">先<span className="hl-draw">想清楚方向</span>，<br/>再投出每一份简历。</h1>
             <p className="mt-5 max-w-[30em] text-[1.075rem] leading-relaxed text-ink-600">结构化推演帮你看清职业路径。无需上传简历，授权后才发送脱敏信号。</p>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -300,6 +300,7 @@ export function LandingPage() {
     </div>
   );
 }
+
 
 
 
