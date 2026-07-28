@@ -151,3 +151,109 @@ export interface NavigationRequestInput {
   region?: string;
   experience_level?: string;
 }
+
+/* ===== F13 群体职业轨迹参照 ===== */
+
+export interface TrajectoryNode {
+  occupation_id: string;
+  name: string;
+  transition_count: number;
+  transition_rate: number; // (0,1)
+  sample_size: number;
+}
+
+export interface TrajectoryEdge {
+  from_occupation_id: string;
+  to_occupation_id: string;
+  count: number;
+  rate: number; // (0,1)
+}
+
+export interface TrajectoryResponse {
+  status: 'ok' | 'data_insufficient' | 'service_failure';
+  request_id: string;
+  current_occupation: Occupation | null;
+  nodes: TrajectoryNode[];
+  edges: TrajectoryEdge[];
+  sources: Source[];
+  scope: DataScope;
+  coverage_gaps: string[];
+  uncertainty: Uncertainty;
+  error: ApiError | null;
+}
+
+export interface TrajectoryQuery {
+  current_occupation?: string;
+  target_occupation?: string;
+  region?: string;
+  experience_min?: number;
+  experience_max?: number;
+}
+
+/* ===== F23 三路径比较 - 决策选择 ===== */
+
+export interface PathSelectionInput {
+  source_navigation_request_id: string;
+  selected_path_id: string;
+  selection_reason: string;
+  unresolved_questions: string[];
+}
+
+export interface PathSelectionResult {
+  decision_id: string;
+  created_at: string;
+  status: 'recorded';
+}
+
+/* ===== F41 行动计划与证据闭环 ===== */
+
+export type ActionStatus = 'proposed' | 'active' | 'completed' | 'abandoned';
+
+export interface CheckIn {
+  checkin_id: string;
+  at: string; // date-time
+  note: string;
+  subjective_feeling: string;
+  before_after_delta?: string | null;
+}
+
+export interface UserAction {
+  action_id: string;
+  path_id: string;
+  title: string;
+  expected_signal: string;
+  timebox_days: number;
+  status: ActionStatus;
+  evidence_links: string[];
+  reason?: string | null;
+  unresolved_questions: string[];
+  reminder_enabled: boolean;
+  checkins: CheckIn[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateActionInput {
+  path_id: string;
+  title: string;
+  expected_signal: string;
+  timebox_days: number;
+  evidence_links?: string[];
+  reason?: string;
+  unresolved_questions?: string[];
+}
+
+export interface UpdateActionInput {
+  title?: string;
+  status?: ActionStatus;
+  evidence_links?: string[];
+  reason?: string;
+  unresolved_questions?: string[];
+  reminder_enabled?: boolean;
+}
+
+export interface CreateCheckInInput {
+  note: string;
+  subjective_feeling: string;
+  before_after_delta?: string;
+}

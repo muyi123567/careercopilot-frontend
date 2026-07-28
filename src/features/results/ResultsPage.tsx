@@ -7,12 +7,16 @@ import { DataInsufficientState, ErrorState, LoadingState } from '../../shared/co
 import { Button } from '../../shared/components/ui/Button';
 import { evidenceDimensions } from '../../shared/api/labels';
 import type { UserConfirmation } from '../../shared/api/contract';
+import { TrajectoryTab } from './components/TrajectoryTab';
+import { CompareTab } from './components/CompareTab';
+import { ActionsTab } from './components/ActionsTab';
 
-type Tab = 'overview' | 'paths' | 'compare' | 'evidence' | 'actions' | 'radar' | 'decisions' | 'privacy';
+type Tab = 'overview' | 'paths' | 'trajectory' | 'compare' | 'evidence' | 'actions' | 'radar' | 'decisions' | 'privacy';
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'overview', label: '总览' },
   { id: 'paths', label: '路径' },
+  { id: 'trajectory', label: '轨迹参照' },
   { id: 'compare', label: '比较' },
   { id: 'evidence', label: '证据' },
   { id: 'actions', label: '行动' },
@@ -55,9 +59,9 @@ export function ResultsPage() {
       </div>
 
       {/* Tab bar */}
-      <div className="flex gap-1 overflow-x-auto border-b border-line pb-px">
+      <div className="flex gap-1 overflow-x-auto border-b border-line pb-px" role="tablist" aria-label="结果页签">
         {TABS.map((t) => (
-          <button key={t.id} type="button" onClick={() => setTab(t.id)}
+          <button key={t.id} type="button" role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)}
             className={`relative whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 active:scale-[0.95] ${tab === t.id ? 'bg-brand-50 text-brand-700' : 'text-ink-500 hover:bg-ink-900/[0.03] hover:text-ink-800'}`}>
             {t.label}
             {tab === t.id && <span className="absolute inset-x-3 -bottom-px h-[2.5px] rounded-full bg-brand-600 shadow-[0_0_6px_rgba(226,114,91,0.4)]" />}
@@ -66,7 +70,7 @@ export function ResultsPage() {
       </div>
 
       {/* Tab content */}
-      <div className="stagger">
+      <div className="stagger" role="tabpanel">
         {/* Overview */}
         {tab === 'overview' && (
           <div className="space-y-4">
@@ -118,24 +122,11 @@ export function ResultsPage() {
           </div>
         )}
 
-        {/* Compare */}
-        {tab === 'compare' && (
-          <div className="space-y-4">
-            {!hasData ? <EmptyTab label="比较" /> : (
-              <div className="grid gap-4 lg:grid-cols-3">
-                {response.data!.paths.map((p) => (
-                  <div key={p.path_id} className="card animate-slide-up flex flex-col gap-3 p-5">
-                    <PathTypeChip type={p.path_type} />
-                    <h3 className="text-sm font-semibold">{p.target_occupation.name}</h3>
-                    {p.benefits.length > 0 && <Section title="收益" items={p.benefits} />}
-                    {p.costs.length > 0 && <Section title="成本" items={p.costs} tone="text-amber-700" />}
-                    {p.counterevidence.length > 0 && <Section title="反证" items={p.counterevidence} tone="text-red-700" />}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
+        {/* F13: Trajectory */}
+        {tab === 'trajectory' && <TrajectoryTab />}
+
+        {/* F23: Compare */}
+        {tab === 'compare' && <CompareTab />}
 
         {/* Evidence */}
         {tab === 'evidence' && (
@@ -159,20 +150,8 @@ export function ResultsPage() {
           </div>
         )}
 
-        {/* Actions */}
-        {tab === 'actions' && (
-          <div className="space-y-3">
-            {!hasData ? <EmptyTab label="行动" /> : (
-              response.data!.paths.flatMap((p) => p.minimum_validation_actions.map((a) => ({ ...a, pathType: p.path_type }))).map((a) => (
-                <div key={a.action_id} className="card card-hover animate-slide-up p-5">
-                  <div className="flex items-center gap-2"><PathTypeChip type={a.pathType} /><span className="text-xs text-ink-400">时间盒：{a.timebox_days} 天</span></div>
-                  <h3 className="display mt-2 text-base font-semibold">{a.title}</h3>
-                  <p className="mt-1 text-sm text-ink-600">预期信号：{a.expected_signal}</p>
-                </div>
-              ))
-            )}
-          </div>
-        )}
+        {/* F41: Actions */}
+        {tab === 'actions' && <ActionsTab />}
 
         {/* Radar */}
         {tab === 'radar' && (
@@ -181,7 +160,7 @@ export function ResultsPage() {
 
         {/* Decisions */}
         {tab === 'decisions' && (
-          <UnavailableTab title="决策复盘需要已保存的用户决策" detail="首发匿名会话不会生成或伪造“已锁定”决策。登录、同意与 F42/F43 结果回填完成后，才会在这里展示不可变快照和检查点。" />
+          <UnavailableTab title="决策复盘需要已保存的用户决策" detail="首发匿名会话不会生成或伪造"已锁定"决策。登录、同意与 F42/F43 结果回填完成后，才会在这里展示不可变快照和检查点。" />
         )}
 
         {/* Privacy */}
@@ -225,11 +204,3 @@ function UnavailableTab({ title, detail }: { title: string; detail: string }) {
     </div>
   );
 }
-
-function Section({ title, items, tone }: { title: string; items: string[]; tone?: string }) {
-  return (
-    <div><p className="eyebrow mb-1">{title}</p><ul className={`list-disc pl-4 text-xs ${tone ?? 'text-ink-700'}`}>{items.map((it, i) => <li key={i}>{it}</li>)}</ul></div>
-  );
-}
-
-
