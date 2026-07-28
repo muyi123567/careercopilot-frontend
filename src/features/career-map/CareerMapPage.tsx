@@ -23,8 +23,8 @@ export function CareerMapPage() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="eyebrow">职业地图</p>
-        <h1 className="display mt-1 text-2xl font-semibold sm:text-3xl">群体轨迹详情</h1>
+        <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">职业地图</p>
+        <h1 className="mt-1.5 font-display text-2xl font-semibold tracking-tight text-ink-900 sm:text-3xl">群体轨迹详情</h1>
         <p className="mt-1 text-sm text-ink-500">基于群体轨迹统计的转岗路径可视化。所有概率均标注样本量和数据来源。</p>
       </div>
 
@@ -71,19 +71,19 @@ export function CareerMapPage() {
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="card relative overflow-hidden p-5">
           <span className="absolute left-0 top-0 h-full w-1 bg-brand-500" />
-          <p className="eyebrow">总样本量</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">总样本量</p>
           <p className="display mt-1 text-2xl font-bold text-brand-800">526</p>
           <p className="text-[11px] text-ink-400">来自脉脉、拉勾、Boss 直聘</p>
         </div>
         <div className="card relative overflow-hidden p-5">
           <span className="absolute left-0 top-0 h-full w-1 bg-teal-500" />
-          <p className="eyebrow">数据截止</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">数据截止</p>
           <p className="display mt-1 text-2xl font-bold text-teal-700">2025.12</p>
           <p className="text-[11px] text-ink-400">存在 6 个月滞后</p>
         </div>
         <div className="card relative overflow-hidden p-5">
           <span className="absolute left-0 top-0 h-full w-1 bg-gold-500" />
-          <p className="eyebrow">覆盖地域</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">覆盖地域</p>
           <p className="display mt-1 text-2xl font-bold text-gold-600">一线 + 新一线</p>
           <p className="text-[11px] text-ink-400">二三线城市数据不足</p>
         </div>
@@ -93,3 +93,4 @@ export function CareerMapPage() {
     </div>
   );
 }
+

@@ -15,8 +15,8 @@ export function RadarPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="eyebrow">市场雷达</p>
-          <h1 className="display mt-1 text-2xl font-semibold sm:text-3xl">职业市场趋势</h1>
+          <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">市场雷达</p>
+          <h1 className="mt-1.5 font-display text-2xl font-semibold tracking-tight text-ink-900 sm:text-3xl">职业市场趋势</h1>
           <p className="mt-1 text-sm text-ink-500">职业/地域/时间三维趋势。所有数据标注来源、样本量与截止时间。</p>
         </div>
         <div className="flex items-center gap-2">
@@ -83,3 +83,4 @@ export function RadarPage() {
     </div>
   );
 }
+

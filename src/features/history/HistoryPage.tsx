@@ -9,8 +9,8 @@ export function HistoryPage() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="eyebrow">对话历史</p>
-        <h1 className="display mt-1 text-2xl font-semibold sm:text-3xl">会话归档</h1>
+        <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">对话历史</p>
+        <h1 className="mt-1.5 font-display text-2xl font-semibold tracking-tight text-ink-900 sm:text-3xl">会话归档</h1>
         <p className="mt-1 text-sm text-ink-500">匿名会话仅存于浏览器内存，关闭后消失。以下为登录后的持久化记录（演示数据）。</p>
       </div>
 
@@ -33,3 +33,4 @@ export function HistoryPage() {
     </div>
   );
 }
+
