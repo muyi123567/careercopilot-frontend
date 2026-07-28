@@ -13,8 +13,11 @@
     "codegen": "node scripts/codegen-contract.mjs"
   },
   "dependencies": {
+    "@base-ui/react": "^1.6.0",
+    "@fontsource-variable/geist": "^5.3.0",
+    "@radix-ui/react-slot": "^1.3.3",
     "@tanstack/react-query": "^5.59.16",
-    "class-variance-authority": "^0.7.0",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.454.0",
     "pdfjs-dist": "^4.8.69",
@@ -22,7 +25,9 @@
     "react-dom": "^19.2.8",
     "react-router": "^8.3.0",
     "react-router-dom": "^7.18.2",
-    "tailwind-merge": "^2.5.4"
+    "shadcn": "^4.16.0",
+    "tailwind-merge": "^2.6.1",
+    "tw-animate-css": "^1.4.0"
   },
   "devDependencies": {
     "@types/node": "^22.7.5",

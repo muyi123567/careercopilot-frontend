@@ -11,7 +11,7 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "react-jsx",`n    "baseUrl": ".",`n    "paths": {`n      "@/*": ["./src/*"]`n    },
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -20,3 +20,4 @@
   },
   "include": ["src"]
 }
+
