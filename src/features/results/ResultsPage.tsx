@@ -119,8 +119,8 @@ export function ResultsPage() {
       {/* Header */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="eyebrow">分析结果</p>
-          <h1 className="display mt-1 text-2xl font-semibold sm:text-3xl">你的路径全景</h1>
+          <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">分析结果</p>
+          <h1 className="mt-1.5 font-display text-2xl font-semibold tracking-tight text-ink-900 sm:text-3xl">你的路径全景</h1>
         </div>
         <div className="flex items-center gap-3">
           {hasLiveData && <CoverageBadge gaps={response.data!.coverage_gaps} />}
@@ -140,7 +140,7 @@ export function ResultsPage() {
           <button key={t.id} type="button" onClick={() => setTab(t.id)}
             className={`relative whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 active:scale-[0.95] ${tab === t.id ? 'bg-brand-50 text-brand-700' : 'text-ink-500 hover:bg-ink-900/[0.03] hover:text-ink-800'}`}>
             {t.label}
-            {tab === t.id && <span className="absolute inset-x-3 -bottom-px h-[2.5px] rounded-full bg-brand-600 shadow-[0_0_6px_rgba(226,114,91,0.4)]" />}
+            {tab === t.id && <span className="absolute inset-x-3 -bottom-px h-0.5 rounded-full bg-brand-600" />}
           </button>
         ))}
       </div>
@@ -384,4 +384,5 @@ function Section({ title, items, tone }: { title: string; items: string[]; tone?
     <div><p className="eyebrow mb-1">{title}</p><ul className={`list-disc pl-4 text-xs ${tone ?? 'text-ink-700'}`}>{items.map((it, i) => <li key={i}>{it}</li>)}</ul></div>
   );
 }
+
 
