@@ -95,7 +95,7 @@ export function WorkspacePage() {
         </div>
         <div className="flex items-center gap-1.5">
           {[1, 2, 3].map((s) => (
-            <span key={s} className={`h-2 rounded-full transition-all duration-500 ${progress >= s ? 'w-8 bg-brand-600' : 'w-2 bg-ink-900/10'}`} />
+            <span key={s} className={`h-2 rounded-full transition-all duration-500 ${progress >= s ? 'w-8 bg-brand-600 shadow-[0_0_8px_rgba(226,114,91,0.4)]' : 'w-2 bg-ink-900/10'}`} />
           ))}
         </div>
       </div>
@@ -107,7 +107,7 @@ export function WorkspacePage() {
           const isDone = (p.id === 'input' && events.length > 0) || (p.id === 'signals' && events.length > 0) || (p.id === 'infer' && !!result);
           return (
             <button key={p.id} type="button" onClick={() => setActive(p.id)}
-              className={`flex flex-1 items-center gap-2.5 rounded-xl border px-4 py-3 text-left transition-all duration-300 ${isActive ? 'border-brand-400 bg-brand-50/60 shadow-sm' : 'border-line bg-surface hover:border-brand-200 hover:bg-paper'}`}>
+              className={`flex flex-1 items-center gap-2.5 rounded-xl border px-4 py-3 text-left transition-all duration-300 active:scale-[0.97] ${isActive ? 'border-brand-400 bg-brand-50/60 shadow-[0_2px_12px_-4px_rgba(226,114,91,0.2)]' : 'border-line bg-surface hover:border-brand-200 hover:bg-paper hover:shadow-sm'}`}>
               <span className={`flex h-7 w-7 flex-none items-center justify-center rounded-full font-display text-xs font-bold transition-colors ${isActive ? 'bg-brand-600 text-white' : isDone ? 'bg-teal-600 text-white' : 'bg-ink-900/5 text-ink-500'}`}>
                 {isDone && !isActive ? '✓' : p.num}
               </span>
@@ -126,8 +126,8 @@ export function WorkspacePage() {
         {active === 'input' && (
           <div className="flex h-full flex-col gap-4">
             <button type="button" onClick={() => inputRef.current?.click()} onDragOver={(e) => e.preventDefault()} onDrop={onDrop}
-              className="flex flex-1 flex-col items-center justify-center gap-3 rounded-xl border-[1.5px] border-dashed border-line py-14 transition-colors hover:border-brand-400 hover:bg-brand-50/40">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-10 w-10 text-brand-500"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
+              className="group flex flex-1 flex-col items-center justify-center gap-3 rounded-xl border-[1.5px] border-dashed border-line py-14 transition-all duration-300 hover:border-brand-400 hover:bg-brand-50/40 hover:shadow-[0_0_0_4px_rgba(226,114,91,0.08)] active:scale-[0.99]">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-10 w-10 text-brand-500 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
               <strong className="text-sm text-ink-700">{fileName || '拖入或选择简历'}</strong>
               <span className="text-xs text-ink-400">PDF · TXT · MD · CSV · JSON · 本地解析，原始文件不上传</span>
             </button>
@@ -233,4 +233,6 @@ export function WorkspacePage() {
     </div>
   );
 }
+
+
 
