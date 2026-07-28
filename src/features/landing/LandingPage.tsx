@@ -171,23 +171,23 @@ export function LandingPage() {
           <div ref={routeCardRef} className="route-card reveal relative flex flex-col overflow-hidden">
             <div className="absolute -right-[50px] -top-[70px] h-[220px] w-[220px] rounded-full bg-[radial-gradient(circle,rgba(226,114,91,0.07),transparent_70%)]" />
             <div className="relative mb-6 flex items-center justify-between">
-              <span className="inline-flex items-center gap-[7px] text-[13px] font-semibold text-ink-600"><span className="text-brand-700"><CompassIcon /></span> 路径推演 · 实时</span>
-              <span className="inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-teal-600"><span className="pulse-dot h-[7px] w-[7px] rounded-full bg-teal-600" /> 等待明确授权</span>
+              <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-500"><span className="text-brand-600"><CompassIcon /></span> 路径推演 · 实时</span>
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-teal-600"><span className="pulse-dot h-1.5 w-1.5 rounded-full bg-teal-500" /> 等待明确授权</span>
             </div>
             <div className="route-path-container relative flex flex-1 flex-col justify-around">
               <span className="rt-tracer absolute left-[11px] z-[2] h-[14px] w-[14px] rounded-full bg-[radial-gradient(circle,#B5472E_0%,rgba(226,114,91,0.9)_35%,rgba(226,114,91,0.25)_65%,transparent_80%)] shadow-[0_0_12px_3px_rgba(226,114,91,0.35)]" />
               <span className="absolute bottom-0 left-[17px] top-0 z-0 w-[2px] bg-[repeating-linear-gradient(180deg,rgba(33,29,26,0.16)_0_5px,transparent_5px_10px)] opacity-50" />
               <div className="rt-node relative z-[1] flex items-start gap-[14px] pb-7">
                 <span className="rt-dot flex h-9 w-9 flex-none items-center justify-center rounded-full border-[1.5px] border-brand-500 bg-brand-500 text-white"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[17px] w-[17px]"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a7 7 0 0 1 13 0"/></svg></span>
-                <div className="flex flex-col gap-[3px] pt-[5px]"><span className="text-[14.5px] font-semibold text-brand-700">后端 2 年</span><span className="text-[12.5px] text-ink-500">你现在的起点</span><div className="rt-detail"><p className="text-[13px] text-ink-600">两年后端，写过系统、背过线上问题——这是你的底盘，不是弱点。</p></div></div>
+                <div className="flex flex-col gap-[3px] pt-[5px]"><span className="text-[15px] font-semibold leading-tight text-brand-700">后端 2 年</span><span className="text-xs text-ink-400">你现在的起点</span><div className="rt-detail"><p className="text-[13px] text-ink-600">两年后端，写过系统、背过线上问题——这是你的底盘，不是弱点。</p></div></div>
               </div>
               <div className="rt-node relative z-[1] flex items-start gap-[14px] pb-7">
                 <span className="rt-dot flex h-9 w-9 flex-none items-center justify-center rounded-full border-[1.5px] border-line bg-surface text-ink-400"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[17px] w-[17px]"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 4-5"/></svg></span>
-                <div className="flex flex-col gap-[3px] pt-[5px]"><span className="text-[14.5px] font-semibold text-ink-800">职业路径</span><span className="text-[12.5px] text-ink-500">补「产品判断」+ 系统思维迁移</span><div className="rt-detail"><p className="text-[13px] text-ink-600">不用从头学产品。把后端经验改写成「我解决了什么不确定性」的故事。</p></div></div>
+                <div className="flex flex-col gap-[3px] pt-[5px]"><span className="text-[15px] font-semibold leading-tight text-ink-800">职业路径</span><span className="text-xs text-ink-400">补「产品判断」+ 系统思维迁移</span><div className="rt-detail"><p className="text-[13px] text-ink-600">不用从头学产品。把后端经验改写成「我解决了什么不确定性」的故事。</p></div></div>
               </div>
               <div className="rt-node goal relative z-[1] flex items-start gap-[14px]">
                 <span className="rt-dot flex h-9 w-9 flex-none items-center justify-center rounded-full border-[1.5px] border-teal-600 bg-surface text-teal-600"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[17px] w-[17px]"><path d="M12 2l2.4 7.4H22l-6 4.3 2.3 7.3L12 17l-6.3 4 2.3-7.3-6-4.3h7.6z"/></svg></span>
-                <div className="flex flex-col gap-[3px] pt-[5px]"><span className="text-[14.5px] font-semibold text-teal-700">产品岗</span><span className="text-[12.5px] text-ink-500">推演目标</span><div className="rt-detail"><p className="text-[13px] text-ink-600">推演给你的不是一张岗位表，而是「下一步到底做什么、为什么」。</p></div></div>
+                <div className="flex flex-col gap-[3px] pt-[5px]"><span className="text-[15px] font-semibold leading-tight text-teal-700">产品岗</span><span className="text-xs text-ink-400">推演目标</span><div className="rt-detail"><p className="text-[13px] text-ink-600">推演给你的不是一张岗位表，而是「下一步到底做什么、为什么」。</p></div></div>
               </div>
             </div>
           </div>
@@ -303,4 +303,5 @@ export function LandingPage() {
     </div>
   );
 }
+
 
