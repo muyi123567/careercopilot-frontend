@@ -63,14 +63,14 @@
   font-size: 0.875rem;
   font-weight: 600;
   color: #fff;
-  background: linear-gradient(135deg, oklch(52% 0.21 36), oklch(45% 0.20 36));
+  background: linear-gradient(145deg, #A8432C, #8B3622);
   border: 1px solid rgba(226,114,91,0.3);
   box-shadow: 0 4px 16px -4px rgba(181,71,46,0.40), 0 0 0 1px rgba(226,114,91,0.10);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
 }
 .auth-btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, oklch(48% 0.22 36), oklch(40% 0.20 36));
+  background: linear-gradient(145deg, #9C3C20, #7A3020);
   box-shadow: 0 8px 28px -6px rgba(181,71,46,0.50), 0 0 0 1px rgba(226,114,91,0.15);
   transform: translateY(-1px);
 }
@@ -94,7 +94,7 @@
   font-size: 0.95rem;
   font-weight: 700;
   color: #fff;
-  background: linear-gradient(135deg, oklch(52% 0.21 36), oklch(42% 0.19 36));
+  background: linear-gradient(145deg, #A8432C, #803422);
   border: 1px solid rgba(226,114,91,0.35);
   box-shadow:
     0 4px 20px -4px rgba(181,71,46,0.45),
@@ -104,7 +104,7 @@
   cursor: pointer;
 }
 .auth-btn-anonymous:hover {
-  background: linear-gradient(135deg, oklch(48% 0.22 36), oklch(38% 0.20 36));
+  background: linear-gradient(145deg, #9C3C20, #6E2C1A);
   box-shadow:
     0 8px 32px -6px rgba(181,71,46,0.55),
     0 0 0 1px rgba(226,114,91,0.20),
@@ -150,11 +150,11 @@
   cursor: pointer;
   border: none;
   background: transparent;
-  color: oklch(54% 0.015 50);
+  color: #6B6258;
 }
 .auth-tab.active {
-  background: oklch(52% 0.21 36 / 0.10);
-  color: oklch(45% 0.20 36);
+  background: rgba(168,67,44,0.10);
+  color: #8B3622;
   box-shadow: 0 1px 4px rgba(181,71,46,0.1);
 }
 
@@ -196,7 +196,7 @@
   bottom: 2rem;
   left: 50%;
   transform: translateX(-50%) translateY(0);
-  background: oklch(28% 0.012 50);
+  background: #2E2925;
   color: #fff;
   padding: 0.75rem 1.5rem;
   border-radius: 9999px;
@@ -306,4 +306,6 @@
   .auth-page-enter .auth-brand-panel > div:last-child > div { animation: none; }
   .auth-toast { animation: none; }
 }
+
+
 
