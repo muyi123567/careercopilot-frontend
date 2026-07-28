@@ -812,3 +812,130 @@ a, button {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(33,29,26,0.25);
 }
+
+/* === Apple-Level Polish: Round 3 — Composition & Micro-detail === */
+
+/* Hero: ensure full headline visibility with proper spacing */
+.landing-hero .reveal:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Route card: inner content refined spacing */
+.route-card .rt-node .body {
+  gap: 2px;
+}
+.route-card .rt-node .lbl {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.route-card .rt-node .sub {
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+/* Accordion: refined divider between items */
+#accordion-section > div > div {
+  border-bottom: 1px solid rgba(33,29,26,0.06);
+}
+#accordion-section > div > div:last-child {
+  border-bottom: none;
+}
+
+/* Accordion active state: subtle background shift */
+#accordion-section button[aria-expanded="true"] {
+  background: rgba(226,114,91,0.03);
+}
+
+/* Navigation: refined logo spacing */
+header .font-display {
+  letter-spacing: -0.02em;
+}
+
+/* CTA button group: refined gap */
+.landing-hero .flex.flex-col.gap-3,
+.landing-hero .flex.flex-wrap.gap-3 {
+  gap: 0.75rem;
+}
+@media (min-width: 640px) {
+  .landing-hero .flex.flex-col.gap-3,
+  .landing-hero .flex.flex-wrap.gap-3 {
+    gap: 1rem;
+  }
+}
+
+/* Route card status indicator: refined */
+.route-card .text-teal-600 {
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+}
+
+/* Accordion section title: refined typography */
+#accordion-section button .text-lg {
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+}
+@media (min-width: 640px) {
+  #accordion-section button .text-lg {
+    font-size: 1.05rem;
+  }
+}
+
+/* Accordion subtitle: refined */
+#accordion-section button .text-xs {
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+/* Hero badge: refined positioning */
+.eyebrow-badge {
+  margin-bottom: 1.25rem;
+}
+
+/* Overall page: refined background gradient */
+body {
+  background: linear-gradient(168deg, #FAF7F2 0%, #F8F4EE 35%, #F5F0E8 65%, #FAF7F2 100%);
+}
+
+/* Refined text rendering for all headings */
+h1, h2, h3, h4, h5, h6 {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Refined link hover: subtle underline animation */
+a {
+  text-decoration: none;
+}
+
+/* Card: refined border radius consistency */
+.card {
+  border-radius: 1rem;
+}
+
+/* Refined focus states for inputs */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #D07A5E;
+  box-shadow: 0 0 0 3px rgba(196,85,59,0.12);
+}
+
+/* Refined button focus */
+button:focus-visible, a:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #FAF7F2, 0 0 0 4px rgba(196,85,59,0.4);
+}
+
+/* Refined image rendering */
+img, svg {
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Smooth page transitions */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
