@@ -446,3 +446,103 @@ header .bg-brand-700 {
   background: linear-gradient(90deg, oklch(22% 0.02 40), oklch(26% 0.03 36), oklch(22% 0.02 40));
 }
 
+
+/* === V2 Polish: Enhanced micro-interactions === */
+
+/* Accordion header: smoother hover with brand tint sweep */
+#accordion-section button {
+  position: relative;
+  overflow: hidden;
+}
+#accordion-section button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(226,114,91,0.04), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+#accordion-section button:hover::after {
+  opacity: 1;
+}
+
+/* Route card: subtle float animation on idle */
+.route-card {
+  animation: cardFloat 6s ease-in-out infinite;
+}
+@keyframes cardFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.route-card:hover {
+  animation-play-state: paused;
+}
+
+/* CTA buttons: press depth effect */
+.hero-btn-primary:active {
+  transform: scale(0.96) translateY(1px) !important;
+  box-shadow: 0 2px 8px -2px rgba(181,71,46,0.3) !important;
+}
+.hero-btn-secondary:active {
+  transform: scale(0.96) translateY(1px) !important;
+}
+
+/* Eyebrow badge: subtle pulse on hover */
+.eyebrow-badge {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.eyebrow-badge:hover {
+  box-shadow: 0 0 0 2px rgba(226,114,91,0.15), 0 4px 12px -2px rgba(226,114,91,0.2);
+  transform: translateY(-1px);
+}
+
+/* Trust bar: subtle shimmer */
+.trust-bar-gradient {
+  position: relative;
+  overflow: hidden;
+}
+.trust-bar-gradient::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+  animation: trustShimmer 8s ease-in-out infinite;
+}
+@keyframes trustShimmer {
+  0%, 100% { left: -100%; }
+  50% { left: 150%; }
+}
+
+/* Navigation CTA: glow pulse */
+header .bg-brand-700 {
+  animation: ctaGlow 3s ease-in-out infinite;
+}
+@keyframes ctaGlow {
+  0%, 100% { box-shadow: 0 2px 12px -3px rgba(181,71,46,0.4), 0 0 0 1px rgba(226,114,91,0.15); }
+  50% { box-shadow: 0 4px 20px -3px rgba(181,71,46,0.55), 0 0 0 1px rgba(226,114,91,0.25); }
+}
+
+/* Heading highlight: enhanced underline animation */
+.hl-draw::after {
+  height: 0.42em;
+  border-radius: 6px;
+}
+
+/* Responsive: disable float animation on mobile */
+@media (max-width: 880px) {
+  .route-card { animation: none; }
+  .trust-bar-gradient::after { display: none; }
+  header .bg-brand-700 { animation: none; }
+}
+
+/* Reduced motion: disable all decorative animations */
+@media (prefers-reduced-motion: reduce) {
+  .route-card { animation: none; }
+  .trust-bar-gradient::after { display: none; }
+  header .bg-brand-700 { animation: none; }
+  .eyebrow-badge:hover { transform: none; }
+}
