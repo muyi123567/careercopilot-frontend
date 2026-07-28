@@ -75,7 +75,14 @@ export function LoginPage() {
             <span className="font-display text-lg font-bold text-ink-900">Career<b className="text-brand-700">Copilot</b></span>
           </div>
 
-          {/* Anonymous entry (most prominent) */}
+          {/* WeChat login (primary entry) */}
+          <button type="button" className="auth-btn-wechat mb-3" onClick={() => showToast('请在微信小程序中搜索「CareerCopilot」一键登录')}>
+            <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-4.024 0-7.291 2.703-7.291 6.037 0 3.335 3.267 6.038 7.291 6.038.828 0 1.622-.118 2.367-.334a.72.72 0 0 1 .598.08l1.584.926a.272.272 0 0 0 .14.045c.133 0 .241-.108.241-.241 0-.06-.024-.12-.04-.178l-.325-1.233a.493.493 0 0 1 .177-.553C23.028 18.572 24 16.89 24 14.895c0-3.334-3.267-6.037-7.062-6.037zm-2.813 3.085c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982z"/></svg>
+            微信一键登录
+          </button>
+          <p className="mb-6 text-center text-[11px] leading-relaxed text-ink-400">小程序内免注册 · 一键授权即可使用</p>
+
+          {/* Anonymous entry */}
           <button type="button" className="auth-btn-anonymous mb-6" onClick={() => navigate('/workspace')}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
             匿名开始推演
@@ -85,25 +92,12 @@ export function LoginPage() {
           {/* Divider */}
           <div className="mb-6 flex items-center gap-3">
             <span className="h-px flex-1 bg-line" />
-            <span className="text-xs text-ink-400">或使用邮箱</span>
+            <span className="text-xs text-ink-400">或使用邮箱（副入口）</span>
             <span className="h-px flex-1 bg-line" />
           </div>
 
           {/* Login/Register form */}
           <LoginForm onSuccess={handleAuthSuccess} />
-
-          {/* WeChat placeholder */}
-          <div className="mt-6">
-            <div className="mb-4 flex items-center gap-3">
-              <span className="h-px flex-1 bg-line" />
-              <span className="text-xs text-ink-400">其他方式</span>
-              <span className="h-px flex-1 bg-line" />
-            </div>
-            <button type="button" className="auth-btn-wechat" onClick={() => showToast('微信扫码登录正在开发中，敬请期待')}>
-              <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-4.024 0-7.291 2.703-7.291 6.037 0 3.335 3.267 6.038 7.291 6.038.828 0 1.622-.118 2.367-.334a.72.72 0 0 1 .598.08l1.584.926a.272.272 0 0 0 .14.045c.133 0 .241-.108.241-.241 0-.06-.024-.12-.04-.178l-.325-1.233a.493.493 0 0 1 .177-.553C23.028 18.572 24 16.89 24 14.895c0-3.334-3.267-6.037-7.062-6.037zm-2.813 3.085c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982z"/></svg>
-              微信登录（即将上线）
-            </button>
-          </div>
 
           {/* Back to home */}
           <div className="mt-9 text-center">
