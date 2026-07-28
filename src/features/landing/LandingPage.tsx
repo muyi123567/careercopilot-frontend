@@ -165,7 +165,7 @@ export function LandingPage() {
             </div>
           </div>
           {/* Route Path Card */}
-          <div ref={routeCardRef} className="route-card reveal relative flex flex-col overflow-hidden rounded-[14px] border border-line bg-surface p-7 shadow-[0_22px_56px_rgba(60,40,30,0.12),0_8px_20px_rgba(60,40,30,0.07)]">
+          <div ref={routeCardRef} className="route-card reveal relative flex flex-col overflow-hidden">
             <div className="absolute -right-[50px] -top-[70px] h-[220px] w-[220px] rounded-full bg-[radial-gradient(circle,rgba(226,114,91,0.07),transparent_70%)]" />
             <div className="relative mb-6 flex items-center justify-between">
               <span className="inline-flex items-center gap-[7px] text-[13px] font-semibold text-ink-600"><span className="text-brand-700"><CompassIcon /></span> 路径推演 · 实时</span>
@@ -300,6 +300,7 @@ export function LandingPage() {
     </div>
   );
 }
+
 
 
 
