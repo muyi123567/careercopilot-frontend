@@ -87,8 +87,6 @@ export function LandingPage() {
   useHeroMouse(heroRef, routeCardRef);
   const [openSection, setOpenSection] = useState<string | null>(null);
 
-  function toggle(id: string) { setOpenSection((prev) => (prev === id ? null : id)); }
-
   return (
     <div ref={rootRef} className="min-h-screen bg-[linear-gradient(168deg,#FAF7F2_0%,#F7F1E8_38%,#F4EDE2_68%,#FAF7F2_100%)] font-sans text-ink-800 antialiased">
       {/* Contour Background */}
@@ -102,7 +100,7 @@ export function LandingPage() {
 
       {/* Trust Bar */}
       <div className="flex items-center justify-center gap-2 bg-ink-900 px-4 py-[7px] text-[12.5px] tracking-wide text-[#B6ABA0]">
-        <ShieldIcon /><span>本地处理 · 不存储 · 零上传</span>
+        <ShieldIcon /><span>原始文件本地解析 · 授权后仅发送结构化信号</span>
         <span className="h-[3px] w-[3px] rounded-full bg-[#B6ABA0] opacity-50" />
         <span>随时关闭，不留任何痕迹</span>
       </div>
@@ -292,7 +290,7 @@ export function LandingPage() {
             <div className="flex items-center gap-[10px] text-base text-ink-800">
               <span className="flex h-[26px] w-[26px] items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-white"><CompassIcon /></span>CareerCopilot
             </div>
-            <p className="mt-3 text-[13px] leading-relaxed text-ink-500">本地处理 · 不存储 · 零上传<br/>我们看不到你是谁</p>
+            <p className="mt-3 text-[13px] leading-relaxed text-ink-500">原始文件本地解析<br/>仅在授权后发送脱敏结构化信号</p>
           </div>
           <nav className="flex flex-col gap-[11px] text-sm">
             <button type="button" onClick={() => setOpenSection('capabilities')} className="text-left text-ink-600 transition-colors hover:text-brand-700">能力详解</button>

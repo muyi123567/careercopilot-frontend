@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useNavigation } from '../../shared/state/navigation';
-import { useAuth } from '../../shared/auth/session';
 import { StatusPill, PathTypeChip, UncertaintyPill, EvidenceGradeBadge, ClassificationTag } from '../../shared/components/ui/Badge';
 import { CoverageBadge } from '../../shared/components/provenance/CoverageBadge';
-import { SourceList } from '../../shared/components/provenance/SourceList';
+import { DataInsufficientState, ErrorState, LoadingState } from '../../shared/components/states/FeedbackStates';
 import { Button } from '../../shared/components/ui/Button';
 import { evidenceDimensions } from '../../shared/api/labels';
-import type { Source, UserConfirmation } from '../../shared/api/contract';
+import type { UserConfirmation } from '../../shared/api/contract';
 
 type Tab = 'overview' | 'paths' | 'compare' | 'evidence' | 'actions' | 'radar' | 'decisions' | 'privacy';
 
@@ -22,35 +21,25 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'privacy', label: '隐私' },
 ];
 
-/* ===== Mock data for radar/decisions/privacy ===== */
-const RADAR_DATA = [
-  { skill: '产品需求分析', demand: 82, growth: '+12%', region: '一线' },
-  { skill: '数据驱动决策', demand: 74, growth: '+18%', region: '全国' },
-  { skill: '用户研究', demand: 68, growth: '+8%', region: '新一线' },
-  { skill: '项目管理', demand: 91, growth: '+5%', region: '全国' },
-  { skill: 'SQL/数据查询', demand: 77, growth: '+9%', region: '一线' },
-];
-
-const DECISION_TIMELINE = [
-  { day: '第 0 天', event: '选择「邻近迁移：后端→产品」路径', reason: '系统思维可迁移，时间成本最低', status: 'locked' },
-  { day: '第 7 天', event: '完成一次信息访谈', reason: '验证产品岗日常是否匹配预期', status: 'pending' },
-  { day: '第 30 天', event: '提交一个需求闭环作品', reason: '证明「从 0 到 1」的判断力', status: 'pending' },
-  { day: '第 90 天', event: '回填结果与新证据', reason: '重估路径判断，更新置信维度', status: 'pending' },
-];
-
-const PRIVACY_DATA = [
-  { category: '结构化事件', usage: '本次推演输入', retention: '会话结束即删', count: '12 条' },
-  { category: '对话历史', usage: '多轮推演上下文', retention: '仅浏览器内存', count: '≤10 轮' },
-  { category: '推演结果', usage: '路径与行动建议', retention: '不持久化', count: '1 份' },
-  { category: '原始文件', usage: '从不离开设备', retention: '零上传', count: '0' },
-];
-
 export function ResultsPage() {
   const navigate = useNavigate();
-  const { phase, response } = useNavigation();
-  const { mode } = useAuth();
+  const { phase, response, error } = useNavigation();
   const [tab, setTab] = useState<Tab>('overview');
   const [confirmations, setConfirmations] = useState<Record<string, UserConfirmation>>({});
+
+  if (phase === 'loading') return <LoadingState />;
+
+  if (phase === 'error') {
+    return <ErrorState message={error ?? '无法读取本次职业导航结果'} onBack={() => navigate('/workspace')} />;
+  }
+
+  if (response?.status === 'service_failure' && response.error) {
+    return <ErrorState message={response.error.message} requestId={response.error.trace_id} onBack={() => navigate('/workspace')} />;
+  }
+
+  if (response?.status === 'data_insufficient') {
+    return <DataInsufficientState gaps={response.data?.coverage_gaps ?? []} />;
+  }
 
   const hasData = response && response.status === 'ok' && response.data;
 
@@ -163,6 +152,7 @@ export function ResultsPage() {
                     <button onClick={() => setConfirmations((m) => ({ ...m, [e.evidence_id]: 'rejected' }))}
                       className={`rounded-lg border px-2.5 py-1 text-xs transition-colors ${state === 'rejected' ? 'border-red-400 bg-red-50 text-red-700' : 'border-line text-ink-500 hover:border-ink-900/20'}`}>驳回</button>
                   </div>
+                  <p className="mt-2 text-xs text-ink-400">此标记仅在当前浏览器会话中保留；保存个人证据需要登录后的后端能力。</p>
                 </div>
               );
             })}
@@ -184,90 +174,27 @@ export function ResultsPage() {
           </div>
         )}
 
-        {/* Radar (mock) */}
+        {/* Radar */}
         {tab === 'radar' && (
-          <div className="space-y-4">
-            <div className="card p-5">
-              <p className="eyebrow mb-1">中文职业市场雷达</p>
-              <p className="text-sm text-ink-500">技能需求热度与增长（合成演示数据，非实时抓取）</p>
-            </div>
-            <div className="card p-5">
-              <div className="space-y-3">
-                {RADAR_DATA.map((r) => (
-                  <div key={r.skill} className="flex items-center gap-3">
-                    <span className="w-28 shrink-0 text-xs font-medium text-ink-700">{r.skill}</span>
-                    <div className="h-5 flex-1 overflow-hidden rounded-full bg-ink-900/5">
-                      <div className="flex h-full items-center rounded-full bg-gradient-to-r from-brand-400 to-brand-600 px-2 transition-all duration-700" style={{ width: `${r.demand}%` }}>
-                        <span className="text-[10px] font-bold text-white">{r.demand}</span>
-                      </div>
-                    </div>
-                    <span className="w-12 text-right text-xs font-semibold text-teal-600">{r.growth}</span>
-                    <span className="w-12 text-right text-[10px] text-ink-400">{r.region}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <p className="text-xs text-ink-400">数据为合成演示。真实版本将标注来源、样本量与截止时间。市场热度不等于个人适合度。</p>
-          </div>
+          <UnavailableTab title="市场雷达尚未开放" detail="首发前没有已批准的职位快照来源，因此不展示合成热度、增长率或地域结论。上线后每项数据都会标注来源、样本量与截止时间。" />
         )}
 
-        {/* Decisions (mock) */}
+        {/* Decisions */}
         {tab === 'decisions' && (
-          <div className="space-y-4">
-            <div className="card p-5">
-              <p className="eyebrow mb-1">决策复盘</p>
-              <p className="text-sm text-ink-500">不可变的决策快照与后续检查点。历史建议不可被覆盖。</p>
-            </div>
-            <div className="relative space-y-0 pl-6">
-              <span className="absolute bottom-2 left-[9px] top-2 w-[2px] bg-[repeating-linear-gradient(180deg,rgba(33,29,26,0.16)_0_5px,transparent_5px_10px)]" />
-              {DECISION_TIMELINE.map((d, i) => (
-                <div key={i} className="relative pb-6 last:pb-0">
-                  <span className={`absolute -left-6 top-1 flex h-5 w-5 items-center justify-center rounded-full border-[1.5px] ${d.status === 'locked' ? 'border-brand-500 bg-brand-500 text-white' : 'border-line bg-surface text-ink-400'}`}>
-                    <span className="h-1.5 w-1.5 rounded-full bg-current" />
-                  </span>
-                  <div className="card ml-2 p-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-brand-700">{d.day}</span>
-                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${d.status === 'locked' ? 'bg-brand-50 text-brand-700' : 'bg-ink-900/5 text-ink-400'}`}>{d.status === 'locked' ? '已锁定' : '待回填'}</span>
-                    </div>
-                    <h4 className="mt-1 text-sm font-semibold text-ink-800">{d.event}</h4>
-                    <p className="mt-0.5 text-xs text-ink-500">{d.reason}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <UnavailableTab title="决策复盘需要已保存的用户决策" detail="首发匿名会话不会生成或伪造“已锁定”决策。登录、同意与 F42/F43 结果回填完成后，才会在这里展示不可变快照和检查点。" />
         )}
 
-        {/* Privacy (mock) */}
+        {/* Privacy */}
         {tab === 'privacy' && (
           <div className="space-y-4">
             <div className="card p-5">
               <p className="eyebrow mb-1">隐私中心</p>
-              <p className="text-sm text-ink-500">每类数据的用途、留存与你的控制权。</p>
+              <p className="text-sm text-ink-500">原始文件在浏览器本地解析；仅在你勾选授权后才发送经筛选的结构化信号和问题。</p>
             </div>
-            <div className="card overflow-hidden">
-              <table className="w-full text-left text-sm">
-                <thead><tr className="border-b border-line bg-paper text-xs text-ink-500">
-                  <th className="px-4 py-3 font-medium">数据类型</th><th className="px-4 py-3 font-medium">用途</th><th className="px-4 py-3 font-medium">留存</th><th className="px-4 py-3 font-medium">数量</th>
-                </tr></thead>
-                <tbody>
-                  {PRIVACY_DATA.map((r) => (
-                    <tr key={r.category} className="border-b border-line last:border-b-0">
-                      <td className="px-4 py-3 font-medium text-ink-800">{r.category}</td>
-                      <td className="px-4 py-3 text-ink-600">{r.usage}</td>
-                      <td className="px-4 py-3"><span className="rounded-full bg-teal-50 px-2 py-0.5 text-xs font-medium text-teal-700">{r.retention}</span></td>
-                      <td className="px-4 py-3 text-ink-500">{r.count}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="card p-5 text-sm leading-relaxed text-ink-600">
+              <p>匿名会话不创建账号数据；浏览器关闭后，本地对话状态消失。导出和删除任务只会在账号数据、审计记录与明确 SLA 均已上线后出现。</p>
+              <p className="mt-3 text-xs text-ink-400">生产失败绝不自动伪装成 Demo 成功。</p>
             </div>
-            <div className="flex gap-3">
-              <button type="button" className="rounded-full border border-line bg-surface px-4 py-2 text-xs font-medium text-ink-600 transition-colors hover:border-brand-400 hover:text-brand-700">导出我的数据</button>
-              <button type="button" className="rounded-full border border-red-200 bg-red-50 px-4 py-2 text-xs font-medium text-red-700 transition-colors hover:bg-red-100">删除全部</button>
-            </div>
-            <p className="text-xs text-ink-400">生产失败绝不自动伪装成 Demo 成功。删除任务有状态、审计与明确 SLA。</p>
           </div>
         )}
       </div>
@@ -283,6 +210,18 @@ function EmptyTab({ label }: { label: string }) {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-10 w-10 text-ink-300"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>
       <div><h3 className="font-semibold text-ink-700">暂无{label}数据</h3><p className="mt-1 text-sm text-ink-500">先在工作台运行推演。</p></div>
       <Button size="sm" onClick={() => navigate('/workspace')}>去工作台</Button>
+    </div>
+  );
+}
+
+function UnavailableTab({ title, detail }: { title: string; detail: string }) {
+  return (
+    <div className="card flex flex-col items-center gap-3 p-12 text-center">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-10 w-10 text-ink-300"><circle cx="12" cy="12" r="9"/><path d="M12 7v5"/><path d="M12 16h.01"/></svg>
+      <div>
+        <h3 className="font-semibold text-ink-700">{title}</h3>
+        <p className="mt-1 max-w-lg text-sm leading-relaxed text-ink-500">{detail}</p>
+      </div>
     </div>
   );
 }
