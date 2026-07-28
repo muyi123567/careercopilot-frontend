@@ -693,3 +693,122 @@ html {
   header .bg-brand-700 { animation: none; }
   html { scroll-behavior: auto; }
 }
+
+/* === Apple-Level Polish: Round 2 — Depth & Rhythm === */
+
+/* Hero subtext: refined opacity + max-width for readability */
+.landing-hero p {
+  max-width: 32em;
+  line-height: 1.7;
+}
+
+/* Route card inner spacing: more generous */
+.route-card {
+  padding: 1.75rem;
+}
+@media (min-width: 640px) {
+  .route-card {
+    padding: 2rem;
+  }
+}
+
+/* Route node: refined spacing + hover reveal */
+.rt-node {
+  padding-bottom: 1.5rem;
+}
+.rt-node:last-child {
+  padding-bottom: 0;
+}
+
+/* Accordion header: more generous padding + refined typography */
+#accordion-section button {
+  padding: 1.25rem 1.5rem;
+}
+@media (min-width: 640px) {
+  #accordion-section button {
+    padding: 1.5rem 2rem;
+  }
+}
+
+/* Accordion number badge: refined sizing */
+#accordion-section button span:first-child {
+  font-size: 0.8rem;
+}
+
+/* Accordion panel content: refined padding */
+#accordion-section .overflow-hidden > div {
+  padding: 0 1.5rem 1.5rem;
+}
+@media (min-width: 640px) {
+  #accordion-section .overflow-hidden > div {
+    padding: 0 2rem 2rem;
+  }
+}
+
+/* Navigation CTA: refined sizing */
+header .bg-brand-700 {
+  font-size: 0.85rem;
+  padding: 0.5rem 1.1rem;
+}
+
+/* Trust bar: refined font size */
+.trust-bar-gradient {
+  font-size: 0.75rem;
+}
+
+/* Eyebrow badge: refined padding */
+.eyebrow-badge {
+  padding: 0.35rem 0.85rem;
+  font-size: 0.75rem;
+}
+
+/* CTA buttons: refined sizing for mobile */
+.hero-btn-primary,
+.hero-btn-secondary {
+  font-size: 0.9rem;
+  padding: 0.75rem 1.5rem;
+}
+@media (min-width: 640px) {
+  .hero-btn-primary,
+  .hero-btn-secondary {
+    font-size: 0.95rem;
+    padding: 0.85rem 1.75rem;
+  }
+}
+
+/* Route card header: refined spacing */
+.route-card .relative.mb-6 {
+  margin-bottom: 1.25rem;
+}
+
+/* Dotted grid: more subtle */
+#accordion-section > div {
+  background-image: radial-gradient(circle, rgba(33,29,26,0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Smooth transitions for all interactive elements */
+a, button {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Card hover: subtle lift */
+.card-hover:hover {
+  transform: translateY(-2px);
+}
+
+/* Refined scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(33,29,26,0.15);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(33,29,26,0.25);
+}
