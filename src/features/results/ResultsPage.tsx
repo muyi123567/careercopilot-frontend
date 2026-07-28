@@ -90,7 +90,7 @@ export function ResultsPage() {
                   <p className="eyebrow mb-3">五维度评估（不合成单一成功率）</p>
                   <div className="flex flex-wrap gap-2">
                     {evidenceDimensions.map((d) => (
-                      <span key={d.key} className="rounded-lg border border-line bg-paper px-3 py-1.5 text-xs text-ink-600">{d.label}</span>
+                      <span key={d.key} className="rounded-lg border border-line bg-paper px-3 py-1.5 text-xs text-ink-600 transition-all duration-200 hover:border-brand-200 hover:bg-brand-50/50 hover:text-brand-700 hover:shadow-sm">{d.label}</span>
                     ))}
                   </div>
                 </div>
@@ -231,6 +231,7 @@ function Section({ title, items, tone }: { title: string; items: string[]; tone?
     <div><p className="eyebrow mb-1">{title}</p><ul className={`list-disc pl-4 text-xs ${tone ?? 'text-ink-700'}`}>{items.map((it, i) => <li key={i}>{it}</li>)}</ul></div>
   );
 }
+
 
 
 
