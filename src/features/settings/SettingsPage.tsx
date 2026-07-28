@@ -18,14 +18,14 @@ export function SettingsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
         <p className="eyebrow">用户设置</p>
         <h1 className="display mt-1 text-2xl font-semibold sm:text-3xl">账户与偏好</h1>
       </div>
 
       {/* Account section */}
-      <div className="card p-6">
+      <div className="card p-4 sm:p-6">
         <h2 className="text-base font-semibold text-ink-800">账户信息</h2>
         <div className="mt-4 space-y-3">
           <div className="flex items-center justify-between rounded-xl border border-line bg-paper px-4 py-3">
@@ -52,7 +52,7 @@ export function SettingsPage() {
       </div>
 
       {/* Notification preferences */}
-      <div className="card p-6">
+      <div className="card p-4 sm:p-6">
         <h2 className="text-base font-semibold text-ink-800">通知偏好</h2>
         <p className="mt-1 text-xs text-ink-400">检查点提醒仅在登录后可用</p>
         <div className="mt-4 space-y-3">
@@ -77,7 +77,7 @@ export function SettingsPage() {
       </div>
 
       {/* Data management */}
-      <div className="card p-6">
+      <div className="card p-4 sm:p-6">
         <h2 className="text-base font-semibold text-ink-800">数据管理</h2>
         <div className="mt-4 flex flex-wrap gap-3">
           <button type="button" onClick={() => showToast('数据导出功能即将上线')}
@@ -93,7 +93,7 @@ export function SettingsPage() {
       </div>
 
       {/* About */}
-      <div className="card p-6">
+      <div className="card p-4 sm:p-6">
         <h2 className="text-base font-semibold text-ink-800">关于</h2>
         <div className="mt-3 space-y-2 text-sm text-ink-600">
           <p>CareerCopilot V2 · 证据优先的职业导航</p>
@@ -109,3 +109,4 @@ export function SettingsPage() {
     </div>
   );
 }
+

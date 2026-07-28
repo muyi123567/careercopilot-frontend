@@ -86,7 +86,7 @@ export function WorkspacePage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
@@ -101,13 +101,13 @@ export function WorkspacePage() {
       </div>
 
       {/* Step tabs (horizontal, one row) */}
-      <div className="flex gap-2 overflow-x-auto">
+      <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 sm:mx-0 sm:px-0">
         {PANELS.map((p) => {
           const isActive = active === p.id;
           const isDone = (p.id === 'input' && events.length > 0) || (p.id === 'signals' && events.length > 0) || (p.id === 'infer' && !!result);
           return (
             <button key={p.id} type="button" onClick={() => setActive(p.id)}
-              className={`flex flex-1 items-center gap-2.5 rounded-xl border px-4 py-3 text-left transition-all duration-300 active:scale-[0.97] ${isActive ? 'border-brand-400 bg-brand-50/60 shadow-[0_2px_12px_-4px_rgba(226,114,91,0.2)]' : 'border-line bg-surface hover:border-brand-200 hover:bg-paper hover:shadow-sm'}`}>
+              className={`flex min-w-[140px] flex-1 items-center gap-2.5 rounded-xl border px-3 py-2.5 text-left transition-all duration-300 active:scale-[0.97] sm:min-w-0 sm:px-4 sm:py-3 ${isActive ? 'border-brand-400 bg-brand-50/60 shadow-[0_2px_12px_-4px_rgba(226,114,91,0.2)]' : 'border-line bg-surface hover:border-brand-200 hover:bg-paper hover:shadow-sm'}`}>
               <span className={`flex h-7 w-7 flex-none items-center justify-center rounded-full font-display text-xs font-bold transition-colors ${isActive ? 'bg-brand-600 text-white' : isDone ? 'bg-teal-600 text-white' : 'bg-ink-900/5 text-ink-500'}`}>
                 {isDone && !isActive ? '✓' : p.num}
               </span>
@@ -121,7 +121,7 @@ export function WorkspacePage() {
       </div>
 
       {/* Active panel content */}
-      <div className="card animate-slide-up p-6 sm:p-8" style={{ minHeight: '360px' }}>
+      <div className="card animate-slide-up p-4 sm:p-6 lg:p-8" style={{ minHeight: '320px' }}>
         {/* Panel: Input */}
         {active === 'input' && (
           <div className="flex h-full flex-col gap-4">
@@ -233,6 +233,7 @@ export function WorkspacePage() {
     </div>
   );
 }
+
 
 
 

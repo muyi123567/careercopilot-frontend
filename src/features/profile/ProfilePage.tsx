@@ -25,7 +25,7 @@ export function ProfilePage() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
         <p className="eyebrow">记忆画像</p>
         <h1 className="display mt-1 text-2xl font-semibold sm:text-3xl">你的职业轮廓</h1>
@@ -33,7 +33,7 @@ export function ProfilePage() {
       </div>
 
       {/* Skills radar */}
-      <div className="card p-6">
+      <div className="card p-4 sm:p-6">
         <h2 className="text-base font-semibold text-ink-800">技能图谱</h2>
         <div className="mt-4 space-y-3">
           {skills.map((s) => (
@@ -58,7 +58,7 @@ export function ProfilePage() {
       </div>
 
       {/* Experience timeline */}
-      <div className="card p-6">
+      <div className="card p-4 sm:p-6">
         <h2 className="text-base font-semibold text-ink-800">经历时间线</h2>
         <div className="relative mt-4 space-y-0 pl-6">
           <span className="absolute bottom-2 left-[9px] top-2 w-[2px] bg-[repeating-linear-gradient(180deg,rgba(33,29,26,0.16)_0_5px,transparent_5px_10px)]" />
@@ -86,9 +86,9 @@ export function ProfilePage() {
       </div>
 
       {/* Preferences */}
-      <div className="card p-6">
+      <div className="card p-4 sm:p-6">
         <h2 className="text-base font-semibold text-ink-800">偏好与约束</h2>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <div className="mt-4 grid gap-3 grid-cols-1 sm:grid-cols-2">
           {preferences.map((p) => (
             <div key={p.label} className="rounded-xl border border-line bg-paper px-4 py-3">
               <p className="text-xs text-ink-400">{p.label}</p>
@@ -101,3 +101,4 @@ export function ProfilePage() {
     </div>
   );
 }
+

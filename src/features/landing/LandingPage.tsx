@@ -107,7 +107,7 @@ export function LandingPage() {
 
       {/* Navigation */}
       <header className="sticky top-0 z-[100] border-b border-line bg-paper/82 backdrop-blur-[12px] saturate-[1.4]">
-        <div className="mx-auto flex h-[66px] max-w-[1120px] items-center justify-between px-6">
+        <div className="mx-auto flex h-14 max-w-[1120px] items-center justify-between px-4 sm:h-[66px] sm:px-6">
           <Link to="/" className="flex items-center gap-[11px]">
             <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[9px] bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-sm"><CompassIcon /></span>
             <span className="font-display text-[19px] font-bold tracking-tight">Career<b className="text-brand-700">Copilot</b></span>
@@ -125,7 +125,7 @@ export function LandingPage() {
       </header>
 
       {/* Hero */}
-      <section ref={heroRef} className="landing-hero px-6 py-12">
+      <section ref={heroRef} className="landing-hero px-4 py-8 sm:px-6 sm:py-12">
         {/* 方向母题装饰：罗盘 + 地球经纬 + 轨道动效 */}
         <div className="pointer-events-none absolute -right-[100px] top-1/2 -translate-y-1/2 opacity-[0.04]" aria-hidden="true">
           <svg width="720" height="720" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.25">
@@ -154,12 +154,12 @@ export function LandingPage() {
             <circle cx="50" cy="50" r="3" fill="currentColor" stroke="none"/>
           </svg>
         </div>
-        <div className="mx-auto grid w-full max-w-[1120px] items-center gap-12 lg:grid-cols-[1.5fr_1fr]">
+        <div className="mx-auto grid w-full max-w-[1120px] items-center gap-8 sm:gap-12 lg:grid-cols-[1.5fr_1fr]">
           <div className="reveal border-l-[3px] border-brand-600 pl-[16px]">
             <span className="eyebrow-badge inline-flex items-center gap-2 rounded-full bg-brand-100 px-[13px] py-1.5 text-[13px] font-semibold tracking-wide text-brand-800"><ShieldIcon /> 隐私优先 · 明确授权 · 临时处理</span>
-            <h1 className="mt-5 font-display text-[clamp(2.4rem,5vw,3.7rem)] font-semibold leading-[1.1] tracking-tight">先<span className="hl-draw">想清楚方向</span>，<br/>再投出每一份简历。</h1>
+            <h1 className="mt-4 font-display text-[clamp(1.8rem,5vw,3.7rem)] font-semibold leading-[1.1] tracking-tight sm:mt-5">先<span className="hl-draw">想清楚方向</span>，<br/>再投出每一份简历。</h1>
             <p className="mt-5 max-w-[30em] text-[1.075rem] leading-relaxed text-ink-600">结构化推演帮你看清职业路径。无需上传简历，授权后才发送脱敏信号。</p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
               <Link to="/workspace" className="hero-btn-primary group inline-flex items-center gap-[9px] rounded-full bg-brand-700 px-[23px] py-[13px] text-[15px] font-semibold text-white shadow-sm hover:bg-brand-800">开始推演 <ArrowRight /></Link>
               <button type="button" onClick={() => document.getElementById('accordion-section')?.scrollIntoView({ behavior: 'smooth' })} className="hero-btn-secondary inline-flex items-center gap-[9px] rounded-full bg-ink-900/[0.04] px-[23px] py-[13px] text-[15px] font-semibold text-ink-700 backdrop-blur-sm hover:text-ink-900">看它怎么工作</button>
             </div>
@@ -192,7 +192,7 @@ export function LandingPage() {
       </section>
 
       {/* Accordion Sections */}
-      <section id="accordion-section" className="reveal mx-auto max-w-[1120px] px-6 pb-16">
+      <section id="accordion-section" className="reveal mx-auto max-w-[1120px] px-4 pb-12 sm:px-6 sm:pb-16">
         <div className="overflow-hidden rounded-[14px] border border-line bg-surface shadow-sm">
           {SECTIONS.map((s) => {
             const isOpen = openSection === s.id;
@@ -300,6 +300,7 @@ export function LandingPage() {
     </div>
   );
 }
+
 
 
 

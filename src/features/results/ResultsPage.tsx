@@ -115,7 +115,7 @@ export function ResultsPage() {
   const showDemo = useDemo && !hasLiveData;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
@@ -135,7 +135,7 @@ export function ResultsPage() {
       </div>
 
       {/* Tab bar */}
-      <div className="flex gap-1 overflow-x-auto border-b border-line pb-px">
+      <div className="flex gap-1 overflow-x-auto border-b border-line pb-px -mx-4 px-4 sm:mx-0 sm:px-0">
         {TABS.map((t) => (
           <button key={t.id} type="button" onClick={() => setTab(t.id)}
             className={`relative whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 active:scale-[0.95] ${tab === t.id ? 'bg-brand-50 text-brand-700' : 'text-ink-500 hover:bg-ink-900/[0.03] hover:text-ink-800'}`}>
@@ -151,7 +151,7 @@ export function ResultsPage() {
         {tab === 'overview' && (
           <div className="space-y-5">
             {/* Stats row */}
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-3 grid-cols-1 sm:grid-cols-3 sm:gap-4">
               <div className="card relative overflow-hidden p-5">
                 <span className="absolute left-0 top-0 h-full w-1 bg-brand-500" />
                 <p className="eyebrow">候选路径</p>
@@ -198,7 +198,7 @@ export function ResultsPage() {
 
         {/* ===== Paths ===== */}
         {tab === 'paths' && (
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-3 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 sm:gap-4">
             {(showDemo ? DEMO_PATHS : []).map((p) => (
               <div key={p.path_id} className="card card-hover animate-slide-up flex flex-col gap-3 p-5">
                 <div className="flex items-center justify-between"><PathTypeChip type={p.path_type} /><UncertaintyPill level={p.uncertainty} /></div>
@@ -215,7 +215,7 @@ export function ResultsPage() {
 
         {/* ===== Compare ===== */}
         {tab === 'compare' && (
-          <div className="grid gap-4 lg:grid-cols-3">
+          <div className="grid gap-3 grid-cols-1 lg:grid-cols-3 sm:gap-4">
             {(showDemo ? DEMO_PATHS : []).map((p) => (
               <div key={p.path_id} className="card animate-slide-up flex flex-col gap-3 p-5">
                 <div className="flex items-center justify-between"><PathTypeChip type={p.path_type} /><UncertaintyPill level={p.uncertainty} /></div>
@@ -344,7 +344,7 @@ export function ResultsPage() {
               <p className="eyebrow mb-1">隐私中心</p>
               <p className="text-sm text-ink-500">每类数据的用途、留存与你的控制权。</p>
             </div>
-            <div className="card overflow-hidden">
+            <div className="card overflow-hidden overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead><tr className="border-b border-line bg-paper text-xs text-ink-500">
                   <th className="px-4 py-3 font-medium">数据类型</th><th className="px-4 py-3 font-medium">用途</th><th className="px-4 py-3 font-medium">留存</th><th className="px-4 py-3 font-medium">数量</th>
@@ -384,3 +384,4 @@ function Section({ title, items, tone }: { title: string; items: string[]; tone?
     <div><p className="eyebrow mb-1">{title}</p><ul className={`list-disc pl-4 text-xs ${tone ?? 'text-ink-700'}`}>{items.map((it, i) => <li key={i}>{it}</li>)}</ul></div>
   );
 }
+
