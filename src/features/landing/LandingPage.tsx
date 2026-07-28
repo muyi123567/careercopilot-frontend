@@ -102,9 +102,9 @@ export function LandingPage() {
       </svg>
 
       {/* Trust Bar */}
-      <div className="trust-bar-gradient flex items-center justify-center gap-2 px-4 py-[7px] text-[12.5px] tracking-wide text-[#C4B8AC]">
+      <div className="trust-bar-gradient flex items-center justify-center gap-2 px-4 py-2 text-xs tracking-wide text-[#B6ABA0]">
         <ShieldIcon /><span>原始文件本地解析 · 授权后仅发送结构化信号</span>
-        <span className="h-[3px] w-[3px] rounded-full bg-[#B6ABA0] opacity-50" />
+        <span className="h-1 w-1 rounded-full bg-current opacity-40" />
         <span>随时关闭，不留任何痕迹</span>
       </div>
 
@@ -303,6 +303,7 @@ export function LandingPage() {
     </div>
   );
 }
+
 
 
 
