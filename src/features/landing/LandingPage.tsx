@@ -195,15 +195,15 @@ export function LandingPage() {
       </section>
 
       {/* Accordion Sections */}
-      <section id="accordion-section" className="reveal mx-auto max-w-[1120px] px-4 pb-12 sm:px-6 sm:pb-16">
-        <div className="overflow-hidden rounded-[14px] border border-line bg-surface shadow-sm">
+      <section id="accordion-section" className="reveal mx-auto max-w-[1120px] px-4 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-12">
+        <div className="overflow-hidden rounded-2xl border border-line/70 bg-surface shadow-card">
           {SECTIONS.map((s) => {
             const isOpen = openSection === s.id;
             return (
               <div key={s.id} className="border-b border-line last:border-b-0">
                 {/* Accordion header */}
                 <button type="button" onMouseEnter={() => setOpenSection(s.id)}
-                  className={`flex w-full items-center gap-5 px-8 py-6 text-left transition-all duration-300 ${isOpen ? 'bg-brand-50/60' : 'hover:bg-paper'}`}>
+                  className={`flex w-full items-center gap-4 px-6 py-5 text-left transition-all duration-300 sm:gap-5 sm:px-8 sm:py-6 ${isOpen ? 'bg-brand-50/50' : 'hover:bg-paper/80'}`}>
                   <span className={`flex h-10 w-10 flex-none items-center justify-center rounded-full font-display text-sm font-bold transition-all duration-300 ${isOpen ? 'bg-brand-600 text-white scale-110 shadow-[0_4px_12px_-4px_rgba(181,71,46,0.4)]' : 'bg-brand-50 text-brand-700'}`}>{isOpen ? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><path d={s.icon}/></svg> : s.num}</span>
                   <div className="flex-1">
                     <span className={`block text-lg font-bold tracking-tight transition-colors ${isOpen ? 'text-brand-800' : 'text-ink-800'}`}>{s.label}</span>
@@ -303,5 +303,6 @@ export function LandingPage() {
     </div>
   );
 }
+
 
 
