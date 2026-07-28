@@ -36,7 +36,7 @@ export function EvidenceGradeBadge({ grade }: { grade: EvidenceGrade }) {
 const PATH_CLASS: Record<PathType, string> = {
   deepen: 'bg-brand-50 text-brand-700 border-brand-200',
   adjacent: 'bg-teal-50 text-teal-700 border-teal-200',
-  explore: 'bg-violet-50 text-violet-700 border-violet-200',
+  explore: 'bg-ink-900/5 text-ink-700 border-ink-900/10',
 };
 
 export function PathTypeChip({ type }: { type: PathType }) {

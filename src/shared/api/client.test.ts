@@ -1,23 +1,31 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { getRuntimeConfig } from './client';
+import { getRuntimeConfig, postNavigation } from './client';
 
 afterEach(() => {
   delete (globalThis as { window?: Window }).window;
 });
 
 describe('getRuntimeConfig', () => {
-  it('does not disable the safe mock fallback when VITE_USE_MOCK is absent', () => {
-    expect(getRuntimeConfig().useMock).toBeUndefined();
+  it('returns no backend URL when none is configured', () => {
+    expect(getRuntimeConfig().apiBase).toBeUndefined();
   });
 
-  it('gives an injected runtime setting priority over the build-time setting', () => {
+  it('uses an injected backend URL', () => {
     (globalThis as { window?: Window }).window = {
-      CAREERCOPILOT_CONFIG: { useMock: true, apiBase: 'https://example.test' },
+      CAREERCOPILOT_CONFIG: { apiBase: 'https://example.test' },
     } as Window;
 
     expect(getRuntimeConfig()).toMatchObject({
-      useMock: true,
       apiBase: 'https://example.test',
     });
+  });
+
+  it('does not create a mock path when the backend is absent', async () => {
+    await expect(
+      postNavigation(
+        { current_occupation: { occupation_id: 'fixture:role', name: '测试职业' } },
+        { mode: 'authenticated' },
+      ),
+    ).rejects.toThrow('尚未配置职业导航后端地址');
   });
 });

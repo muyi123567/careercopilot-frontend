@@ -4,7 +4,7 @@ import { HashRouter } from 'react-router-dom';
 import App from './App';
 import { ApiProvider } from './shared/api/query';
 import { AuthProvider } from './shared/auth/session';
-import { JwtAuthProvider } from './shared/auth/AuthContext';
+import { NavigationProvider } from './shared/state/navigation';
 import './index.css';
 
 const rootEl = document.getElementById('root');
@@ -18,14 +18,14 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
 
 createRoot(rootEl).render(
   <StrictMode>
-    <JwtAuthProvider>
+    <ApiProvider>
       <AuthProvider>
-        <ApiProvider>
+        <NavigationProvider>
           <HashRouter>
             <App />
           </HashRouter>
-        </ApiProvider>
+        </NavigationProvider>
       </AuthProvider>
-    </JwtAuthProvider>
+    </ApiProvider>
   </StrictMode>,
 );

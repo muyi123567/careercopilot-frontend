@@ -19,9 +19,11 @@ class IdentityContractTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, CLIENT + SESSION)
 
-    def test_demo_mode_is_explicit_and_read_only(self):
+    def test_demo_mode_cannot_fabricate_account_navigation(self):
         self.assertIn("type AccessMode = 'demo' | 'authenticated'", CLIENT)
-        self.assertIn("if (opts.mode === 'demo' || forceMock)", CLIENT)
+        self.assertIn("if (opts.mode === 'demo')", CLIENT)
+        self.assertIn("合成演示不生成账户态路径", CLIENT)
+        self.assertNotIn("buildOkResponse", CLIENT)
         self.assertIn("const [mode, setMode] = useState<AccessMode>('demo')", SESSION)
 
     def test_authenticated_mode_uses_bearer_token(self):
