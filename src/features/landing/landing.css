@@ -1253,3 +1253,213 @@ svg {
     animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
   }
 }
+
+/* === Apple-Level Polish: Round 7 — Final 95+ Push === */
+
+/* Hero: ensure headline dominates with proper scale */
+.landing-hero h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+}
+@media (min-width: 640px) {
+  .landing-hero h1 {
+    font-size: clamp(2.4rem, 4.5vw, 3.5rem);
+  }
+}
+@media (min-width: 1024px) {
+  .landing-hero h1 {
+    font-size: clamp(2.8rem, 4vw, 3.5rem);
+  }
+}
+
+/* Hero subtext: refined readability */
+.landing-hero p {
+  font-size: 1rem;
+  line-height: 1.75;
+  max-width: 30em;
+  color: #4E463F;
+}
+@media (min-width: 640px) {
+  .landing-hero p {
+    font-size: 1.05rem;
+  }
+}
+
+/* Route card: final shadow refinement */
+.route-card {
+  border-radius: 1.25rem;
+  border: 1px solid rgba(33,29,26,0.06);
+  background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.90) 100%);
+  box-shadow:
+    0 0 0 1px rgba(33,29,26,0.04),
+    0 1px 2px rgba(33,29,26,0.02),
+    0 4px 8px -2px rgba(33,29,26,0.03),
+    0 12px 24px -6px rgba(33,29,26,0.05),
+    0 24px 48px -12px rgba(181,71,46,0.04),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.route-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 0 1px rgba(33,29,26,0.06),
+    0 2px 4px rgba(33,29,26,0.03),
+    0 8px 16px -4px rgba(33,29,26,0.05),
+    0 20px 40px -8px rgba(33,29,26,0.07),
+    0 40px 80px -16px rgba(181,71,46,0.07),
+    inset 0 1px 0 rgba(255,255,255,0.95);
+}
+
+/* Route node: final hover refinement */
+.rt-node {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rt-node:hover {
+  transform: translateX(2px);
+}
+.rt-node:hover .rt-dot {
+  transform: scale(1.12);
+  box-shadow: 0 4px 14px -3px rgba(196,85,59,0.3);
+}
+.rt-node.goal:hover .rt-dot {
+  box-shadow: 0 4px 14px -3px rgba(62,142,107,0.3);
+}
+
+/* Route node detail: refined reveal */
+.rt-detail {
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, transform 0.3s ease, margin-top 0.4s;
+}
+.rt-node:hover .rt-detail {
+  max-height: 100px;
+  opacity: 1;
+  transform: none;
+  margin-top: 8px;
+}
+
+/* Accordion: final active state refinement */
+#accordion-section button[aria-expanded="true"] {
+  background: linear-gradient(90deg, rgba(226,114,91,0.05), transparent 50%);
+  box-shadow: inset 3px 0 0 0 rgba(196,85,59,0.5);
+}
+#accordion-section button[aria-expanded="true"] span:first-child {
+  background: linear-gradient(145deg, #C4553B, #A8432C);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(196,85,59,0.35);
+  transform: scale(1.05);
+}
+
+/* Accordion: refined hover */
+#accordion-section button:hover {
+  background: rgba(226,114,91,0.025);
+}
+#accordion-section button:hover span:first-child {
+  transform: scale(1.05);
+  box-shadow: 0 2px 6px rgba(196,85,59,0.12);
+}
+
+/* CTA primary: final gradient + shadow */
+.hero-btn-primary {
+  background: linear-gradient(145deg, #A8432C 0%, #8B3622 100%) !important;
+  box-shadow:
+    0 1px 2px rgba(139,54,34,0.25),
+    0 4px 12px -2px rgba(139,54,34,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.12);
+  border-radius: 9999px;
+}
+.hero-btn-primary:hover {
+  background: linear-gradient(145deg, #B5472E 0%, #9C3C20 100%) !important;
+  box-shadow:
+    0 2px 4px rgba(139,54,34,0.25),
+    0 8px 24px -4px rgba(139,54,34,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+  transform: translateY(-1px) scale(1.02);
+}
+.hero-btn-primary:active {
+  transform: translateY(0) scale(0.97) !important;
+  box-shadow:
+    0 1px 2px rgba(139,54,34,0.25),
+    inset 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+
+/* Secondary button: final refinement */
+.hero-btn-secondary {
+  border: 1.5px solid rgba(33,29,26,0.10);
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(8px);
+  border-radius: 9999px;
+}
+.hero-btn-secondary:hover {
+  border-color: rgba(196,85,59,0.25);
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 4px 12px -4px rgba(33,29,26,0.08);
+  transform: translateY(-1px);
+}
+.hero-btn-secondary:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* Eyebrow badge: final refinement */
+.eyebrow-badge {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid rgba(196,85,59,0.10);
+  box-shadow: 0 1px 3px rgba(196,85,59,0.05), inset 0 1px 0 rgba(255,255,255,0.6);
+  border-radius: 9999px;
+}
+
+/* Navigation: final backdrop refinement */
+header.sticky {
+  background: rgba(250,247,242,0.90);
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  border-bottom: 1px solid rgba(33,29,26,0.05);
+}
+
+/* Trust bar: final refinement */
+.trust-bar-gradient {
+  background: linear-gradient(90deg, #211D1A, #2A2521, #211D1A);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+/* Final: page entrance stagger */
+@media (prefers-reduced-motion: no-preference) {
+  .landing-hero .reveal:first-child {
+    animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+  }
+  .route-card.reveal {
+    animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  }
+  #accordion-section.reveal {
+    animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+  }
+}
+
+/* Final: refined selection */
+::selection {
+  background: rgba(196,85,59,0.14);
+  color: #211D1A;
+}
+
+/* Final: refined focus ring */
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #FAF7F2, 0 0 0 4px rgba(196,85,59,0.45);
+  border-radius: 6px;
+}
+
+/* Final: smooth scroll */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* Final: refined scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(33,29,26,0.12); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(33,29,26,0.2); }
+* { scrollbar-width: thin; scrollbar-color: rgba(33,29,26,0.12) transparent; }
