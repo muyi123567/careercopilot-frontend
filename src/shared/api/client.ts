@@ -1,24 +1,17 @@
 /**
  * 导航 API 客户端。
- * - demo 模式：始终使用契约形 mock（绝不在后端错误时伪造成功）。
- * - authenticated 模式：命中真实 /api/v2/navigation；未配置后端时回退为 data_insufficient mock，如实反映现状。
+ * - 账户态始终命中真实 /api/v2/navigation。
+ * - 后端未配置或不可用时显式失败，绝不生成伪造的路径、证据或成功状态。
  * - 任何响应都先过 validateNavigationResponse，非法则抛错。
  */
 import type { CareerNavigationResponse, NavigationRequestInput } from './contract';
 import { validateNavigationResponse } from './validate';
-import {
-  buildDataInsufficientResponse,
-  buildOkResponse,
-  buildServiceFailureResponse,
-} from './mock';
 
 export type AccessMode = 'demo' | 'authenticated';
 export type MockScenario = 'ok' | 'data_insufficient' | 'service_failure';
 
 export interface RuntimeConfig {
   apiBase?: string;
-  useMock?: boolean;
-  mockScenario?: MockScenario;
 }
 
 declare global {
@@ -34,16 +27,8 @@ export function getRuntimeConfig(): RuntimeConfig {
     ? {}
     : window.CAREERCOPILOT_CONFIG ?? {};
   const envApiBase = import.meta.env.VITE_API_BASE_URL;
-  const rawEnvUseMock = import.meta.env.VITE_USE_MOCK;
-  const envUseMock = rawEnvUseMock === undefined
-    ? undefined
-    : rawEnvUseMock === 'true';
-  const envMockScenario = import.meta.env.VITE_MOCK_SCENARIO as MockScenario | undefined;
-
   return Object.freeze({
     apiBase: windowConfig.apiBase ?? envApiBase ?? undefined,
-    useMock: windowConfig.useMock ?? envUseMock ?? undefined,
-    mockScenario: windowConfig.mockScenario ?? envMockScenario ?? undefined,
   });
 }
 
@@ -53,17 +38,6 @@ export function createClientSessionId(): string {
     return crypto.randomUUID();
   }
   return `sess-${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
-}
-
-function delay(ms: number, signal?: AbortSignal): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (signal?.aborted) return reject(new DOMException('Aborted', 'AbortError'));
-    const t = setTimeout(resolve, ms);
-    signal?.addEventListener('abort', () => {
-      clearTimeout(t);
-      reject(new DOMException('Aborted', 'AbortError'));
-    });
-  });
 }
 
 export interface PostOptions {
@@ -79,18 +53,11 @@ export async function postNavigation(
 ): Promise<CareerNavigationResponse> {
   const cfg = getRuntimeConfig();
   const backendConfigured = !!cfg.apiBase && cfg.apiBase !== 'null';
-  const forceMock = cfg.useMock ?? !backendConfigured;
-
-  if (opts.mode === 'demo' || forceMock) {
-    await delay(550, opts.signal);
-    const scenario = opts.mode === 'demo' ? opts.mockScenario ?? 'ok' : 'data_insufficient';
-    const data =
-      scenario === 'ok'
-        ? buildOkResponse(input)
-        : scenario === 'data_insufficient'
-          ? buildDataInsufficientResponse(input)
-          : buildServiceFailureResponse();
-    return validateNavigationResponse(data);
+  if (!backendConfigured) {
+    throw new Error('尚未配置职业导航后端地址，无法生成账户态路径。');
+  }
+  if (opts.mode === 'demo') {
+    throw new Error('合成演示不生成账户态路径；请切换到登录后的真实导航。');
   }
 
   const apiBase = String(cfg.apiBase).replace(/\/$/, '');

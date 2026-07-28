@@ -74,8 +74,8 @@ export function ResultsPage() {
               <div className="card flex flex-col items-center gap-4 p-12 text-center">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-12 w-12 text-ink-300"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>
                 <div>
-                  <h3 className="text-lg font-semibold text-ink-700">还没有分析数据</h3>
-                  <p className="mt-1 text-sm text-ink-500">去工作台运行一次推演，结果会在这里展开。</p>
+                  <h3 className="text-lg font-semibold text-ink-700">账户态职业地图尚未运行</h3>
+                  <p className="mt-1 text-sm text-ink-500">匿名临时推演只生成当次行动建议；真实路径、比较与行动创建需要登录并连接已部署的数据服务。</p>
                 </div>
                 <Button onClick={() => navigate('/workspace')}>去推演工作台</Button>
               </div>
