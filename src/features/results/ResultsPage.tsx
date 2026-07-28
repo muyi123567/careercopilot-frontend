@@ -71,13 +71,20 @@ export function ResultsPage() {
         {tab === 'overview' && (
           <div className="space-y-4">
             {!hasData ? (
-              <div className="card flex flex-col items-center gap-4 p-12 text-center">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-12 w-12 text-ink-300"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>
-                <div>
-                  <h3 className="text-lg font-semibold text-ink-700">账户态职业地图尚未运行</h3>
-                  <p className="mt-1 text-sm text-ink-500">匿名临时推演只生成当次行动建议；真实路径、比较与行动创建需要登录并连接已部署的数据服务。</p>
+              <div className="card flex flex-col items-center gap-5 p-14 text-center">
+                <div className="relative">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-14 w-14 text-brand-300"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>
+                  <span className="absolute -right-1.5 -top-1.5 h-4 w-4 rounded-full border-2 border-brand-100 bg-brand-50" />
+                  <span className="absolute -bottom-1 -left-1.5 h-3 w-3 rounded-full border border-teal-100 bg-teal-50" />
                 </div>
-                <Button onClick={() => navigate('/workspace')}>去推演工作台</Button>
+                <div>
+                  <h3 className="text-lg font-semibold text-ink-800">职业地图尚未生成</h3>
+                  <p className="mx-auto mt-2 max-w-[32em] text-sm leading-relaxed text-ink-500">匿名临时推演只生成当次行动建议。真实路径、比较与行动创建需要登录并连接已部署的数据服务。</p>
+                </div>
+                <button type="button" onClick={() => navigate('/workspace')} className="group inline-flex items-center gap-2 rounded-full bg-brand-700 px-6 py-2.5 text-sm font-semibold text-white shadow-[0_4px_14px_-4px_rgba(181,71,46,0.3)] transition-all duration-300 hover:bg-brand-800 hover:shadow-[0_8px_24px_-6px_rgba(181,71,46,0.35)] hover:-translate-y-px active:scale-[0.97]">
+                  去推演工作台
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4 transition-transform group-hover:translate-x-[3px]"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+                </button>
               </div>
             ) : (
               <>
