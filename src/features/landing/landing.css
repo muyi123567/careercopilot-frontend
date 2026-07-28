@@ -12,7 +12,7 @@
 .landing-contour ellipse,
 .landing-contour path {
   fill: none;
-  stroke: oklch(72% 0.01 50);
+  stroke: #9A9088;
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
   opacity: 0.14;
@@ -186,7 +186,7 @@
 .cap-head { transition: background 0.25s, padding-left 0.25s; }
 .cap-head::before {
   content: ""; position: absolute; left: 0; top: 18%; bottom: 18%; width: 3px;
-  background: oklch(61% 0.14 36); border-radius: 0 3px 3px 0;
+  background: #C4553B; border-radius: 0 3px 3px 0;
   transform: scaleY(0); transform-origin: center; opacity: 0;
   transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.35s;
 }
@@ -195,10 +195,10 @@
 .cap-panel { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.4s; }
 .cap-item:hover .cap-panel, .cap-item:focus-within .cap-panel { max-height: 160px; opacity: 1; }
 .cap-chev { transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), color 0.25s; }
-.cap-item:hover .cap-chev { transform: rotate(90deg); color: oklch(52% 0.15 36); }
+.cap-item:hover .cap-chev { transform: rotate(90deg); color: #A8432C; }
 .cap-num { transition: background 0.25s, color 0.25s, transform 0.25s; }
-.cap-item:hover .cap-num { background: oklch(61% 0.14 36); color: #fff; transform: scale(1.1); }
-.cap-item:hover .cap-title { color: oklch(52% 0.15 36); }
+.cap-item:hover .cap-num { background: #C4553B; color: #fff; transform: scale(1.1); }
+.cap-item:hover .cap-title { color: #A8432C; }
 
 /* === Reveal === */
 .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
@@ -546,3 +546,4 @@ header .bg-brand-700 {
   header .bg-brand-700 { animation: none; }
   .eyebrow-badge:hover { transform: none; }
 }
+

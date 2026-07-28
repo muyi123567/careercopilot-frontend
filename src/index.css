@@ -147,3 +147,64 @@
   .card-enter { animation: none; }
   .stat-card-hover:hover { transform: none; }
 }
+
+/* === Huawei Browser / Legacy Chromium Compatibility === */
+
+/* Force color rendering for browsers with poor color management */
+@supports not (color: oklch(50% 0.1 50)) {
+  :root {
+    color-scheme: light;
+  }
+}
+
+/* Enhanced text contrast for low-quality displays */
+@media screen and (max-resolution: 1.5dppx) {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  .eyebrow {
+    color: #4E463F;
+  }
+}
+
+/* Huawei browser specific: force hardware acceleration for gradients */
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+  .landing-hero,
+  .auth-card,
+  .card {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+}
+
+/* Ensure brand colors render with sufficient saturation on all displays */
+.brand-500 { color: #C4553B; }
+.bg-brand-500 { background-color: #C4553B; }
+.bg-brand-600 { background-color: #A8432C; }
+.bg-brand-700 { background-color: #8B3622; }
+.text-brand-700 { color: #8B3622; }
+.text-brand-800 { color: #722C1C; }
+.border-brand-400 { border-color: #D07A5E; }
+.border-brand-500 { border-color: #C4553B; }
+
+/* Force minimum contrast for body text on low-quality screens */
+@media screen and (max-width: 768px) {
+  body {
+    color: #2E2925;
+  }
+  .text-ink-500 {
+    color: #4E463F;
+  }
+  .text-ink-400 {
+    color: #6B6258;
+  }
+}
+
+/* Viewport stability for mobile browsers with dynamic toolbars */
+@supports (height: 100dvh) {
+  .landing-hero {
+    min-height: calc(100dvh - 100px);
+  }
+}

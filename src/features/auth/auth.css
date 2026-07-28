@@ -35,16 +35,16 @@
   background: rgba(255,255,255,0.9);
   padding: 0.7rem 1rem;
   font-size: 0.875rem;
-  color: oklch(28% 0.012 50);
+  color: #2E2925;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   outline: none;
 }
 .auth-input::placeholder {
-  color: oklch(70% 0.01 50);
+  color: #9A9088;
 }
 .auth-input:focus {
-  border-color: oklch(67% 0.18 36);
-  box-shadow: 0 0 0 3px oklch(61% 0.20 36 / 0.15), 0 2px 8px -2px rgba(212,85,59,0.12);
+  border-color: #D07A5E;
+  box-shadow: 0 0 0 3px rgba(196,85,59,0.15), 0 2px 8px -2px rgba(212,85,59,0.12);
 }
 .auth-input:disabled {
   opacity: 0.5;
@@ -242,8 +242,8 @@
 
 /* Input fields: enhanced focus with brand glow spread */
 .auth-input:focus {
-  border-color: oklch(67% 0.18 36);
-  box-shadow: 0 0 0 3px oklch(61% 0.20 36 / 0.15), 0 0 16px -4px rgba(226,114,91,0.15), 0 2px 8px -2px rgba(212,85,59,0.12);
+  border-color: #D07A5E;
+  box-shadow: 0 0 0 3px rgba(196,85,59,0.15), 0 0 16px -4px rgba(226,114,91,0.15), 0 2px 8px -2px rgba(212,85,59,0.12);
   background: rgba(255,255,255,0.95);
 }
 
@@ -306,3 +306,4 @@
   .auth-page-enter .auth-brand-panel > div:last-child > div { animation: none; }
   .auth-toast { animation: none; }
 }
+
