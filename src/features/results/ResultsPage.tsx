@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useNavigation } from '../../shared/state/navigation';
-import { PathTypeChip, UncertaintyPill, EvidenceGradeBadge, ClassificationTag } from '../../shared/components/ui/Badge';
+import { PathTypeChip, UncertaintyPill, ClassificationTag } from '../../shared/components/ui/Badge';
 import { CoverageBadge } from '../../shared/components/provenance/CoverageBadge';
 import { DataInsufficientState, ErrorState, LoadingState } from '../../shared/components/states/FeedbackStates';
 import { evidenceDimensions } from '../../shared/api/labels';
-import type { UserConfirmation } from '../../shared/api/contract';
+
 
 type Tab = 'overview' | 'paths' | 'compare' | 'evidence' | 'actions' | 'radar' | 'decisions' | 'privacy';
 
@@ -70,7 +70,7 @@ const DEMO_EVIDENCE = [
   { id: 'e1', grade: 'A' as const, classification: 'fact' as const, uncertainty: 'low' as const, claim: '你有 2 年后端开发经验，熟悉 Python 和分布式系统基础。', source: '简历结构化提取', confirmed: null as string | null },
   { id: 'e2', grade: 'B' as const, classification: 'inference' as const, uncertainty: 'medium' as const, claim: '你的系统思维能力可以迁移到产品判断中。', source: '职业路径模型推断', confirmed: null as string | null },
   { id: 'e3', grade: 'C' as const, classification: 'inference' as const, uncertainty: 'high' as const, claim: '技术转产品的成功率约为 30-40%。', source: '脉脉社区统计（样本量有限）', confirmed: null as string | null },
-  { id: 'e4', grade: 'D' as const, classification: 'suggestion' as const, uncertainty: 'very_high' as const, claim: '独立开发者 3 年存活率约 15%。', source: 'IndieHackers 社区（非中国样本）', confirmed: null as string | null },
+  { id: 'e4', grade: 'D' as const, classification: 'recommendation' as const, uncertainty: 'very_high' as const, claim: '独立开发者 3 年存活率约 15%。', source: 'IndieHackers 社区（非中国样本）', confirmed: null as string | null },
   { id: 'e5', grade: 'U' as const, classification: 'fact' as const, uncertainty: 'unknown' as const, claim: '你所在城市的技术 PM 岗位供需比。', source: '数据缺失 — 需要地域化数据源', confirmed: null as string | null },
 ];
 

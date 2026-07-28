@@ -47,7 +47,7 @@ const UNCERTAINTY_KINDS = new Set<UncertaintyKind>([
   'extraction_quality',
   'not_available',
 ]);
-const UNCERTAINTY_LEVELS = new Set<UncertaintyLevel>(['low', 'medium', 'high', 'unknown']);
+const UNCERTAINTY_LEVELS = new Set<UncertaintyLevel>(['low', 'medium', 'high', 'very_high', 'unknown']);
 const ERROR_CODES = new Set<ErrorCode>([
   'UPSTREAM_UNAVAILABLE',
   'CONTRACT_VIOLATION',

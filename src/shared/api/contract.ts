@@ -17,7 +17,7 @@ export type UncertaintyKind =
   | 'data_coverage'
   | 'extraction_quality'
   | 'not_available';
-export type UncertaintyLevel = 'low' | 'medium' | 'high' | 'unknown';
+export type UncertaintyLevel = 'low' | 'medium' | 'high' | 'very_high' | 'unknown';
 export type SourceType =
   | 'user_confirmed'
   | 'job_posting'

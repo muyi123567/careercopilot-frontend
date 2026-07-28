@@ -62,6 +62,7 @@ export const uncertaintyLevelLabel: Record<UncertaintyLevel, string> = {
   low: '不确定性低',
   medium: '不确定性中',
   high: '不确定性高',
+  very_high: '不确定性极高',
   unknown: '不确定性未知',
 };
 

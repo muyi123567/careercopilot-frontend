@@ -59,11 +59,11 @@ function useHeroMouse(heroRef: React.RefObject<HTMLElement | null>, cardRef: Rea
 
 /* ===== Accordion Section Data ===== */
 const SECTIONS = [
-  { id: 'console', num: '01', label: '推演控制台', sub: '把经历交给推演，不交给服务器' },
-  { id: 'trust', num: '02', label: '信任宣言', sub: '不知道你是谁，是我们的底色' },
-  { id: 'capabilities', num: '03', label: '能力详解', sub: '它能为你做什么' },
-  { id: 'chat', num: '04', label: '匿名对话', sub: '不留存的多轮探索' },
-  { id: 'cta', num: '05', label: '开始行动', sub: '先想清楚，再行动' },
+  { id: 'console', num: '01', label: '推演控制台', sub: '把经历交给推演，不交给服务器', icon: 'M12 20V10M18 20V4M6 20v-4' },
+  { id: 'trust', num: '02', label: '信任宣言', sub: '不知道你是谁，是我们的底色', icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z' },
+  { id: 'capabilities', num: '03', label: '能力详解', sub: '它能为你做什么', icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5' },
+  { id: 'chat', num: '04', label: '匿名对话', sub: '不留存的多轮探索', icon: 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z' },
+  { id: 'cta', num: '05', label: '开始行动', sub: '先想清楚，再行动', icon: 'M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4L12 14.01l-3-3' },
 ];
 
 const CAPABILITIES = [

@@ -54,6 +54,7 @@ const UNC_CLASS: Record<UncertaintyLevel, string> = {
   low: 'bg-emerald-50 text-emerald-700',
   medium: 'bg-amber-50 text-amber-700',
   high: 'bg-red-50 text-red-700',
+  very_high: 'bg-red-100 text-red-800',
   unknown: 'bg-slate-100 text-slate-600',
 };
 
