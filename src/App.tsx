@@ -1,24 +1,19 @@
 import { Routes, Route } from 'react-router-dom';
-import { MatrixLandingPage } from './features/matrix/MatrixLandingPage';
-import { AuthPage } from './features/auth/AuthPage';
-import { RequireAuth } from './shared/auth/RequireAuth';
-import { MapPage } from './features/career-map/MapPage';
-import { ComparePage } from './features/path-compare/ComparePage';
-import { EvidencePage } from './features/evidence/EvidencePage';
-import { ActionsPage } from './features/actions/ActionsPage';
+import { AppShell } from './shared/components/layout/AppShell';
+import { LandingPage } from './features/landing/LandingPage';
+import { WorkspacePage } from './features/workspace/WorkspacePage';
+import { ResultsPage } from './features/results/ResultsPage';
 
 export default function App() {
   return (
     <Routes>
-      {/* 公开路由：匿名 Demo */}
-      <Route path="/" element={<MatrixLandingPage />} />
-      <Route path="/auth" element={<AuthPage />} />
-
-      {/* 账户态路由：需登录 */}
-      <Route path="/dashboard" element={<RequireAuth><MapPage /></RequireAuth>} />
-      <Route path="/compare" element={<RequireAuth><ComparePage /></RequireAuth>} />
-      <Route path="/evidence" element={<RequireAuth><EvidencePage /></RequireAuth>} />
-      <Route path="/actions" element={<RequireAuth><ActionsPage /></RequireAuth>} />
+      {/* 第一页：吸睛着陆页（全宽独立布局） */}
+      <Route index element={<LandingPage />} />
+      {/* 第二页 + 第三页：AppShell 布局 */}
+      <Route element={<AppShell />}>
+        <Route path="workspace" element={<WorkspacePage />} />
+        <Route path="results" element={<ResultsPage />} />
+      </Route>
     </Routes>
   );
 }
