@@ -27,8 +27,8 @@ export function ProfilePage() {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div>
-        <p className="eyebrow">记忆画像</p>
-        <h1 className="display mt-1 text-2xl font-semibold sm:text-3xl">你的职业轮廓</h1>
+        <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">记忆画像</p>
+        <h1 className="mt-1.5 font-display text-2xl font-semibold tracking-tight text-ink-900 sm:text-3xl">你的职业轮廓</h1>
         <p className="mt-1 text-sm text-ink-500">基于推演过程中提取的结构化信号构建。所有数据仅用于为你生成路径建议。</p>
       </div>
 
@@ -101,4 +101,5 @@ export function ProfilePage() {
     </div>
   );
 }
+
 

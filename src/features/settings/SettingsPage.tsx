@@ -20,8 +20,8 @@ export function SettingsPage() {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div>
-        <p className="eyebrow">用户设置</p>
-        <h1 className="display mt-1 text-2xl font-semibold sm:text-3xl">账户与偏好</h1>
+        <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">用户设置</p>
+        <h1 className="mt-1.5 font-display text-2xl font-semibold tracking-tight text-ink-900 sm:text-3xl">账户与偏好</h1>
       </div>
 
       {/* Account section */}
@@ -109,4 +109,5 @@ export function SettingsPage() {
     </div>
   );
 }
+
 
