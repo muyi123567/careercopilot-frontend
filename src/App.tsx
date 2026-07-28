@@ -4,21 +4,22 @@ import { LandingPage } from './features/landing/LandingPage';
 import { WorkspacePage } from './features/workspace/WorkspacePage';
 import { ResultsPage } from './features/results/ResultsPage';
 import { LoginPage } from './features/auth/LoginPage';
+import { SettingsPage } from './features/settings/SettingsPage';
+import { ProfilePage } from './features/profile/ProfilePage';
 
 export default function App() {
   return (
     <Routes>
-      {/* 第一页：吸睛着陆页（全宽独立布局） */}
-      {/* 登录页：全宽独立布局 */}
+      {/* 着陆页 + 登录页：全宽独立布局 */}
       <Route path="login" element={<LoginPage />} />
       <Route index element={<LandingPage />} />
-      {/* 第二页 + 第三页：AppShell 布局 */}
+      {/* 功能页：AppShell 布局 */}
       <Route element={<AppShell />}>
         <Route path="workspace" element={<WorkspacePage />} />
         <Route path="results" element={<ResultsPage />} />
+        <Route path="settings" element={<SettingsPage />} />
+        <Route path="profile" element={<ProfilePage />} />
       </Route>
     </Routes>
   );
 }
-
-
