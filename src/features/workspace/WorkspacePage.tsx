@@ -1,5 +1,5 @@
 import { useRef, useState, type ChangeEvent, type DragEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { getRuntimeConfig } from '../../shared/api/client';
 import { parsePdfLocally, isPdfFile, isDocxFile, isSupportedTextFile } from '../../lib/pdf-parser';
 import { extractStructuredEvents, type StructuredEvent } from '../matrix/MatrixLandingPage';

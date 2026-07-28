@@ -40,7 +40,7 @@ export function AnonymousChat({ events, initialQuestion, onClose }: AnonymousCha
   const [turn, setTurn] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const initialized = useRef(false);
-  const sendMessageRef = useRef<(text: string, history: ChatMessage[]) => Promise<void>>();
+  const sendMessageRef = useRef<((text: string, history: ChatMessage[]) => Promise<void>) | null>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

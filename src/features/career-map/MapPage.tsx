@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useNavigation } from '../../shared/state/navigation';
 import { useAuth } from '../../shared/auth/session';
 import { StatusPill } from '../../shared/components/ui/Badge';

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAuth } from '../../shared/auth/session';
 import { useNavigation } from '../../shared/state/navigation';
 import { Button } from '../../shared/components/ui/Button';
