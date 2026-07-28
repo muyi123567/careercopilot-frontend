@@ -15,7 +15,7 @@ export function LegalPage({ type }: { type: 'terms' | 'privacy' }) {
           返回登录
         </Link>
 
-        <div className="rounded-2xl border border-line bg-white/85 p-8 shadow-[0_4px_24px_-8px_rgba(33,29,26,0.08)] backdrop-blur-sm sm:p-12">
+        <div className="rounded-2xl border border-line/70 bg-white/90 p-7 shadow-[0_0_0_1px_rgba(33,29,26,0.03),0_8px_32px_-8px_rgba(33,29,26,0.07)] backdrop-blur-sm sm:p-10 lg:p-12">
           <div className="mb-8 flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
@@ -23,7 +23,7 @@ export function LegalPage({ type }: { type: 'terms' | 'privacy' }) {
               </svg>
             </span>
             <div>
-              <h1 className="font-display text-2xl font-semibold tracking-tight text-ink-900">{isTerms ? '用户协议' : '隐私政策'}</h1>
+              <h1 className="font-display text-2xl font-bold tracking-tight text-ink-900">{isTerms ? '用户协议' : '隐私政策'}</h1>
               <p className="text-xs text-ink-400">最后更新：2026 年 7 月 28 日</p>
             </div>
           </div>
@@ -54,3 +54,4 @@ export function LegalPage({ type }: { type: 'terms' | 'privacy' }) {
     </div>
   );
 }
+
