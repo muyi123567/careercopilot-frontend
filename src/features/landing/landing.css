@@ -939,3 +939,126 @@ img, svg {
     scroll-behavior: smooth;
   }
 }
+
+/* === Apple-Level Polish: Round 4 — Final Refinement === */
+
+/* Ensure hero headline is fully visible with proper viewport handling */
+.landing-hero {
+  min-height: auto;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+@media (min-width: 640px) {
+  .landing-hero {
+    min-height: calc(100vh - 120px);
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+@media (min-width: 1024px) {
+  .landing-hero {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+
+/* Route card: enhanced inner glow + refined border */
+.route-card {
+  border: 1px solid rgba(33,29,26,0.06);
+  background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.88) 100%);
+}
+
+/* Route card header: refined spacing + typography */
+.route-card .rt-head {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(33,29,26,0.05);
+  margin-bottom: 1.25rem;
+}
+
+/* Route node icons: refined sizing + shadow */
+.rt-dot {
+  box-shadow: 0 2px 6px -2px rgba(33,29,26,0.1);
+}
+.rt-node:first-child .rt-dot {
+  box-shadow: 0 2px 8px -2px rgba(196,85,59,0.3);
+}
+
+/* Accordion: refined hover state with subtle scale */
+#accordion-section button:hover {
+  background: rgba(226,114,91,0.02);
+}
+#accordion-section button:active {
+  transform: scale(0.995);
+}
+
+/* Accordion number badge: refined gradient */
+#accordion-section button span:first-child {
+  background: linear-gradient(135deg, #FDF5F2, #F9E8E0);
+  border: 1px solid rgba(196,85,59,0.1);
+}
+
+/* Navigation: refined backdrop blur */
+header.sticky {
+  backdrop-filter: blur(16px) saturate(1.5);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+}
+
+/* CTA primary: refined gradient direction */
+.hero-btn-primary {
+  background: linear-gradient(135deg, #A8432C 0%, #8B3622 100%) !important;
+}
+.hero-btn-primary:hover {
+  background: linear-gradient(135deg, #B5472E 0%, #9C3C20 100%) !important;
+}
+
+/* Eyebrow badge: refined icon spacing */
+.eyebrow-badge svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Route card status: refined dot animation */
+.route-card .pulse-dot {
+  animation: pulse 2.5s ease-in-out infinite;
+}
+
+/* Accordion panel: refined content spacing */
+#accordion-section .overflow-hidden > div > div {
+  padding-top: 0.5rem;
+}
+
+/* Refined text selection */
+::selection {
+  background: rgba(196,85,59,0.12);
+  color: #211D1A;
+}
+
+/* Refined scrollbar for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(33,29,26,0.15) transparent;
+}
+
+/* Ensure proper rendering on high-DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .route-card {
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Final touch: subtle page entrance */
+@media (prefers-reduced-motion: no-preference) {
+  .landing-hero .reveal {
+    animation: heroEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes heroEntrance {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
