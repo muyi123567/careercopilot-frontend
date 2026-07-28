@@ -90,10 +90,10 @@ export function AnonymousChat({ events, initialQuestion, onClose }: AnonymousCha
   function handleKeyDown(e: React.KeyboardEvent) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }
 
   return (
-    <div className="card animate-slide-up overflow-hidden">
+    <div className="card animate-slide-up overflow-hidden shadow-[0_4px_24px_-8px_rgba(33,29,26,0.10)]">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-line bg-paper px-5 py-3">
-        <span className="text-sm font-semibold text-ink-800">临时探索对话</span>
+      <div className="flex items-center justify-between border-b border-line bg-gradient-to-r from-paper to-brand-50/30 px-5 py-3">
+        <span className="flex items-center gap-2 text-sm font-semibold text-ink-800"><span className="h-2 w-2 rounded-full bg-teal-500 pulse-dot" />临时探索对话</span>
         <div className="flex items-center gap-3">
           <span className="text-xs text-ink-400">{turn}/{MAX_TURNS} 轮</span>
           <button type="button" onClick={onClose} aria-label="关闭对话" className="flex h-7 w-7 items-center justify-center rounded-full text-ink-400 transition-colors hover:bg-ink-900/5 hover:text-ink-700">✕</button>
@@ -106,8 +106,8 @@ export function AnonymousChat({ events, initialQuestion, onClose }: AnonymousCha
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
               msg.role === 'user'
-                ? 'rounded-br-[5px] bg-brand-600 text-white'
-                : 'rounded-bl-[5px] border border-line bg-surface text-ink-700'
+                ? 'rounded-br-[5px] bg-brand-600 text-white shadow-[0_2px_8px_-2px_rgba(181,71,46,0.3)]'
+                : 'rounded-bl-[5px] border border-line bg-surface text-ink-700 shadow-sm'
             }`}>
               {msg.content}
             </div>
@@ -115,7 +115,7 @@ export function AnonymousChat({ events, initialQuestion, onClose }: AnonymousCha
         ))}
         {busy && (
           <div className="flex justify-start">
-            <div className="rounded-2xl rounded-bl-[5px] border border-line bg-surface px-4 py-3 text-sm text-ink-400">正在思考…</div>
+            <div className="rounded-2xl rounded-bl-[5px] border border-line bg-surface px-4 py-3 text-sm text-ink-400"><span className="inline-flex gap-1"><span className="h-1.5 w-1.5 animate-bounce rounded-full bg-brand-400 [animation-delay:0ms]" /><span className="h-1.5 w-1.5 animate-bounce rounded-full bg-brand-400 [animation-delay:150ms]" /><span className="h-1.5 w-1.5 animate-bounce rounded-full bg-brand-400 [animation-delay:300ms]" /></span></div>
           </div>
         )}
         <div ref={messagesEndRef} />
@@ -129,7 +129,7 @@ export function AnonymousChat({ events, initialQuestion, onClose }: AnonymousCha
         <div className="flex flex-wrap gap-2 px-5 pb-3">
           {suggestions.map(s => (
             <button key={s} type="button" onClick={() => handleSuggestion(s)}
-              className="rounded-full border border-line bg-surface px-3 py-1.5 text-xs text-ink-600 transition-colors hover:border-brand-400 hover:text-brand-700">
+              className="rounded-full border border-line bg-surface px-3 py-1.5 text-xs text-ink-600 transition-all duration-200 hover:border-brand-400 hover:bg-brand-50/50 hover:text-brand-700 hover:shadow-sm hover:-translate-y-px active:scale-[0.95]">
               {s}
             </button>
           ))}
@@ -155,7 +155,7 @@ export function AnonymousChat({ events, initialQuestion, onClose }: AnonymousCha
             className="field flex-1"
           />
           <button type="button" onClick={handleSend} disabled={busy || !input.trim()}
-            className="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-brand-700 text-white transition-colors hover:bg-brand-800 disabled:opacity-40">
+            className="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-brand-700 text-white shadow-[0_2px_8px_-2px_rgba(181,71,46,0.4)] transition-all duration-200 hover:bg-brand-800 hover:shadow-[0_4px_12px_-2px_rgba(181,71,46,0.5)] hover:scale-105 active:scale-90 disabled:opacity-40 disabled:hover:scale-100">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
           </button>
         </div>
@@ -168,3 +168,4 @@ export function AnonymousChat({ events, initialQuestion, onClose }: AnonymousCha
     </div>
   );
 }
+
