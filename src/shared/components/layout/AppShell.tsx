@@ -43,7 +43,9 @@ export function AppShell() {
       </header>
 
       {/* Main */}
-      <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:py-10">
+      <main id="main" className="relative mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:py-10">
+        {/* Subtle dot-grid background for functional pages */}
+        <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.4]" style={{backgroundImage: 'radial-gradient(circle, rgba(33,29,26,0.04) 1px, transparent 1px)', backgroundSize: '28px 28px'}} aria-hidden="true" />
         <Outlet />
       </main>
 
@@ -54,5 +56,6 @@ export function AppShell() {
     </div>
   );
 }
+
 
 
