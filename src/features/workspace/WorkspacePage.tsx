@@ -152,14 +152,14 @@ export function WorkspacePage() {
                 </div>
                 <ul className="grid gap-1.5 sm:grid-cols-2">
                   {events.map((ev) => (
-                    <li key={`${ev.kind}-${ev.label}`} className="flex items-center gap-2 rounded-lg border border-line bg-paper px-3 py-2 text-xs">
+                    <li key={`${ev.kind}-${ev.label}`} className="flex items-center gap-2 rounded-lg border border-line bg-paper px-3 py-2 text-xs transition-all duration-200 hover:border-brand-200 hover:shadow-sm hover:-translate-y-px">
                       <b className="shrink-0 text-brand-700">{ev.kind}</b>
                       <span className="text-ink-600">{ev.label}</span>
                     </li>
                   ))}
                 </ul>
                 <button type="button" onClick={() => setActive('infer')}
-                  className="group mt-auto inline-flex items-center justify-center gap-2 self-center rounded-full bg-brand-700 px-6 py-2.5 text-sm font-semibold text-white transition-all hover:bg-brand-800">
+                  className="group mt-auto inline-flex items-center justify-center gap-2 self-center rounded-full bg-brand-700 px-6 py-2.5 text-sm font-semibold text-white shadow-[0_4px_14px_-4px_rgba(181,71,46,0.3)] transition-all duration-300 hover:bg-brand-800 hover:shadow-[0_8px_24px_-6px_rgba(181,71,46,0.35)] hover:-translate-y-px active:scale-[0.97]">
                   信号就绪，开始推演
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4 transition-transform group-hover:translate-x-[3px]"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
                 </button>
@@ -187,7 +187,7 @@ export function WorkspacePage() {
             </>
 
             {result && (
-              <div className="rounded-xl border border-line bg-paper p-5">
+              <div className="rounded-xl border border-line bg-gradient-to-br from-paper to-brand-50/30 p-5 shadow-sm">
                 <p className="eyebrow mb-2">TEMPORARY / RETENTION: NONE</p>
                 <h4 className="text-base font-semibold text-ink-800">临时信号已整理</h4>
                 <p className="mt-1 text-sm text-ink-500">共 {Object.values(result.event_counts).reduce((s, c) => s + c, 0)} 个事件，原始文件没有离开浏览器。</p>
@@ -233,6 +233,7 @@ export function WorkspacePage() {
     </div>
   );
 }
+
 
 
 
