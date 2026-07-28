@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { useNavigation } from '../../shared/state/navigation';
 import { StatusPill, PathTypeChip, UncertaintyPill, EvidenceGradeBadge, ClassificationTag } from '../../shared/components/ui/Badge';
 import { CoverageBadge } from '../../shared/components/provenance/CoverageBadge';
@@ -231,3 +231,4 @@ function Section({ title, items, tone }: { title: string; items: string[]; tone?
     <div><p className="eyebrow mb-1">{title}</p><ul className={`list-disc pl-4 text-xs ${tone ?? 'text-ink-700'}`}>{items.map((it, i) => <li key={i}>{it}</li>)}</ul></div>
   );
 }
+

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import './landing.css';
 
 /* ===== Scroll Reveal Hook ===== */
@@ -118,7 +118,7 @@ export function LandingPage() {
               登录
             </button>
             <Link to="/workspace" className="group inline-flex items-center gap-2 rounded-full bg-brand-700 px-[17px] py-[9px] text-sm font-semibold text-white transition-all hover:-translate-y-px hover:bg-brand-800">
-              开始免费推演 <ArrowRight />
+              开始推演 <ArrowRight />
             </Link>
           </div>
         </div>
@@ -158,13 +158,10 @@ export function LandingPage() {
           <div className="reveal border-l-2 border-brand-500 pl-[14px]">
             <span className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-[13px] py-1.5 text-[13px] font-semibold tracking-wide text-brand-700"><ShieldIcon /> 隐私优先 · 明确授权 · 临时处理</span>
             <h1 className="mt-5 font-display text-[clamp(2.4rem,5vw,3.7rem)] font-semibold leading-[1.1] tracking-tight">先<span className="hl-draw">想清楚方向</span>，<br/>再投出每一份简历。</h1>
-            <p className="mt-5 max-w-[30em] text-[1.075rem] leading-relaxed text-ink-600">CareerCopilot 用结构化推演帮你看清职业路径——无需上传原始简历。只有在你明确同意后，必要的结构化信号和问题才会发送到临时推演服务。</p>
+            <p className="mt-5 max-w-[30em] text-[1.075rem] leading-relaxed text-ink-600">结构化推演帮你看清职业路径。无需上传简历，授权后才发送脱敏信号。</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/workspace" className="hero-btn-primary group inline-flex items-center gap-[9px] rounded-full bg-brand-700 px-[23px] py-[13px] text-[15px] font-semibold text-white shadow-sm hover:bg-brand-800">开始匿名推演 <ArrowRight /></Link>
+              <Link to="/workspace" className="hero-btn-primary group inline-flex items-center gap-[9px] rounded-full bg-brand-700 px-[23px] py-[13px] text-[15px] font-semibold text-white shadow-sm hover:bg-brand-800">开始推演 <ArrowRight /></Link>
               <button type="button" onClick={() => document.getElementById('accordion-section')?.scrollIntoView({ behavior: 'smooth' })} className="hero-btn-secondary inline-flex items-center gap-[9px] rounded-full bg-ink-900/[0.04] px-[23px] py-[13px] text-[15px] font-semibold text-ink-700 backdrop-blur-sm hover:text-ink-900">看它怎么工作</button>
-            </div>
-            <div className="mt-6 flex items-center gap-2 border-t border-line pt-5 text-[13.5px] text-ink-500">
-              <span className="text-teal-600"><CheckIcon /></span>原始文件始终在本地解析；传输范围、保留规则和限制会在提交前后明确展示。
             </div>
           </div>
           {/* Route Path Card */}
@@ -195,7 +192,7 @@ export function LandingPage() {
       </section>
 
       {/* Accordion Sections */}
-      <section id="accordion-section" className="mx-auto max-w-[1120px] px-6 pb-16">
+      <section id="accordion-section" className="reveal mx-auto max-w-[1120px] px-6 pb-16">
         <div className="overflow-hidden rounded-[14px] border border-line bg-surface shadow-sm">
           {SECTIONS.map((s) => {
             const isOpen = openSection === s.id;
@@ -229,7 +226,7 @@ export function LandingPage() {
                             <span className="mt-px flex-none text-[#6FB593]"><CheckIcon /></span>
                             <span>以上内容只在本机处理，不会上传到任何服务器，也不会被存储。</span>
                           </div>
-                          <Link to="/workspace" className="group inline-flex items-center gap-2 rounded-full bg-[#E8896F] px-5 py-2.5 text-sm font-semibold text-[#2A1206] transition-all hover:bg-[#F0A088]">进入工作台 <ArrowRight /></Link>
+                          <Link to="/workspace" className="group inline-flex items-center gap-2 rounded-full bg-[#E8896F] px-5 py-2.5 text-sm font-semibold text-[#2A1206] transition-all hover:bg-[#F0A088]">进入推演 <ArrowRight /></Link>
                         </div>
                       )}
                       {/* Trust */}
@@ -271,7 +268,7 @@ export function LandingPage() {
                         <div className="py-4 text-center">
                           <h3 className="font-display text-2xl font-semibold">先想清楚，再行动。</h3>
                           <p className="mx-auto mt-2 max-w-[28em] text-sm text-ink-500">不上传原始文件，明确授权后临时处理。先看清限制，再决定下一步。</p>
-                          <Link to="/workspace" className="group mt-5 inline-flex items-center gap-2 rounded-full bg-brand-700 px-6 py-3 text-[15px] font-semibold text-white shadow-sm transition-all hover:-translate-y-px hover:bg-brand-800 hover:shadow-md">开始免费推演 <ArrowRight /></Link>
+                          <Link to="/workspace" className="group mt-5 inline-flex items-center gap-2 rounded-full bg-brand-700 px-6 py-3 text-[15px] font-semibold text-white shadow-sm transition-all hover:-translate-y-px hover:bg-brand-800 hover:shadow-md">开始推演 <ArrowRight /></Link>
                         </div>
                       )}
                     </div>
@@ -294,7 +291,7 @@ export function LandingPage() {
           </div>
           <nav className="flex flex-col gap-[11px] text-sm">
             <button type="button" onClick={() => setOpenSection('capabilities')} className="text-left text-ink-600 transition-colors hover:text-brand-700">能力详解</button>
-            <Link to="/workspace" className="text-ink-600 transition-colors hover:text-brand-700">开始免费推演</Link>
+            <Link to="/workspace" className="text-ink-600 transition-colors hover:text-brand-700">开始推演</Link>
             <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-left text-ink-600 transition-colors hover:text-brand-700">回到顶部</button>
           </nav>
         </div>
@@ -303,6 +300,13 @@ export function LandingPage() {
     </div>
   );
 }
+
+
+
+
+
+
+
 
 
 

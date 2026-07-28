@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { HashRouter } from 'react-router';
+import { HashRouter } from 'react-router-dom';
 import App from './App';
 import { ApiProvider } from './shared/api/query';
 import { AuthProvider } from './shared/auth/session';
@@ -29,3 +29,4 @@ createRoot(rootEl).render(
     </ApiProvider>
   </StrictMode>,
 );
+

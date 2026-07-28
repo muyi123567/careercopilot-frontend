@@ -1,5 +1,5 @@
 import { useRef, useState, type ChangeEvent, type DragEvent } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { getRuntimeConfig } from '../../shared/api/client';
 import { parsePdfLocally, isPdfFile, isDocxFile, isSupportedTextFile } from '../../lib/pdf-parser';
 import { extractStructuredEvents, type StructuredEvent } from '../../shared/privacy/structured-events';
@@ -233,3 +233,4 @@ export function WorkspacePage() {
     </div>
   );
 }
+

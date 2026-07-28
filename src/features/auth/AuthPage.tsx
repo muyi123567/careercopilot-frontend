@@ -3,7 +3,7 @@
  * 邮箱 + 密码，HS256 JWT 认证。
  */
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { useJwtAuth } from '../../shared/auth/AuthContext';
 
 export function AuthPage() {
@@ -98,3 +98,4 @@ export function AuthPage() {
     </main>
   );
 }
+

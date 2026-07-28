@@ -1,4 +1,4 @@
-import { NavLink, Outlet, Link, useLocation } from 'react-router';
+import { NavLink, Outlet, Link, useLocation } from 'react-router-dom';
 
 const STEPS = [
   { to: '/workspace', label: '推演工作台', num: '01' },
@@ -54,3 +54,4 @@ export function AppShell() {
     </div>
   );
 }
+
