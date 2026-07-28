@@ -113,10 +113,10 @@ export function LandingPage() {
             <span className="font-display text-[19px] font-bold tracking-tight">Career<b className="text-brand-700">Copilot</b></span>
           </Link>
           <div className="flex items-center gap-3">
-            <button type="button" title="微信小程序（即将上线）" className="hidden items-center gap-1.5 rounded-full border border-line bg-surface/80 px-4 py-2 text-sm font-medium text-ink-600 transition-all hover:border-teal-600/40 hover:text-teal-700 sm:flex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12h8M12 8v8"/></svg>小程序</button><button type="button" className="hidden items-center gap-1.5 rounded-full border border-line bg-surface/80 px-4 py-2 text-sm font-medium text-ink-600 transition-all hover:border-brand-300 hover:text-brand-700 sm:flex">
+            <button type="button" title="微信小程序（即将上线）" className="hidden items-center gap-1.5 rounded-full border border-line bg-surface/80 px-4 py-2 text-sm font-medium text-ink-600 transition-all hover:border-teal-600/40 hover:text-teal-700 sm:flex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12h8M12 8v8"/></svg>小程序</button><Link to="/login" className="hidden items-center gap-1.5 rounded-full border border-line bg-surface/80 px-4 py-2 text-sm font-medium text-ink-600 transition-all hover:border-brand-300 hover:text-brand-700 sm:flex">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><circle cx="12" cy="8" r="4"/><path d="M5.5 21a7 7 0 0 1 13 0"/></svg>
               登录
-            </button>
+            </Link>
             <Link to="/workspace" className="group inline-flex items-center gap-2 rounded-full bg-brand-700 px-[17px] py-[9px] text-sm font-semibold text-white transition-all hover:-translate-y-px hover:bg-brand-800">
               开始推演 <ArrowRight />
             </Link>
@@ -300,6 +300,8 @@ export function LandingPage() {
     </div>
   );
 }
+
+
 
 
 
