@@ -90,12 +90,12 @@ export function WorkspacePage() {
       {/* Header */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="eyebrow">推演工作台</p>
-          <h1 className="display mt-1 text-2xl font-semibold sm:text-3xl">从简历到下一步行动</h1>
+          <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">推演工作台</p>
+          <h1 className="mt-1.5 font-display text-2xl font-semibold tracking-tight text-ink-900 sm:text-3xl">从简历到下一步行动</h1>
         </div>
         <div className="flex items-center gap-1.5">
           {[1, 2, 3].map((s) => (
-            <span key={s} className={`h-2 rounded-full transition-all duration-500 ${progress >= s ? 'w-8 bg-brand-600 shadow-[0_0_8px_rgba(226,114,91,0.4)]' : 'w-2 bg-ink-900/10'}`} />
+            <span key={s} className={`h-1.5 rounded-full transition-all duration-500 ${progress >= s ? 'w-7 bg-brand-600' : 'w-1.5 bg-ink-900/10'}`} />
           ))}
         </div>
       </div>
@@ -233,6 +233,7 @@ export function WorkspacePage() {
     </div>
   );
 }
+
 
 
 
