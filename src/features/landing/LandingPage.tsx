@@ -120,7 +120,7 @@ export function LandingPage() {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><circle cx="12" cy="8" r="4"/><path d="M5.5 21a7 7 0 0 1 13 0"/></svg>
               登录
             </Link>
-            <Link to="/workspace" className="group inline-flex items-center gap-2 rounded-full bg-brand-700 px-[17px] py-[9px] text-sm font-semibold text-white transition-all hover:-translate-y-px hover:bg-brand-800">
+            <Link to="/workspace" className="group inline-flex items-center gap-2 rounded-full bg-brand-700 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:bg-brand-800">
               开始推演 <ArrowRight />
             </Link>
           </div>
@@ -158,13 +158,13 @@ export function LandingPage() {
           </svg>
         </div>
         <div className="mx-auto grid w-full max-w-[1120px] items-center gap-8 sm:gap-12 lg:grid-cols-[1.5fr_1fr]">
-          <div className="reveal border-l-[3px] border-brand-600 pl-[16px]">
+          <div className="reveal border-l-2 border-brand-500/60 pl-5">
             <span className="eyebrow-badge inline-flex items-center gap-2 rounded-full bg-brand-100 px-[13px] py-1.5 text-[13px] font-semibold tracking-wide text-brand-800"><ShieldIcon /> 隐私优先 · 明确授权 · 临时处理</span>
             <h1 className="mt-4 font-display text-[clamp(1.8rem,5vw,3.7rem)] font-semibold leading-[1.1] tracking-tight sm:mt-5">先<span className="hl-draw">想清楚方向</span>，<br/>再投出每一份简历。</h1>
             <p className="mt-5 max-w-[30em] text-[1.075rem] leading-relaxed text-ink-600">结构化推演帮你看清职业路径。无需上传简历，授权后才发送脱敏信号。</p>
             <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
-              <Link to="/workspace" className="hero-btn-primary group inline-flex items-center gap-[9px] rounded-full bg-brand-700 px-[23px] py-[13px] text-[15px] font-semibold text-white shadow-sm hover:bg-brand-800">开始推演 <ArrowRight /></Link>
-              <button type="button" onClick={() => document.getElementById('accordion-section')?.scrollIntoView({ behavior: 'smooth' })} className="hero-btn-secondary inline-flex items-center gap-[9px] rounded-full bg-ink-900/[0.04] px-[23px] py-[13px] text-[15px] font-semibold text-ink-700 backdrop-blur-sm hover:text-ink-900">看它怎么工作</button>
+              <Link to="/workspace" className="hero-btn-primary group inline-flex items-center gap-2.5 rounded-full bg-brand-700 px-6 py-3.5 text-[15px] font-semibold text-white shadow-sm hover:bg-brand-800">开始推演 <ArrowRight /></Link>
+              <button type="button" onClick={() => document.getElementById('accordion-section')?.scrollIntoView({ behavior: 'smooth' })} className="hero-btn-secondary inline-flex items-center gap-2.5 rounded-full bg-ink-900/[0.04] px-6 py-3.5 text-[15px] font-semibold text-ink-700 backdrop-blur-sm hover:text-ink-900">看它怎么工作</button>
             </div>
           </div>
           {/* Route Path Card */}
@@ -303,30 +303,4 @@ export function LandingPage() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
