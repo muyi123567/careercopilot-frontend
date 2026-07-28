@@ -406,3 +406,68 @@ header .bg-brand-700 {
   .landing-hero .reveal, .route-card.reveal, #accordion-section.reveal { animation: none; }
   html { scroll-behavior: auto; }
 }
+
+
+/* === Huawei Browser Animation Fix === */
+
+/* 1. Ensure .reveal content is visible even without JS/IO */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal.in { opacity: 1; transform: none; }
+/* Fallback: if JS fails, content becomes visible after 1.5s via CSS animation */
+@keyframes revealFallback { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+.reveal { animation: revealFallback 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.5s both; }
+.reveal.in { animation: none; opacity: 1; transform: none; }
+
+/* 2. Disable will-change on mobile (causes layer explosion on old Chromium) */
+@media (max-width: 1024px) {
+  .landing-contour g { will-change: auto; }
+}
+
+/* 3. Reduce infinite animations on mobile/touch (performance) */
+@media (hover: none), (max-width: 768px) {
+  .trust-bar-gradient::after { animation: none; display: none; }
+  header .bg-brand-700 { animation: none; box-shadow: 0 2px 12px -3px rgba(181,71,46,0.4); }
+  .divider-path { animation: none; }
+  .compass-spin-slow { animation: none; }
+  .compass-orbit { animation: none; }
+  .compass-orbit-reverse { animation: none; }
+}
+
+/* 4. Backdrop-filter fallback for old Chromium */
+header.sticky {
+  background: rgba(250,247,242,0.96);
+}
+@supports (backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px)) {
+  header.sticky {
+    background: rgba(250,247,242,0.90);
+    backdrop-filter: blur(20px) saturate(1.6);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  }
+}
+
+/* 5. Add -webkit- prefix for keyframe animations (old Chromium) */
+@-webkit-keyframes heroEntrance {
+  from { opacity: 0; -webkit-transform: translateY(24px); transform: translateY(24px); }
+  to { opacity: 1; -webkit-transform: none; transform: none; }
+}
+@-webkit-keyframes hlDraw { from { -webkit-transform: scaleX(0); transform: scaleX(0); } to { -webkit-transform: scaleX(1); transform: scaleX(1); } }
+@-webkit-keyframes accordionChildIn { from { opacity: 0; -webkit-transform: translateY(8px); transform: translateY(8px); } to { opacity: 1; -webkit-transform: none; transform: none; } }
+@-webkit-keyframes trustShimmer { 0%, 100% { left: -100%; } 50% { left: 150%; } }
+@-webkit-keyframes ctaGlow {
+  0%, 100% { box-shadow: 0 2px 12px -3px rgba(181,71,46,0.4), 0 0 0 1px rgba(226,114,91,0.15); }
+  50% { box-shadow: 0 4px 20px -3px rgba(181,71,46,0.55), 0 0 0 1px rgba(226,114,91,0.25); }
+}
+@-webkit-keyframes revealFallback { from { opacity: 0; -webkit-transform: translateY(20px); transform: translateY(20px); } to { opacity: 1; -webkit-transform: none; transform: none; } }
+
+/* 6. Ensure hero entrance works without prefers-reduced-motion support */
+.landing-hero .reveal:first-child { -webkit-animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
+.route-card.reveal { -webkit-animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
+#accordion-section.reveal { -webkit-animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both; animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both; }
+.hl-draw::after { -webkit-animation: hlDraw 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both; animation: hlDraw 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both; }
+
+/* 7. Disable all infinite animations for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal { animation: none; opacity: 1; transform: none; }
+  .landing-hero .reveal:first-child, .route-card.reveal, #accordion-section.reveal { animation: none; opacity: 1; transform: none; }
+  .hl-draw::after { animation: none; -webkit-transform: scaleX(1); transform: scaleX(1); }
+}
