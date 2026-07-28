@@ -336,3 +336,113 @@ button:disabled, input:disabled {
   .stagger > * { animation: none; }
   button:active:not(:disabled) { transform: none; }
 }
+
+/* === Apple-Level Final: Workspace & Results Micro-detail === */
+
+/* Workspace step tabs: refined active with inner glow */
+button[class*="border-brand-400"][class*="bg-brand-50"] {
+  box-shadow: 0 2px 12px -4px rgba(196,85,59,0.15), inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+/* Workspace drop zone: refined idle state */
+button[class*="border-dashed"] {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+button[class*="border-dashed"]:hover {
+  border-color: #D07A5E;
+  background: rgba(253,245,242,0.6);
+  box-shadow: 0 0 0 4px rgba(196,85,59,0.06), 0 4px 16px -4px rgba(196,85,59,0.08);
+}
+
+/* Results tab bar: refined active indicator */
+button[class*="bg-brand-50"][class*="text-brand-700"] {
+  box-shadow: inset 0 -2px 0 0 #A8432C;
+}
+
+/* Results stat cards: refined left accent */
+.card[class*="overflow-hidden"] span[class*="absolute"][class*="left-0"][class*="w-1"] {
+  border-radius: 0 2px 2px 0;
+}
+
+/* Refined card entrance for workspace panel */
+.card.animate-slide-up {
+  animation: cardSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes cardSlideUp {
+  from { opacity: 0; transform: translateY(12px) scale(0.99); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Refined progress dots */
+span[class*="bg-brand-600"][class*="shadow"] {
+  box-shadow: 0 0 8px rgba(196,85,59,0.35);
+}
+
+/* Refined evidence grade badges */
+span[class*="rounded-md"][class*="border"][class*="font-bold"] {
+  letter-spacing: 0.02em;
+}
+
+/* Refined table hover for results */
+tr[class*="transition-colors"]:hover {
+  background-color: rgba(253,245,242,0.5);
+}
+
+/* Refined timeline dots for decisions */
+span[class*="rounded-full"][class*="border-brand-500"][class*="bg-brand-500"] {
+  box-shadow: 0 2px 8px -2px rgba(196,85,59,0.4);
+}
+
+/* Refined skill bars for profile */
+div[class*="rounded-full"][class*="bg-gradient-to-r"] {
+  box-shadow: 0 1px 3px -1px rgba(0,0,0,0.1);
+}
+
+/* Refined toggle switches for settings */
+button[class*="rounded-full"][class*="h-6"][class*="w-11"] {
+  transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+button[class*="rounded-full"][class*="h-6"][class*="w-11"] span {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Global: refined focus-visible for all interactive elements */
+button:focus-visible, a:focus-visible, input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #FAF7F2, 0 0 0 4px rgba(196,85,59,0.4);
+  border-radius: 6px;
+}
+
+/* Global: refined disabled state */
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Global: smooth page transitions */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* Global: refined text rendering */
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global: refined heading hierarchy */
+h1 { letter-spacing: -0.03em; }
+h2 { letter-spacing: -0.025em; }
+h3 { letter-spacing: -0.02em; }
+
+/* Global: refined scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(33,29,26,0.12); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(33,29,26,0.2); }
+* { scrollbar-width: thin; scrollbar-color: rgba(33,29,26,0.12) transparent; }
+
+/* Global: refined selection */
+::selection { background: rgba(196,85,59,0.14); color: #211D1A; }
