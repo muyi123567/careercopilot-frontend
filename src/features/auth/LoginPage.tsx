@@ -24,7 +24,7 @@ export function LoginPage() {
 
       {/* Subtle contour pattern */}
       <svg className="pointer-events-none fixed inset-0 h-full w-full opacity-[0.06]" aria-hidden="true" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
-        <g fill="none" stroke="oklch(72% 0.01 50)" strokeWidth="1">
+        <g fill="none" stroke="#9A9088" strokeWidth="1">
           <ellipse cx="1180" cy="172" rx="86" ry="60"/><ellipse cx="1193" cy="162" rx="122" ry="84"/><ellipse cx="1206" cy="151" rx="206" ry="142"/>
           <ellipse cx="232" cy="742" rx="80" ry="54"/><ellipse cx="219" cy="757" rx="114" ry="76"/><ellipse cx="206" cy="772" rx="194" ry="128"/>
         </g>
@@ -117,3 +117,4 @@ export function LoginPage() {
     </div>
   );
 }
+
