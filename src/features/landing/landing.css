@@ -1,4 +1,5 @@
-/* ===== CareerCopilot Landing - Editorial Luxury × Tech Warmth ===== */
+/* ===== CareerCopilot Landing — Apple-Level Craft ===== */
+/* Consolidated: Editorial Luxury x Tech Warmx Terracotta */
 
 /* === Contour Background === */
 .landing-contour {
@@ -36,10 +37,12 @@
 .landing-hero {
   position: relative;
   z-index: 1;
-  min-height: calc(100vh - 100px);
   display: flex;
   align-items: center;
   overflow: hidden;
+  min-height: auto;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
   --mx: 0.5;
   --my: 0.5;
   --cx: 50%;
@@ -49,7 +52,13 @@
     radial-gradient(ellipse 50% 40% at 90% 15%, rgba(62,142,107,0.14), transparent),
     radial-gradient(ellipse 120% 90% at 50% -10%, rgba(244,238,228,0.95), transparent);
 }
-/* Grain texture overlay */
+@media (min-width: 640px) {
+  .landing-hero { min-height: calc(100vh - 140px); padding-top: 3.5rem; padding-bottom: 3.5rem; }
+}
+@media (min-width: 1024px) {
+  .landing-hero { min-height: calc(100vh - 120px); padding-top: 4rem; padding-bottom: 4rem; }
+}
+/* Grain texture */
 .landing-hero::before {
   content: "";
   position: absolute;
@@ -76,6 +85,34 @@
 }
 .landing-hero:hover::after { opacity: 1; }
 
+/* Hero typography */
+.landing-hero h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+}
+@media (min-width: 640px) { .landing-hero h1 { font-size: clamp(2.4rem, 4.5vw, 3.5rem); } }
+@media (min-width: 1024px) { .landing-hero h1 { font-size: clamp(2.8rem, 4vw, 3.5rem); } }
+.landing-hero p {
+  font-size: 1rem;
+  line-height: 1.75;
+  max-width: 30em;
+  color: #4E463F;
+}
+@media (min-width: 640px) { .landing-hero p { font-size: 1.05rem; } }
+
+/* Hero entrance */
+@media (prefers-reduced-motion: no-preference) {
+  .landing-hero .reveal:first-child { animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
+  .route-card.reveal { animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
+  #accordion-section.reveal { animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both; }
+}
+@keyframes heroEntrance {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+
 /* === Headline Highlight === */
 .hl-draw {
   position: relative;
@@ -92,235 +129,59 @@
   left: -4px;
   right: -4px;
   bottom: 0.02em;
-  height: 0.38em;
-  background: linear-gradient(90deg, rgba(212,85,59,0.40), rgba(226,114,91,0.22));
+  height: 0.35em;
+  background: linear-gradient(90deg, rgba(196,85,59,0.22), rgba(196,85,59,0.10));
   border-radius: 4px;
   z-index: -1;
   transform-origin: left center;
   animation: hlDraw 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
 }
-@keyframes hlDraw {
-  from { clip-path: inset(0 100% 0 0); }
-  to { clip-path: inset(0 0 0 0); }
+@keyframes hlDraw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* === Eyebrow Badge === */
+.eyebrow-badge {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid rgba(196,85,59,0.10);
+  box-shadow: 0 1px 3px rgba(196,85,59,0.05), inset 0 1px 0 rgba(255,255,255,0.6);
+  border-radius: 9999px;
+  margin-bottom: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
+.eyebrow-badge:hover {
+  box-shadow: 0 0 0 2px rgba(226,114,91,0.15), 0 4px 12px -2px rgba(226,114,91,0.2);
+  transform: translateY(-1px);
+}
+.eyebrow-badge svg { width: 14px; height: 14px; }
 
 /* === Route Card === */
 .route-card {
-  transform-style: preserve-3d;
-  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s;
-  border: 1px solid transparent;
-  background-image: linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.92)), linear-gradient(160deg, rgba(212,85,59,0.45), rgba(62,142,107,0.30), rgba(212,85,59,0.20));
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-}
-
-/* Route nodes */
-.rt-node {
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s, filter 0.4s;
-  animation: rtNodeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-}
-.rt-node:nth-child(2) { animation-delay: 0.2s; }
-.rt-node:nth-child(3) { animation-delay: 0.35s; }
-.rt-node:nth-child(4) { animation-delay: 0.5s; }
-@keyframes rtNodeIn {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: none; }
-}
-.rt-detail {
-  max-height: 0; opacity: 0; overflow: hidden; transform: translateY(-4px);
-  transition: max-height 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.35s, transform 0.35s, margin-top 0.45s;
-}
-.rt-node:hover .rt-detail, .rt-node:focus-within .rt-detail { max-height: 96px; opacity: 1; transform: none; margin-top: 7px; }
-.rt-node:hover .rt-dot { box-shadow: 0 0 0 5px rgba(226,114,91,0.12); }
-.rt-node.goal:hover .rt-dot { box-shadow: 0 0 0 5px rgba(62,142,107,0.12); }
-.route-path-container:hover .rt-node { opacity: 0.55; filter: saturate(0.85); }
-.route-path-container:hover .rt-node:hover { opacity: 1; filter: none; }
-
-/* Tracer */
-.rt-tracer { animation: rtTracer 3.8s cubic-bezier(0.16,1,0.3,1) 1.2s infinite; }
-@keyframes rtTracer {
-  0% { top: 1%; opacity: 0; transform: scale(0.4); }
-  12% { opacity: 1; transform: scale(1); }
-  88% { opacity: 1; }
-  100% { top: 97%; opacity: 0; transform: scale(0.4); }
-}
-
-/* Pulse */
-.pulse-dot { animation: pulse 2.2s infinite; }
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(62,142,107,0.4); }
-  70% { box-shadow: 0 0 0 9px rgba(62,142,107,0); }
-  100% { box-shadow: 0 0 0 0 rgba(62,142,107,0); }
-}
-
-/* === Compass Animations === */
-.compass-spin-slow { animation: compassSpin 90s linear infinite; }
-.compass-orbit { animation: compassSpin 16s linear infinite; }
-.compass-orbit-reverse { animation: compassSpin 24s linear infinite reverse; }
-@keyframes compassSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-/* === Buttons === */
-.hero-btn-primary {
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 16px -4px rgba(181, 71, 46, 0.45), 0 0 0 1px rgba(226,114,91,0.15);
-}
-.hero-btn-primary:hover {
-  transform: scale(1.07) translateY(-2px);
-  box-shadow: 0 16px 48px -8px rgba(181, 71, 46, 0.50), 0 0 0 1px rgba(226,114,91,0.20);
-}
-.hero-btn-primary:active { transform: scale(0.95); }
-.hero-btn-secondary {
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.hero-btn-secondary:hover {
-  transform: scale(1.06) translateY(-1px);
-  background: rgba(33, 29, 26, 0.07);
-  box-shadow: 0 8px 24px -6px rgba(33, 29, 26, 0.12);
-}
-.hero-btn-secondary:active { transform: scale(0.95); }
-
-/* === Accordion === */
-.cap-item { transition: opacity 0.4s cubic-bezier(0.16,1,0.3,1), filter 0.4s; }
-.cap-container:hover .cap-item { opacity: 0.55; filter: saturate(0.85); }
-.cap-container:hover .cap-item:hover { opacity: 1; filter: none; }
-.cap-head { transition: background 0.25s, padding-left 0.25s; }
-.cap-head::before {
-  content: ""; position: absolute; left: 0; top: 18%; bottom: 18%; width: 3px;
-  background: #C4553B; border-radius: 0 3px 3px 0;
-  transform: scaleY(0); transform-origin: center; opacity: 0;
-  transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.35s;
-}
-.cap-item:hover .cap-head, .cap-item:focus-within .cap-head { background: rgba(226,114,91,0.06); padding-left: calc(1.5rem + 5px); }
-.cap-item:hover .cap-head::before, .cap-item:focus-within .cap-head::before { transform: scaleY(1); opacity: 1; }
-.cap-panel { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.4s; }
-.cap-item:hover .cap-panel, .cap-item:focus-within .cap-panel { max-height: 160px; opacity: 1; }
-.cap-chev { transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), color 0.25s; }
-.cap-item:hover .cap-chev { transform: rotate(90deg); color: #A8432C; }
-.cap-num { transition: background 0.25s, color 0.25s, transform 0.25s; }
-.cap-item:hover .cap-num { background: #C4553B; color: #fff; transform: scale(1.1); }
-.cap-item:hover .cap-title { color: #A8432C; }
-
-/* === Reveal === */
-.reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
-.reveal.in { opacity: 1; transform: none; }
-
-/* === Reduced Motion === */
-@media (prefers-reduced-motion: reduce) {
-  .landing-hero::after, .landing-contour g, .landing-contour .flow, .route-card { transition: none; }
-  .hl-draw::after { animation: none; clip-path: none; }
-  .rt-tracer { display: none; }
-  .rt-node { animation: none; }
-  .compass-spin-slow, .compass-orbit, .compass-orbit-reverse { animation: none; }
-  .reveal { opacity: 1; transform: none; transition: none; }
-  * { animation-duration: 0.001ms !important; }
-}
-
-/* === Touch === */
-@media (hover: none) {
-  .rt-detail { max-height: 96px; opacity: 1; transform: none; margin-top: 7px; }
-  .rt-node { opacity: 1; filter: none; }
-  .cap-panel { max-height: 160px; opacity: 1; }
-  .cap-chev { transform: rotate(90deg); }
-  .cap-container:hover .cap-item { opacity: 1; filter: none; }
-}
-
-/* === Mobile === */
-@media (max-width: 880px) {
-  .landing-hero { min-height: auto; padding-top: 3rem; }
-  .rt-detail { max-height: 96px; opacity: 1; transform: none; margin-top: 7px; }
-  .rt-node { opacity: 1; filter: none; }
-}
-
-/* === Impeccable Bolder: Hero presence amplification === */
-.landing-hero h1 {
-  text-shadow: 0 2px 40px rgba(226,114,91,0.06);
-}
-
-/* Route card: deeper elevation + warm ambient glow */
-.route-card {
+  border-radius: 1.25rem;
+  border: 1px solid rgba(33,29,26,0.06);
+  background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.90) 100%);
+  padding: 1.75rem;
   box-shadow:
-    0 1px 2px rgba(33,29,26,0.04),
-    0 8px 24px -8px rgba(33,29,26,0.10),
-    0 24px 64px -16px rgba(181,71,46,0.08);
+    0 0 0 1px rgba(33,29,26,0.04),
+    0 1px 2px rgba(33,29,26,0.02),
+    0 4px 8px -2px rgba(33,29,26,0.03),
+    0 12px 24px -6px rgba(33,29,26,0.05),
+    0 24px 48px -12px rgba(181,71,46,0.04),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
+@media (min-width: 640px) { .route-card { padding: 2rem; } }
 .route-card:hover {
+  transform: translateY(-3px);
   box-shadow:
-    0 2px 4px rgba(33,29,26,0.05),
-    0 12px 32px -8px rgba(33,29,26,0.12),
-    0 32px 80px -16px rgba(181,71,46,0.12);
+    0 0 0 1px rgba(33,29,26,0.06),
+    0 2px 4px rgba(33,29,26,0.03),
+    0 8px 16px -4px rgba(33,29,26,0.05),
+    0 20px 40px -8px rgba(33,29,26,0.07),
+    0 40px 80px -16px rgba(181,71,46,0.07),
+    inset 0 1px 0 rgba(255,255,255,0.95);
 }
-
-/* Accordion section: stronger container presence */
-#accordion-section > div {
-  box-shadow:
-    0 1px 3px rgba(33,29,26,0.04),
-    0 12px 40px -12px rgba(33,29,26,0.08);
-}
-
-/* Accordion header: bolder active state */
-#accordion-section button[aria-expanded="true"],
-#accordion-section .bg-brand-50\/60 {
-  box-shadow: inset 3px 0 0 0 oklch(61% 0.14 36);
-}
-
-/* Trust bar: subtle gradient for depth */
-.trust-bar-gradient {
-  background: linear-gradient(90deg, oklch(21% 0.012 50), oklch(24% 0.015 40), oklch(21% 0.012 50));
-}
-
-/* CTA button: layered shadow for premium feel */
-.hero-btn-primary {
-  box-shadow:
-    0 2px 8px -2px rgba(181,71,46,0.35),
-    0 8px 24px -6px rgba(181,71,46,0.25),
-    inset 0 1px 0 rgba(255,255,255,0.15);
-}
-.hero-btn-primary:hover {
-  box-shadow:
-    0 4px 12px -2px rgba(181,71,46,0.4),
-    0 16px 48px -8px rgba(181,71,46,0.3),
-    inset 0 1px 0 rgba(255,255,255,0.2);
-}
-
-/* Eyebrow badge: subtle inner glow */
-.eyebrow-badge {
-  box-shadow: 0 0 0 1.5px rgba(212,85,59,0.20), 0 2px 12px -2px rgba(212,85,59,0.25);
-}
-
-/* Progress node dots: enhanced tracer glow */
-.rt-tracer {
-  filter: drop-shadow(0 0 6px rgba(226,114,91,0.5));
-}
-
-/* Section reveal: staggered children */
-#accordion-section.reveal.in > div > div {
-  animation: accordionChildIn 0.5s cubic-bezier(0.16,1,0.3,1) backwards;
-}
-#accordion-section.reveal.in > div > div:nth-child(2) { animation-delay: 0.08s; }
-#accordion-section.reveal.in > div > div:nth-child(3) { animation-delay: 0.16s; }
-#accordion-section.reveal.in > div > div:nth-child(4) { animation-delay: 0.24s; }
-#accordion-section.reveal.in > div > div:nth-child(5) { animation-delay: 0.32s; }
-@keyframes accordionChildIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: none; }
-}
-
-
-/* === Section Divider: animated dash flow === */
-.divider-path {
-  animation: dividerDash 12s linear infinite;
-}
-@keyframes dividerDash {
-  to { stroke-dashoffset: -100; }
-}
-
-/* === Dot-grid pattern for accordion container === */
-#accordion-section > div {
-  background-image: radial-gradient(circle, rgba(33,29,26,0.09) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-
-/* === Decorative corner accents on route card === */
+/* Decorative corner accent */
 .route-card::after {
   content: "";
   position: absolute;
@@ -334,126 +195,99 @@
   pointer-events: none;
 }
 
-/* === Warm ambient glow behind hero content === */
-.landing-hero .reveal:first-child {
-  position: relative;
+/* Route nodes */
+.rt-node {
+  padding-bottom: 1.5rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.landing-hero .reveal:first-child::before {
-  content: "";
-  position: absolute;
-  top: -40px;
-  left: -60px;
-  width: 280px;
-  height: 280px;
-  background: radial-gradient(circle, rgba(212,85,59,0.22), transparent 70%);
-  pointer-events: none;
-  z-index: -1;
+.rt-node:last-child { padding-bottom: 0; }
+.rt-node:hover { transform: translateX(2px); }
+.rt-dot {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px -2px rgba(33,29,26,0.1);
 }
-
-
-
-
-
-
-/* === V2 Visual Upgrade: Glassmorphism + Brand Dominance === */
-
-/* Route card: glassmorphism overlay */
-.route-card {
-  backdrop-filter: blur(12px) saturate(1.3);
-  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+.rt-node:hover .rt-dot {
+  transform: scale(1.12);
+  box-shadow: 0 4px 14px -3px rgba(196,85,59,0.3);
 }
+.rt-node.goal:hover .rt-dot { box-shadow: 0 4px 14px -3px rgba(62,142,107,0.3); }
+.rt-node .lbl { font-size: 0.9rem; font-weight: 600; letter-spacing: -0.01em; }
+.rt-node .sub { font-size: 0.75rem; line-height: 1.4; }
+/* Detail reveal on hover */
+.rt-detail {
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, transform 0.3s ease, margin-top 0.4s;
+}
+.rt-node:hover .rt-detail { max-height: 100px; opacity: 1; transform: none; margin-top: 8px; }
 
-/* Hero CTA: gradient background for stronger brand presence */
+/* === Compass Animations === */
+.compass-spin-slow { animation: compassSpin 60s linear infinite; }
+.compass-orbit { animation: compassSpin 20s linear infinite; }
+.compass-orbit-reverse { animation: compassSpin 30s linear infinite reverse; }
+@keyframes compassSpin { to { transform: rotate(360deg); } }
+
+/* === CTA Buttons === */
 .hero-btn-primary {
-  background: linear-gradient(135deg, oklch(52% 0.21 36), oklch(45% 0.20 36)) !important;
-  border: 1px solid rgba(226,114,91,0.3);
-}
-.hero-btn-primary:hover {
-  background: linear-gradient(135deg, oklch(48% 0.22 36), oklch(40% 0.20 36)) !important;
-}
-
-/* Navigation CTA in header: gradient + glow */
-header a.bg-brand-700,
-header .bg-brand-700 {
-  background: linear-gradient(135deg, oklch(52% 0.21 36), oklch(42% 0.19 36)) !important;
-  box-shadow: 0 2px 12px -3px rgba(181,71,46,0.4), 0 0 0 1px rgba(226,114,91,0.15);
-}
-
-/* Hero left border: thicker brand accent with glow */
-.landing-hero .border-l-\[3px\] {
-  border-left-width: 4px !important;
-  border-image: linear-gradient(180deg, oklch(52% 0.21 36), oklch(61% 0.20 36), oklch(50% 0.09 155)) 1;
-  box-shadow: -4px 0 16px -4px rgba(212,85,59,0.25);
-}
-
-/* Accordion active: stronger brand inset + bg gradient */
-#accordion-section .bg-brand-50\/60 {
-  background: linear-gradient(90deg, rgba(226,114,91,0.10), rgba(226,114,91,0.04)) !important;
-  box-shadow: inset 4px 0 0 0 oklch(52% 0.21 36);
-}
-
-/* Card system: gradient border highlight for premium feel */
-.card {
   position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #A8432C 0%, #8B3622 100%) !important;
+  box-shadow: 0 1px 2px rgba(139,54,34,0.25), 0 4px 12px -2px rgba(139,54,34,0.2), inset 0 1px 0 rgba(255,255,255,0.12);
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.card::before {
+.hero-btn-primary::after {
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(160deg, rgba(226,114,91,0.15), transparent 40%, transparent 60%, rgba(62,142,107,0.10));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
+  background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 50%);
   pointer-events: none;
 }
-
-/* Responsive: Hero grid stacking on tablet/mobile */
-@media (max-width: 1024px) {
-  .landing-hero .mx-auto.grid {
-    grid-template-columns: 1fr !important;
-    gap: 2.5rem;
-  }
-  .landing-hero {
-    min-height: auto;
-    padding-top: 2.5rem;
-    padding-bottom: 2rem;
-  }
+.hero-btn-primary:hover {
+  background: linear-gradient(145deg, #B5472E 0%, #9C3C20 100%) !important;
+  box-shadow: 0 2px 4px rgba(139,54,34,0.25), 0 8px 24px -4px rgba(139,54,34,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+  transform: translateY(-1px) scale(1.02);
+}
+.hero-btn-primary:active {
+  transform: translateY(0) scale(0.97) !important;
+  box-shadow: 0 1px 2px rgba(139,54,34,0.25), inset 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+.hero-btn-secondary {
+  border: 1.5px solid rgba(33,29,26,0.10);
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(8px);
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hero-btn-secondary:hover {
+  border-color: rgba(196,85,59,0.25);
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 4px 12px -4px rgba(33,29,26,0.08);
+  transform: translateY(-1px);
+}
+.hero-btn-secondary:active { transform: translateY(0) scale(0.97); }
+@media (min-width: 640px) {
+  .hero-btn-primary, .hero-btn-secondary { font-size: 0.95rem; padding: 0.85rem 1.75rem; }
 }
 
-@media (max-width: 640px) {
-  .landing-hero .mx-auto.grid {
-    gap: 1.5rem;
-  }
-  .hero-btn-primary,
-  .hero-btn-secondary {
-    width: 100%;
-    justify-content: center;
-  }
-  .landing-hero .flex.flex-wrap.gap-3 {
-    flex-direction: column;
-  }
+/* === Accordion === */
+#accordion-section > div {
+  border-radius: 1rem;
+  overflow: hidden;
+  background-image: radial-gradient(circle, rgba(33,29,26,0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
-
-/* Typography: stronger hierarchy contrast */
-.landing-hero h1 {
-  letter-spacing: -0.03em;
-}
-
-/* Trust bar: brand-tinted gradient */
-.trust-bar-gradient {
-  background: linear-gradient(90deg, oklch(22% 0.02 40), oklch(26% 0.03 36), oklch(22% 0.02 40));
-}
-
-
-/* === V2 Polish: Enhanced micro-interactions === */
-
-/* Accordion header: smoother hover with brand tint sweep */
+#accordion-section > div > div { border-bottom: 1px solid rgba(33,29,26,0.06); }
+#accordion-section > div > div:last-child { border-bottom: none; }
 #accordion-section button {
   position: relative;
   overflow: hidden;
+  padding: 1.25rem 1.5rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
+@media (min-width: 640px) { #accordion-section button { padding: 1.5rem 2rem; } }
 #accordion-section button::after {
   content: "";
   position: absolute;
@@ -463,882 +297,19 @@ header .bg-brand-700 {
   transition: opacity 0.3s ease;
   pointer-events: none;
 }
-#accordion-section button:hover::after {
-  opacity: 1;
-}
-
-/* Route card: subtle float animation on idle */
-.route-card {
-  animation: cardFloat 6s ease-in-out infinite;
-}
-@keyframes cardFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-}
-.route-card:hover {
-  animation-play-state: paused;
-}
-
-/* CTA buttons: press depth effect */
-.hero-btn-primary:active {
-  transform: scale(0.96) translateY(1px) !important;
-  box-shadow: 0 2px 8px -2px rgba(181,71,46,0.3) !important;
-}
-.hero-btn-secondary:active {
-  transform: scale(0.96) translateY(1px) !important;
-}
-
-/* Eyebrow badge: subtle pulse on hover */
-.eyebrow-badge {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.eyebrow-badge:hover {
-  box-shadow: 0 0 0 2px rgba(226,114,91,0.15), 0 4px 12px -2px rgba(226,114,91,0.2);
-  transform: translateY(-1px);
-}
-
-/* Trust bar: subtle shimmer */
-.trust-bar-gradient {
-  position: relative;
-  overflow: hidden;
-}
-.trust-bar-gradient::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
-  animation: trustShimmer 8s ease-in-out infinite;
-}
-@keyframes trustShimmer {
-  0%, 100% { left: -100%; }
-  50% { left: 150%; }
-}
-
-/* Navigation CTA: glow pulse */
-header .bg-brand-700 {
-  animation: ctaGlow 3s ease-in-out infinite;
-}
-@keyframes ctaGlow {
-  0%, 100% { box-shadow: 0 2px 12px -3px rgba(181,71,46,0.4), 0 0 0 1px rgba(226,114,91,0.15); }
-  50% { box-shadow: 0 4px 20px -3px rgba(181,71,46,0.55), 0 0 0 1px rgba(226,114,91,0.25); }
-}
-
-/* Heading highlight: enhanced underline animation */
-.hl-draw::after {
-  height: 0.42em;
-  border-radius: 6px;
-}
-
-/* Responsive: disable float animation on mobile */
-@media (max-width: 880px) {
-  .route-card { animation: none; }
-  .trust-bar-gradient::after { display: none; }
-  header .bg-brand-700 { animation: none; }
-}
-
-/* Reduced motion: disable all decorative animations */
-@media (prefers-reduced-motion: reduce) {
-  .route-card { animation: none; }
-  .trust-bar-gradient::after { display: none; }
-  header .bg-brand-700 { animation: none; }
-  .eyebrow-badge:hover { transform: none; }
-}
-
-
-/* === Apple-Level Polish: Round 1 === */
-
-/* Typography: more dramatic scale contrast */
-.landing-hero h1 {
-  letter-spacing: -0.035em;
-  line-height: 1.08;
-}
-
-/* Generous whitespace: Apple-level breathing room */
-.landing-hero {
-  padding-top: 4rem;
-  padding-bottom: 4rem;
-}
-@media (min-width: 640px) {
-  .landing-hero {
-    padding-top: 5rem;
-    padding-bottom: 5rem;
-  }
-}
-@media (min-width: 1024px) {
-  .landing-hero {
-    padding-top: 6rem;
-    padding-bottom: 6rem;
-  }
-}
-
-/* Route card: refined shadow + subtle inner glow */
-.route-card {
-  box-shadow:
-    0 0 0 1px rgba(33,29,26,0.04),
-    0 4px 6px -2px rgba(33,29,26,0.03),
-    0 12px 28px -8px rgba(33,29,26,0.08),
-    0 32px 64px -16px rgba(181,71,46,0.06);
-}
-.route-card:hover {
-  box-shadow:
-    0 0 0 1px rgba(33,29,26,0.06),
-    0 4px 8px -2px rgba(33,29,26,0.04),
-    0 16px 36px -8px rgba(33,29,26,0.10),
-    0 40px 80px -20px rgba(181,71,46,0.10);
-}
-
-/* CTA primary: Apple-style subtle gradient + refined shadow */
-.hero-btn-primary {
-  background: linear-gradient(180deg, #A8432C 0%, #8B3622 100%) !important;
-  box-shadow:
-    0 1px 2px rgba(139,54,34,0.3),
-    0 4px 12px -2px rgba(139,54,34,0.25),
-    inset 0 1px 0 rgba(255,255,255,0.12);
-}
-.hero-btn-primary:hover {
-  background: linear-gradient(180deg, #B5472E 0%, #9C3C20 100%) !important;
-  box-shadow:
-    0 2px 4px rgba(139,54,34,0.3),
-    0 8px 24px -4px rgba(139,54,34,0.35),
-    inset 0 1px 0 rgba(255,255,255,0.15);
-  transform: translateY(-1px) scale(1.02);
-}
-.hero-btn-primary:active {
-  transform: translateY(0) scale(0.98) !important;
-  box-shadow:
-    0 1px 2px rgba(139,54,34,0.3),
-    inset 0 1px 3px rgba(0,0,0,0.1) !important;
-}
-
-/* Secondary button: ghost with refined border */
-.hero-btn-secondary {
-  border: 1.5px solid rgba(33,29,26,0.12);
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(8px);
-}
-.hero-btn-secondary:hover {
-  border-color: rgba(139,54,34,0.25);
-  background: rgba(255,255,255,0.9);
-  box-shadow: 0 4px 12px -4px rgba(33,29,26,0.08);
-  transform: translateY(-1px);
-}
-
-/* Eyebrow badge: more refined */
-.eyebrow-badge {
-  letter-spacing: 0.06em;
-  border: 1px solid rgba(196,85,59,0.12);
-}
-
-/* Trust bar: more subtle, Apple-style */
-.trust-bar-gradient {
-  background: linear-gradient(90deg, #211D1A, #2E2925, #211D1A);
-  letter-spacing: 0.03em;
-}
-
-/* Accordion: refined borders + hover */
-#accordion-section > div {
-  border-radius: 1rem;
-  overflow: hidden;
-}
-
-/* Navigation: refined backdrop */
-header.sticky {
-  background: rgba(250,247,242,0.88);
-  border-bottom-color: rgba(33,29,26,0.06);
-}
-
-/* Route node dots: refined sizing */
-.rt-dot {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.rt-node:hover .rt-dot {
-  transform: scale(1.08);
-}
-
-/* Heading highlight: more refined underline */
-.hl-draw::after {
-  height: 0.35em;
-  border-radius: 4px;
-  background: linear-gradient(90deg, rgba(196,85,59,0.22), rgba(196,85,59,0.10));
-}
-
-/* Smooth scroll behavior */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Selection color */
-::selection {
-  background: rgba(196,85,59,0.15);
-  color: #211D1A;
-}
-
-/* Focus visible: refined ring */
-:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px #FAF7F2, 0 0 0 4px rgba(196,85,59,0.5);
-  border-radius: 4px;
-}
-
-/* Reduced motion: respect user preference */
-@media (prefers-reduced-motion: reduce) {
-  .route-card { animation: none; }
-  .rt-node { animation: none; }
-  .rt-tracer { display: none; }
-  .compass-spin-slow, .compass-orbit, .compass-orbit-reverse { animation: none; }
-  .trust-bar-gradient::after { display: none; }
-  header .bg-brand-700 { animation: none; }
-  html { scroll-behavior: auto; }
-}
-
-/* === Apple-Level Polish: Round 2 — Depth & Rhythm === */
-
-/* Hero subtext: refined opacity + max-width for readability */
-.landing-hero p {
-  max-width: 32em;
-  line-height: 1.7;
-}
-
-/* Route card inner spacing: more generous */
-.route-card {
-  padding: 1.75rem;
-}
-@media (min-width: 640px) {
-  .route-card {
-    padding: 2rem;
-  }
-}
-
-/* Route node: refined spacing + hover reveal */
-.rt-node {
-  padding-bottom: 1.5rem;
-}
-.rt-node:last-child {
-  padding-bottom: 0;
-}
-
-/* Accordion header: more generous padding + refined typography */
-#accordion-section button {
-  padding: 1.25rem 1.5rem;
-}
-@media (min-width: 640px) {
-  #accordion-section button {
-    padding: 1.5rem 2rem;
-  }
-}
-
-/* Accordion number badge: refined sizing */
+#accordion-section button:hover { background: rgba(226,114,91,0.025); }
+#accordion-section button:hover::after { opacity: 1; }
+#accordion-section button:active { transform: scale(0.995); }
+/* Number badge */
 #accordion-section button span:first-child {
   font-size: 0.8rem;
-}
-
-/* Accordion panel content: refined padding */
-#accordion-section .overflow-hidden > div {
-  padding: 0 1.5rem 1.5rem;
-}
-@media (min-width: 640px) {
-  #accordion-section .overflow-hidden > div {
-    padding: 0 2rem 2rem;
-  }
-}
-
-/* Navigation CTA: refined sizing */
-header .bg-brand-700 {
-  font-size: 0.85rem;
-  padding: 0.5rem 1.1rem;
-}
-
-/* Trust bar: refined font size */
-.trust-bar-gradient {
-  font-size: 0.75rem;
-}
-
-/* Eyebrow badge: refined padding */
-.eyebrow-badge {
-  padding: 0.35rem 0.85rem;
-  font-size: 0.75rem;
-}
-
-/* CTA buttons: refined sizing for mobile */
-.hero-btn-primary,
-.hero-btn-secondary {
-  font-size: 0.9rem;
-  padding: 0.75rem 1.5rem;
-}
-@media (min-width: 640px) {
-  .hero-btn-primary,
-  .hero-btn-secondary {
-    font-size: 0.95rem;
-    padding: 0.85rem 1.75rem;
-  }
-}
-
-/* Route card header: refined spacing */
-.route-card .relative.mb-6 {
-  margin-bottom: 1.25rem;
-}
-
-/* Dotted grid: more subtle */
-#accordion-section > div {
-  background-image: radial-gradient(circle, rgba(33,29,26,0.05) 1px, transparent 1px);
-  background-size: 28px 28px;
-}
-
-/* Smooth transitions for all interactive elements */
-a, button {
-  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Card hover: subtle lift */
-.card-hover:hover {
-  transform: translateY(-2px);
-}
-
-/* Refined scrollbar for webkit browsers */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(33,29,26,0.15);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(33,29,26,0.25);
-}
-
-/* === Apple-Level Polish: Round 3 — Composition & Micro-detail === */
-
-/* Hero: ensure full headline visibility with proper spacing */
-.landing-hero .reveal:first-child {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-/* Route card: inner content refined spacing */
-.route-card .rt-node .body {
-  gap: 2px;
-}
-.route-card .rt-node .lbl {
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-.route-card .rt-node .sub {
-  font-size: 0.75rem;
-  line-height: 1.4;
-}
-
-/* Accordion: refined divider between items */
-#accordion-section > div > div {
-  border-bottom: 1px solid rgba(33,29,26,0.06);
-}
-#accordion-section > div > div:last-child {
-  border-bottom: none;
-}
-
-/* Accordion active state: subtle background shift */
-#accordion-section button[aria-expanded="true"] {
-  background: rgba(226,114,91,0.03);
-}
-
-/* Navigation: refined logo spacing */
-header .font-display {
-  letter-spacing: -0.02em;
-}
-
-/* CTA button group: refined gap */
-.landing-hero .flex.flex-col.gap-3,
-.landing-hero .flex.flex-wrap.gap-3 {
-  gap: 0.75rem;
-}
-@media (min-width: 640px) {
-  .landing-hero .flex.flex-col.gap-3,
-  .landing-hero .flex.flex-wrap.gap-3 {
-    gap: 1rem;
-  }
-}
-
-/* Route card status indicator: refined */
-.route-card .text-teal-600 {
-  font-size: 0.7rem;
-  letter-spacing: 0.02em;
-}
-
-/* Accordion section title: refined typography */
-#accordion-section button .text-lg {
-  font-size: 0.95rem;
-  letter-spacing: -0.01em;
-}
-@media (min-width: 640px) {
-  #accordion-section button .text-lg {
-    font-size: 1.05rem;
-  }
-}
-
-/* Accordion subtitle: refined */
-#accordion-section button .text-xs {
-  font-size: 0.72rem;
-  line-height: 1.4;
-}
-
-/* Hero badge: refined positioning */
-.eyebrow-badge {
-  margin-bottom: 1.25rem;
-}
-
-/* Overall page: refined background gradient */
-body {
-  background: linear-gradient(168deg, #FAF7F2 0%, #F8F4EE 35%, #F5F0E8 65%, #FAF7F2 100%);
-}
-
-/* Refined text rendering for all headings */
-h1, h2, h3, h4, h5, h6 {
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Refined link hover: subtle underline animation */
-a {
-  text-decoration: none;
-}
-
-/* Card: refined border radius consistency */
-.card {
-  border-radius: 1rem;
-}
-
-/* Refined focus states for inputs */
-input:focus, textarea:focus, select:focus {
-  outline: none;
-  border-color: #D07A5E;
-  box-shadow: 0 0 0 3px rgba(196,85,59,0.12);
-}
-
-/* Refined button focus */
-button:focus-visible, a:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px #FAF7F2, 0 0 0 4px rgba(196,85,59,0.4);
-}
-
-/* Refined image rendering */
-img, svg {
-  image-rendering: -webkit-optimize-contrast;
-}
-
-/* Smooth page transitions */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-}
-
-/* === Apple-Level Polish: Round 4 — Final Refinement === */
-
-/* Ensure hero headline is fully visible with proper viewport handling */
-.landing-hero {
-  min-height: auto;
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-}
-@media (min-width: 640px) {
-  .landing-hero {
-    min-height: calc(100vh - 120px);
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-  }
-}
-@media (min-width: 1024px) {
-  .landing-hero {
-    padding-top: 5rem;
-    padding-bottom: 5rem;
-  }
-}
-
-/* Route card: enhanced inner glow + refined border */
-.route-card {
-  border: 1px solid rgba(33,29,26,0.06);
-  background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.88) 100%);
-}
-
-/* Route card header: refined spacing + typography */
-.route-card .rt-head {
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(33,29,26,0.05);
-  margin-bottom: 1.25rem;
-}
-
-/* Route node icons: refined sizing + shadow */
-.rt-dot {
-  box-shadow: 0 2px 6px -2px rgba(33,29,26,0.1);
-}
-.rt-node:first-child .rt-dot {
-  box-shadow: 0 2px 8px -2px rgba(196,85,59,0.3);
-}
-
-/* Accordion: refined hover state with subtle scale */
-#accordion-section button:hover {
-  background: rgba(226,114,91,0.02);
-}
-#accordion-section button:active {
-  transform: scale(0.995);
-}
-
-/* Accordion number badge: refined gradient */
-#accordion-section button span:first-child {
-  background: linear-gradient(135deg, #FDF5F2, #F9E8E0);
-  border: 1px solid rgba(196,85,59,0.1);
-}
-
-/* Navigation: refined backdrop blur */
-header.sticky {
-  backdrop-filter: blur(16px) saturate(1.5);
-  -webkit-backdrop-filter: blur(16px) saturate(1.5);
-}
-
-/* CTA primary: refined gradient direction */
-.hero-btn-primary {
-  background: linear-gradient(135deg, #A8432C 0%, #8B3622 100%) !important;
-}
-.hero-btn-primary:hover {
-  background: linear-gradient(135deg, #B5472E 0%, #9C3C20 100%) !important;
-}
-
-/* Eyebrow badge: refined icon spacing */
-.eyebrow-badge svg {
-  width: 14px;
-  height: 14px;
-}
-
-/* Route card status: refined dot animation */
-.route-card .pulse-dot {
-  animation: pulse 2.5s ease-in-out infinite;
-}
-
-/* Accordion panel: refined content spacing */
-#accordion-section .overflow-hidden > div > div {
-  padding-top: 0.5rem;
-}
-
-/* Refined text selection */
-::selection {
-  background: rgba(196,85,59,0.12);
-  color: #211D1A;
-}
-
-/* Refined scrollbar for Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(33,29,26,0.15) transparent;
-}
-
-/* Ensure proper rendering on high-DPI displays */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .route-card {
-    -webkit-font-smoothing: antialiased;
-  }
-}
-
-/* Final touch: subtle page entrance */
-@media (prefers-reduced-motion: no-preference) {
-  .landing-hero .reveal {
-    animation: heroEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-  @keyframes heroEntrance {
-    from {
-      opacity: 0;
-      transform: translateY(24px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-}
-
-/* === Apple-Level Polish: Round 5 — Visual Depth & Interaction === */
-
-/* Hero: ensure headline is never cut off */
-.landing-hero {
-  min-height: auto;
-  padding-top: 2.5rem;
-  padding-bottom: 2.5rem;
-}
-@media (min-width: 640px) {
-  .landing-hero {
-    min-height: calc(100vh - 140px);
-    padding-top: 3.5rem;
-    padding-bottom: 3.5rem;
-  }
-}
-@media (min-width: 1024px) {
-  .landing-hero {
-    min-height: calc(100vh - 120px);
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-  }
-}
-
-/* Route card: enhanced depth with inner shadow */
-.route-card {
-  box-shadow:
-    0 0 0 1px rgba(33,29,26,0.05),
-    0 1px 3px rgba(33,29,26,0.02),
-    0 4px 8px -2px rgba(33,29,26,0.04),
-    0 12px 24px -6px rgba(33,29,26,0.06),
-    0 24px 48px -12px rgba(181,71,46,0.05),
-    inset 0 1px 0 rgba(255,255,255,0.8);
-}
-.route-card:hover {
-  box-shadow:
-    0 0 0 1px rgba(33,29,26,0.07),
-    0 2px 4px rgba(33,29,26,0.03),
-    0 8px 16px -4px rgba(33,29,26,0.06),
-    0 20px 40px -8px rgba(33,29,26,0.08),
-    0 40px 80px -16px rgba(181,71,46,0.08),
-    inset 0 1px 0 rgba(255,255,255,0.9);
-  transform: translateY(-2px);
-}
-
-/* Route node: refined hover with scale + shadow */
-.rt-node:hover .rt-dot {
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px -3px rgba(196,85,59,0.25);
-}
-.rt-node.goal:hover .rt-dot {
-  box-shadow: 0 4px 12px -3px rgba(62,142,107,0.25);
-}
-
-/* Accordion: refined active state with left accent */
-#accordion-section button[aria-expanded="true"] {
-  background: linear-gradient(90deg, rgba(226,114,91,0.04), transparent 60%);
-  box-shadow: inset 3px 0 0 0 rgba(196,85,59,0.4);
-}
-
-/* Accordion: refined number badge with gradient */
-#accordion-section button span:first-child {
   background: linear-gradient(145deg, #FDF5F2, #F9E8E0);
   border: 1px solid rgba(196,85,59,0.12);
   box-shadow: 0 1px 3px rgba(196,85,59,0.08);
-}
-#accordion-section button[aria-expanded="true"] span:first-child {
-  background: linear-gradient(145deg, #C4553B, #A8432C);
-  color: #fff;
-  border-color: transparent;
-  box-shadow: 0 2px 6px rgba(196,85,59,0.3);
-}
-
-/* Navigation: refined logo with subtle shadow */
-header .font-display {
-  text-shadow: 0 1px 2px rgba(33,29,26,0.03);
-}
-
-/* CTA primary: enhanced 3-state interaction */
-.hero-btn-primary {
-  position: relative;
-  overflow: hidden;
-}
-.hero-btn-primary::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 50%);
-  pointer-events: none;
-}
-
-/* Eyebrow badge: refined with subtle inner shadow */
-.eyebrow-badge {
-  box-shadow: 0 1px 3px rgba(196,85,59,0.06), inset 0 1px 0 rgba(255,255,255,0.5);
-}
-
-/* Trust bar: refined with subtle gradient overlay */
-.trust-bar-gradient::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%);
-  pointer-events: none;
-}
-
-/* Accordion panel: refined entrance */
-#accordion-section .overflow-hidden {
-  transition: grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-}
-
-/* Route card status: refined pulse */
-.route-card .pulse-dot {
-  box-shadow: 0 0 0 0 rgba(62,142,107,0.4);
-}
-
-/* Refined focus ring for all interactive elements */
-button:focus-visible,
-a:focus-visible,
-input:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px #FAF7F2, 0 0 0 4px rgba(196,85,59,0.4);
-  border-radius: 6px;
-}
-
-/* Refined card hover for all cards */
-.card {
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.card:hover {
-  transform: translateY(-1px);
-  box-shadow:
-    0 0 0 1px rgba(33,29,26,0.05),
-    0 4px 12px -4px rgba(33,29,26,0.06),
-    0 12px 24px -8px rgba(33,29,26,0.04);
-}
-
-/* Refined heading hierarchy */
-h1 { letter-spacing: -0.03em; }
-h2 { letter-spacing: -0.025em; }
-h3 { letter-spacing: -0.02em; }
-
-/* Refined body text rendering */
-body {
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Refined link transitions */
-a {
-  transition: color 0.2s ease, opacity 0.2s ease;
-}
-
-/* Refined button transitions */
-button {
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
-/* Refined image/SVG rendering */
-svg {
-  shape-rendering: geometricPrecision;
-}
-
-/* Refined scrollbar for all browsers */
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(33,29,26,0.12);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(33,29,26,0.2);
-}
-
-/* Final: ensure smooth page load */
-@media (prefers-reduced-motion: no-preference) {
-  .landing-hero .reveal {
-    animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
-  }
-  .route-card.reveal {
-    animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
-  }
-  #accordion-section.reveal {
-    animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
-  }
-}
-
-/* === Apple-Level Polish: Round 7 — Final 95+ Push === */
-
-/* Hero: ensure headline dominates with proper scale */
-.landing-hero h1 {
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  line-height: 1.08;
-  letter-spacing: -0.035em;
-  font-weight: 600;
-}
-@media (min-width: 640px) {
-  .landing-hero h1 {
-    font-size: clamp(2.4rem, 4.5vw, 3.5rem);
-  }
-}
-@media (min-width: 1024px) {
-  .landing-hero h1 {
-    font-size: clamp(2.8rem, 4vw, 3.5rem);
-  }
-}
-
-/* Hero subtext: refined readability */
-.landing-hero p {
-  font-size: 1rem;
-  line-height: 1.75;
-  max-width: 30em;
-  color: #4E463F;
-}
-@media (min-width: 640px) {
-  .landing-hero p {
-    font-size: 1.05rem;
-  }
-}
-
-/* Route card: final shadow refinement */
-.route-card {
-  border-radius: 1.25rem;
-  border: 1px solid rgba(33,29,26,0.06);
-  background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.90) 100%);
-  box-shadow:
-    0 0 0 1px rgba(33,29,26,0.04),
-    0 1px 2px rgba(33,29,26,0.02),
-    0 4px 8px -2px rgba(33,29,26,0.03),
-    0 12px 24px -6px rgba(33,29,26,0.05),
-    0 24px 48px -12px rgba(181,71,46,0.04),
-    inset 0 1px 0 rgba(255,255,255,0.9);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.route-card:hover {
-  transform: translateY(-3px);
-  box-shadow:
-    0 0 0 1px rgba(33,29,26,0.06),
-    0 2px 4px rgba(33,29,26,0.03),
-    0 8px 16px -4px rgba(33,29,26,0.05),
-    0 20px 40px -8px rgba(33,29,26,0.07),
-    0 40px 80px -16px rgba(181,71,46,0.07),
-    inset 0 1px 0 rgba(255,255,255,0.95);
-}
-
-/* Route node: final hover refinement */
-.rt-node {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.rt-node:hover {
-  transform: translateX(2px);
-}
-.rt-node:hover .rt-dot {
-  transform: scale(1.12);
-  box-shadow: 0 4px 14px -3px rgba(196,85,59,0.3);
-}
-.rt-node.goal:hover .rt-dot {
-  box-shadow: 0 4px 14px -3px rgba(62,142,107,0.3);
-}
-
-/* Route node detail: refined reveal */
-.rt-detail {
-  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, transform 0.3s ease, margin-top 0.4s;
-}
-.rt-node:hover .rt-detail {
-  max-height: 100px;
-  opacity: 1;
-  transform: none;
-  margin-top: 8px;
-}
-
-/* Accordion: final active state refinement */
+#accordion-section button:hover span:first-child { transform: scale(1.05); box-shadow: 0 2px 6px rgba(196,85,59,0.12); }
+/* Active state */
 #accordion-section button[aria-expanded="true"] {
   background: linear-gradient(90deg, rgba(226,114,91,0.05), transparent 50%);
   box-shadow: inset 3px 0 0 0 rgba(196,85,59,0.5);
@@ -1350,116 +321,88 @@ svg {
   box-shadow: 0 2px 8px rgba(196,85,59,0.35);
   transform: scale(1.05);
 }
+/* Section title */
+#accordion-section button .text-lg { font-size: 0.95rem; letter-spacing: -0.01em; }
+@media (min-width: 640px) { #accordion-section button .text-lg { font-size: 1.05rem; } }
+#accordion-section button .text-xs { font-size: 0.72rem; line-height: 1.4; }
+/* Staggered children entrance */
+#accordion-section.reveal.in > div > div { animation: accordionChildIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+#accordion-section.reveal.in > div > div:nth-child(1) { animation-delay: 0s; }
+#accordion-section.reveal.in > div > div:nth-child(2) { animation-delay: 0.08s; }
+#accordion-section.reveal.in > div > div:nth-child(3) { animation-delay: 0.16s; }
+#accordion-section.reveal.in > div > div:nth-child(4) { animation-delay: 0.24s; }
+#accordion-section.reveal.in > div > div:nth-child(5) { animation-delay: 0.32s; }
+@keyframes accordionChildIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-/* Accordion: refined hover */
-#accordion-section button:hover {
-  background: rgba(226,114,91,0.025);
-}
-#accordion-section button:hover span:first-child {
-  transform: scale(1.05);
-  box-shadow: 0 2px 6px rgba(196,85,59,0.12);
-}
+/* === Reveal === */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal.in { opacity: 1; transform: none; }
 
-/* CTA primary: final gradient + shadow */
-.hero-btn-primary {
-  background: linear-gradient(145deg, #A8432C 0%, #8B3622 100%) !important;
-  box-shadow:
-    0 1px 2px rgba(139,54,34,0.25),
-    0 4px 12px -2px rgba(139,54,34,0.2),
-    inset 0 1px 0 rgba(255,255,255,0.12);
-  border-radius: 9999px;
-}
-.hero-btn-primary:hover {
-  background: linear-gradient(145deg, #B5472E 0%, #9C3C20 100%) !important;
-  box-shadow:
-    0 2px 4px rgba(139,54,34,0.25),
-    0 8px 24px -4px rgba(139,54,34,0.3),
-    inset 0 1px 0 rgba(255,255,255,0.15);
-  transform: translateY(-1px) scale(1.02);
-}
-.hero-btn-primary:active {
-  transform: translateY(0) scale(0.97) !important;
-  box-shadow:
-    0 1px 2px rgba(139,54,34,0.25),
-    inset 0 2px 4px rgba(0,0,0,0.1) !important;
-}
+/* === Section Divider === */
+.divider-path { animation: dividerDash 12s linear infinite; }
+@keyframes dividerDash { to { stroke-dashoffset: -100; } }
 
-/* Secondary button: final refinement */
-.hero-btn-secondary {
-  border: 1.5px solid rgba(33,29,26,0.10);
-  background: rgba(255,255,255,0.75);
-  backdrop-filter: blur(8px);
-  border-radius: 9999px;
-}
-.hero-btn-secondary:hover {
-  border-color: rgba(196,85,59,0.25);
-  background: rgba(255,255,255,0.92);
-  box-shadow: 0 4px 12px -4px rgba(33,29,26,0.08);
-  transform: translateY(-1px);
-}
-.hero-btn-secondary:active {
-  transform: translateY(0) scale(0.97);
-}
-
-/* Eyebrow badge: final refinement */
-.eyebrow-badge {
+/* === Trust Bar === */
+.trust-bar-gradient {
+  background: linear-gradient(90deg, #211D1A, #2A2521, #211D1A);
   font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  padding: 0.35rem 0.9rem;
-  border: 1px solid rgba(196,85,59,0.10);
-  box-shadow: 0 1px 3px rgba(196,85,59,0.05), inset 0 1px 0 rgba(255,255,255,0.6);
-  border-radius: 9999px;
+  letter-spacing: 0.04em;
+  position: relative;
+  overflow: hidden;
 }
+.trust-bar-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%);
+  pointer-events: none;
+}
+.trust-bar-gradient::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+  animation: trustShimmer 8s ease-in-out infinite;
+}
+@keyframes trustShimmer { 0%, 100% { left: -100%; } 50% { left: 150%; } }
 
-/* Navigation: final backdrop refinement */
+/* === Navigation === */
 header.sticky {
   background: rgba(250,247,242,0.90);
   backdrop-filter: blur(20px) saturate(1.6);
   -webkit-backdrop-filter: blur(20px) saturate(1.6);
   border-bottom: 1px solid rgba(33,29,26,0.05);
 }
-
-/* Trust bar: final refinement */
-.trust-bar-gradient {
-  background: linear-gradient(90deg, #211D1A, #2A2521, #211D1A);
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
+header .font-display { letter-spacing: -0.02em; text-shadow: 0 1px 2px rgba(33,29,26,0.03); }
+header .bg-brand-700 {
+  font-size: 0.85rem;
+  padding: 0.5rem 1.1rem;
+  animation: ctaGlow 3s ease-in-out infinite;
+}
+@keyframes ctaGlow {
+  0%, 100% { box-shadow: 0 2px 12px -3px rgba(181,71,46,0.4), 0 0 0 1px rgba(226,114,91,0.15); }
+  50% { box-shadow: 0 4px 20px -3px rgba(181,71,46,0.55), 0 0 0 1px rgba(226,114,91,0.25); }
 }
 
-/* Final: page entrance stagger */
-@media (prefers-reduced-motion: no-preference) {
-  .landing-hero .reveal:first-child {
-    animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
-  }
-  .route-card.reveal {
-    animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
-  }
-  #accordion-section.reveal {
-    animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
-  }
+/* === Touch === */
+@media (hover: none) {
+  .rt-detail { max-height: none; opacity: 1; transform: none; margin-top: 8px; }
+  .landing-hero::after { display: none; }
 }
 
-/* Final: refined selection */
-::selection {
-  background: rgba(196,85,59,0.14);
-  color: #211D1A;
+/* === Reduced Motion === */
+@media (prefers-reduced-motion: reduce) {
+  .route-card { animation: none; }
+  .rt-node { animation: none; }
+  .rt-tracer { display: none; }
+  .compass-spin-slow, .compass-orbit, .compass-orbit-reverse { animation: none; }
+  .trust-bar-gradient::after { display: none; }
+  header .bg-brand-700 { animation: none; }
+  .eyebrow-badge:hover { transform: none; }
+  .hl-draw::after { animation: none; transform: scaleX(1); }
+  .landing-hero .reveal, .route-card.reveal, #accordion-section.reveal { animation: none; }
+  html { scroll-behavior: auto; }
 }
-
-/* Final: refined focus ring */
-:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px #FAF7F2, 0 0 0 4px rgba(196,85,59,0.45);
-  border-radius: 6px;
-}
-
-/* Final: smooth scroll */
-@media (prefers-reduced-motion: no-preference) {
-  html { scroll-behavior: smooth; }
-}
-
-/* Final: refined scrollbar */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(33,29,26,0.12); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(33,29,26,0.2); }
-* { scrollbar-width: thin; scrollbar-color: rgba(33,29,26,0.12) transparent; }
