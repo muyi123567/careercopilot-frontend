@@ -1,12 +1,11 @@
 import { useRef, useState, type ChangeEvent, type DragEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { getRuntimeConfig } from '../../shared/api/client';
 import { parsePdfLocally, isPdfFile, isDocxFile, isSupportedTextFile } from '../../lib/pdf-parser';
-import { extractStructuredEvents, type StructuredEvent } from '../matrix/MatrixLandingPage';
+import { extractStructuredEvents, type StructuredEvent } from '../../shared/privacy/structured-events';
 import { AnonymousChat } from '../console/AnonymousChat';
 
 type Panel = 'input' | 'signals' | 'infer' | 'chat';
-type Mode = 'demo' | 'anonymous';
 
 interface TemporaryResult {
   status: 'temporary_preview';
@@ -24,17 +23,10 @@ const PANELS: { id: Panel; num: string; label: string; sub: string }[] = [
   { id: 'chat', num: '04', label: '对话', sub: '匿名多轮探索' },
 ];
 
-const DEMO_RESULT = {
-  title: '演示信号已就绪',
-  detail: '从数据分析基础出发，比较本行业深化、邻近迁移与探索性路径。',
-  steps: ['选择一个想验证的目标岗位。', '用一周完成一个可展示的小作品。', '记录真实反馈，而不是追逐单一成功率。'],
-};
-
 export function WorkspacePage() {
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
   const [active, setActive] = useState<Panel>('input');
-  const [mode, setMode] = useState<Mode>('demo');
   const [events, setEvents] = useState<StructuredEvent[]>([]);
   const [fileName, setFileName] = useState('');
   const [question, setQuestion] = useState('我应该先验证哪项能力？');
@@ -42,13 +34,12 @@ export function WorkspacePage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [result, setResult] = useState<TemporaryResult | null>(null);
-  const [demoVisible, setDemoVisible] = useState(false);
   const [chatReady, setChatReady] = useState(false);
 
-  const progress = events.length > 0 ? (result || demoVisible ? 3 : 2) : 1;
+  const progress = events.length > 0 ? (result ? 3 : 2) : 1;
 
   async function parseFile(file: File) {
-    setError(''); setResult(null); setDemoVisible(false);
+    setError(''); setResult(null);
     if (isDocxFile(file)) { setError('DOCX 支持即将加入。请先导出为 PDF 或 TXT。'); return; }
     let localText: string;
     if (isPdfFile(file)) {
@@ -76,7 +67,7 @@ export function WorkspacePage() {
     if (!events.length) { setError('请先解析简历。'); return; }
     if (!question.trim()) { setError('请写下问题。'); return; }
     const apiBase = getRuntimeConfig().apiBase?.replace(/\/$/, '');
-    if (!apiBase) { setError('尚未配置后端；请使用合成演示。'); return; }
+    if (!apiBase) { setError('尚未配置后端，无法开始临时推演。'); return; }
     setBusy(true);
     try {
       const res = await fetch(`${apiBase}/api/v1/anonymous-navigation`, {
@@ -94,8 +85,6 @@ export function WorkspacePage() {
     } finally { setBusy(false); }
   }
 
-  function runDemo() { setDemoVisible(true); setChatReady(false); setActive('infer'); }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -111,23 +100,11 @@ export function WorkspacePage() {
         </div>
       </div>
 
-      {/* Mode switch */}
-      <div className="flex gap-2">
-        <button type="button" onClick={() => setMode('demo')}
-          className={`rounded-full px-4 py-1.5 text-sm font-semibold transition-colors ${mode === 'demo' ? 'bg-brand-700 text-white' : 'border border-line bg-surface text-ink-600 hover:border-brand-400'}`}>
-          合成演示
-        </button>
-        <button type="button" onClick={() => setMode('anonymous')}
-          className={`rounded-full px-4 py-1.5 text-sm font-semibold transition-colors ${mode === 'anonymous' ? 'bg-brand-700 text-white' : 'border border-line bg-surface text-ink-600 hover:border-brand-400'}`}>
-          临时推演
-        </button>
-      </div>
-
       {/* Step tabs (horizontal, one row) */}
       <div className="flex gap-2 overflow-x-auto">
         {PANELS.map((p) => {
           const isActive = active === p.id;
-          const isDone = (p.id === 'input' && events.length > 0) || (p.id === 'signals' && events.length > 0) || (p.id === 'infer' && (demoVisible || !!result));
+          const isDone = (p.id === 'input' && events.length > 0) || (p.id === 'signals' && events.length > 0) || (p.id === 'infer' && !!result);
           return (
             <button key={p.id} type="button" onClick={() => setActive(p.id)}
               className={`flex flex-1 items-center gap-2.5 rounded-xl border px-4 py-3 text-left transition-all duration-300 ${isActive ? 'border-brand-400 bg-brand-50/60 shadow-sm' : 'border-line bg-surface hover:border-brand-200 hover:bg-paper'}`}>
@@ -155,13 +132,6 @@ export function WorkspacePage() {
               <span className="text-xs text-ink-400">PDF · TXT · MD · CSV · JSON · 本地解析，原始文件不上传</span>
             </button>
             <input ref={inputRef} className="sr-only" type="file" accept=".pdf,.txt,.md,.csv,.json" onChange={onFileChange} />
-            {mode === 'demo' && (
-              <button type="button" onClick={runDemo}
-                className="group inline-flex items-center justify-center gap-2 self-center rounded-full bg-brand-700 px-6 py-2.5 text-sm font-semibold text-white transition-all hover:bg-brand-800">
-                跳过，直接用合成样例
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4 transition-transform group-hover:translate-x-[3px]"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
-              </button>
-            )}
           </div>
         )}
 
@@ -201,30 +171,28 @@ export function WorkspacePage() {
         {/* Panel: Infer */}
         {active === 'infer' && (
           <div className="flex h-full flex-col gap-4">
-            {mode === 'anonymous' && (
-              <>
-                <div>
+            <>
+              <div>
                   <label className="mb-1.5 block text-xs font-medium text-ink-500" htmlFor="ws-q">你想验证什么？</label>
                   <input id="ws-q" className="field" value={question} maxLength={500} onChange={(e) => setQuestion(e.target.value)} />
-                </div>
-                <label className="flex items-start gap-2.5 rounded-xl border border-line bg-paper p-3 text-xs leading-relaxed text-ink-600">
+              </div>
+              <label className="flex items-start gap-2.5 rounded-xl border border-line bg-paper p-3 text-xs leading-relaxed text-ink-600">
                   <input type="checkbox" checked={consented} onChange={(e) => setConsented(e.target.checked)} className="mt-0.5 h-3.5 w-3.5 rounded text-brand-600" />
                   <span>我同意仅为本次临时推演发送结构化事件和问题；不发送原始文件，不保留内容。</span>
-                </label>
-                <button type="button" disabled={busy} onClick={() => void submitTemporary()}
+              </label>
+              <button type="button" disabled={busy} onClick={() => void submitTemporary()}
                   className="inline-flex items-center justify-center gap-2 self-center rounded-full bg-brand-700 px-6 py-2.5 text-sm font-semibold text-white transition-all hover:bg-brand-800 disabled:opacity-50">
                   {busy ? '推演中…' : '开始推演'}
-                </button>
-              </>
-            )}
+              </button>
+            </>
 
-            {(demoVisible || result) && (
+            {result && (
               <div className="rounded-xl border border-line bg-paper p-5">
-                <p className="eyebrow mb-2">{result ? 'TEMPORARY / RETENTION: NONE' : 'SYNTHETIC / READ ONLY'}</p>
-                <h4 className="text-base font-semibold text-ink-800">{result ? '临时信号已整理' : DEMO_RESULT.title}</h4>
-                <p className="mt-1 text-sm text-ink-500">{result ? `共 ${Object.values(result.event_counts).reduce((s, c) => s + c, 0)} 个事件，原始文件没有离开浏览器。` : DEMO_RESULT.detail}</p>
+                <p className="eyebrow mb-2">TEMPORARY / RETENTION: NONE</p>
+                <h4 className="text-base font-semibold text-ink-800">临时信号已整理</h4>
+                <p className="mt-1 text-sm text-ink-500">共 {Object.values(result.event_counts).reduce((s, c) => s + c, 0)} 个事件，原始文件没有离开浏览器。</p>
                 <ol className="mt-3 list-decimal space-y-1.5 pl-5 text-sm text-ink-700">
-                  {(result?.next_steps ?? DEMO_RESULT.steps).map((s) => <li key={s}>{s}</li>)}
+                  {result.next_steps.map((s) => <li key={s}>{s}</li>)}
                 </ol>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <button type="button" onClick={() => navigate('/results')}
@@ -232,7 +200,7 @@ export function WorkspacePage() {
                     查看账户态地图状态
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5 transition-transform group-hover:translate-x-[2px]"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
                   </button>
-                  {result && chatReady && (
+                  {chatReady && (
                     <button type="button" onClick={() => setActive('chat')}
                       className="rounded-full border border-line px-5 py-2 text-xs font-medium text-ink-600 transition-colors hover:border-brand-400 hover:text-brand-700">
                       继续对话深挖

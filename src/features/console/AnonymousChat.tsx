@@ -4,7 +4,7 @@
  */
 import { useState, useRef, useEffect } from 'react';
 import { getRuntimeConfig } from '../../shared/api/client';
-import type { StructuredEvent } from '../matrix/MatrixLandingPage';
+import type { StructuredEvent } from '../../shared/privacy/structured-events';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -40,7 +40,7 @@ export function AnonymousChat({ events, initialQuestion, onClose }: AnonymousCha
   const [turn, setTurn] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const initialized = useRef(false);
-  const sendMessageRef = useRef<(text: string, history: ChatMessage[]) => Promise<void>>();
+  const sendMessageRef = useRef<((text: string, history: ChatMessage[]) => Promise<void>) | null>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

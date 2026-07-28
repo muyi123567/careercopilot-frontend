@@ -24,7 +24,7 @@ describe('getRuntimeConfig', () => {
     await expect(
       postNavigation(
         { current_occupation: { occupation_id: 'fixture:role', name: '测试职业' } },
-        { mode: 'authenticated' },
+        {},
       ),
     ).rejects.toThrow('尚未配置职业导航后端地址');
   });

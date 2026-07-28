@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import './landing.css';
 
 /* ===== Scroll Reveal Hook ===== */
@@ -64,11 +64,11 @@ const SECTIONS = [
 ];
 
 const CAPABILITIES = [
-  { num: '1', title: '两种模式，都不登录', desc: '临时推演填你自己的经历，合成演示用内置示例。无论哪种，过程都在本地，不上传、不留存。' },
+  { num: '1', title: '临时推演，无需注册', desc: '先在本地解析经历；只有在你明确授权后，才发送必要的结构化信号和问题。' },
   { num: '2', title: '把经历交给推演，不交给服务器', desc: '拖入简历本地解析，勾选授权后开始。解析与推演都在你设备，文件不会离开。' },
   { num: '3', title: '拿到下一步，也拿到「为什么」', desc: '每条建议可追溯来源；信息不足处诚实标注「未知」，绝不编一个好看的总分。' },
-  { num: '4', title: '不登录 · 不留数据 · 可随时关闭', desc: '没有账号、没有手机号；关掉页面即清空，后台没有任何一张表存着你的内容。' },
-  { num: '5', title: '三步，三十秒', desc: '提交职业事件 → 本地推演 → 拿到下一步。不满意就继续对话，深挖任意一点。' },
+  { num: '4', title: '临时处理 · 可随时关闭', desc: '原始文件不上传；临时请求的保留规则和限制会在每次响应中明确展示。' },
+  { num: '5', title: '三步，逐项核验', desc: '提取职业事件 → 授权临时推演 → 查看下一步和限制。不满意可继续追问。' },
 ];
 
 /* ===== Icons ===== */
@@ -156,15 +156,15 @@ export function LandingPage() {
         </div>
         <div className="mx-auto grid w-full max-w-[1120px] items-center gap-12 lg:grid-cols-[1.5fr_1fr]">
           <div className="reveal border-l-2 border-brand-500 pl-[14px]">
-            <span className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-[13px] py-1.5 text-[13px] font-semibold tracking-wide text-brand-700"><ShieldIcon /> 隐私优先 · 不登录 · 不留数据</span>
+            <span className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-[13px] py-1.5 text-[13px] font-semibold tracking-wide text-brand-700"><ShieldIcon /> 隐私优先 · 明确授权 · 临时处理</span>
             <h1 className="mt-5 font-display text-[clamp(2.4rem,5vw,3.7rem)] font-semibold leading-[1.1] tracking-tight">先<span className="hl-draw">想清楚方向</span>，<br/>再投出每一份简历。</h1>
-            <p className="mt-5 max-w-[30em] text-[1.075rem] leading-relaxed text-ink-600">CareerCopilot 用结构化推演帮你看清职业路径——无需注册、无需上传简历。对话与推演都在你设备上完成，随时关闭、不留痕迹。</p>
+            <p className="mt-5 max-w-[30em] text-[1.075rem] leading-relaxed text-ink-600">CareerCopilot 用结构化推演帮你看清职业路径——无需上传原始简历。只有在你明确同意后，必要的结构化信号和问题才会发送到临时推演服务。</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/workspace" className="hero-btn-primary group inline-flex items-center gap-[9px] rounded-full bg-brand-700 px-[23px] py-[13px] text-[15px] font-semibold text-white shadow-sm hover:bg-brand-800">开始匿名推演 <ArrowRight /></Link>
               <button type="button" onClick={() => document.getElementById('accordion-section')?.scrollIntoView({ behavior: 'smooth' })} className="hero-btn-secondary inline-flex items-center gap-[9px] rounded-full bg-ink-900/[0.04] px-[23px] py-[13px] text-[15px] font-semibold text-ink-700 backdrop-blur-sm hover:text-ink-900">看它怎么工作</button>
             </div>
             <div className="mt-6 flex items-center gap-2 border-t border-line pt-5 text-[13.5px] text-ink-500">
-              <span className="text-teal-600"><CheckIcon /></span>上线至今 0 次数据上传——我们看不到你是谁，也看不到你的简历。
+              <span className="text-teal-600"><CheckIcon /></span>原始文件始终在本地解析；传输范围、保留规则和限制会在提交前后明确展示。
             </div>
           </div>
           {/* Route Path Card */}
@@ -172,7 +172,7 @@ export function LandingPage() {
             <div className="absolute -right-[50px] -top-[70px] h-[220px] w-[220px] rounded-full bg-[radial-gradient(circle,rgba(226,114,91,0.07),transparent_70%)]" />
             <div className="relative mb-6 flex items-center justify-between">
               <span className="inline-flex items-center gap-[7px] text-[13px] font-semibold text-ink-600"><span className="text-brand-700"><CompassIcon /></span> 路径推演 · 实时</span>
-              <span className="inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-teal-600"><span className="pulse-dot h-[7px] w-[7px] rounded-full bg-teal-600" /> 本地推理中</span>
+              <span className="inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-teal-600"><span className="pulse-dot h-[7px] w-[7px] rounded-full bg-teal-600" /> 等待明确授权</span>
             </div>
             <div className="route-path-container relative flex flex-1 flex-col justify-around">
               <span className="rt-tracer absolute left-[11px] z-[2] h-[14px] w-[14px] rounded-full bg-[radial-gradient(circle,#B5472E_0%,rgba(226,114,91,0.9)_35%,rgba(226,114,91,0.25)_65%,transparent_80%)] shadow-[0_0_12px_3px_rgba(226,114,91,0.35)]" />
@@ -235,7 +235,7 @@ export function LandingPage() {
                       {/* Trust */}
                       {s.id === 'trust' && (
                         <div className="rounded-[10px] bg-ink-900 p-8 text-center text-[#F3EDE6]">
-                          <blockquote className="font-display text-[clamp(1.3rem,2.5vw,1.8rem)] font-medium leading-[1.4]">我们靠<b className="text-[#E8896F]">「不知道你是谁」</b>建立信任。<br/>不登录、不上传、不留存——这是底色，不是功能。</blockquote>
+                          <blockquote className="font-display text-[clamp(1.3rem,2.5vw,1.8rem)] font-medium leading-[1.4]">我们靠<b className="text-[#E8896F]">「最小必要数据」</b>建立信任。<br/>不上传原始文件、明确授权、如实说明限制——这是底色，不是功能。</blockquote>
                           <p className="mt-4 text-sm text-[#B6ABA0]">这就是 CareerCopilot 和那些要你先交简历、再谈服务的产品的区别。</p>
                         </div>
                       )}
@@ -270,7 +270,7 @@ export function LandingPage() {
                       {s.id === 'cta' && (
                         <div className="py-4 text-center">
                           <h3 className="font-display text-2xl font-semibold">先想清楚，再行动。</h3>
-                          <p className="mx-auto mt-2 max-w-[28em] text-sm text-ink-500">不登录、不上传、不留痕迹。三十秒，看清你下一步该往哪走。</p>
+                          <p className="mx-auto mt-2 max-w-[28em] text-sm text-ink-500">不上传原始文件，明确授权后临时处理。先看清限制，再决定下一步。</p>
                           <Link to="/workspace" className="group mt-5 inline-flex items-center gap-2 rounded-full bg-brand-700 px-6 py-3 text-[15px] font-semibold text-white shadow-sm transition-all hover:-translate-y-px hover:bg-brand-800 hover:shadow-md">开始免费推演 <ArrowRight /></Link>
                         </div>
                       )}
@@ -298,7 +298,7 @@ export function LandingPage() {
             <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-left text-ink-600 transition-colors hover:text-brand-700">回到顶部</button>
           </nav>
         </div>
-        <div className="mx-auto mt-8 max-w-[1120px] border-t border-line pt-5 text-center text-[12.5px] text-ink-400">© 2026 CareerCopilot · 不登录、不上传、不留痕迹</div>
+        <div className="mx-auto mt-8 max-w-[1120px] border-t border-line pt-5 text-center text-[12.5px] text-ink-400">© 2026 CareerCopilot · 原始文件本地解析 · 授权后临时处理</div>
       </footer>
     </div>
   );

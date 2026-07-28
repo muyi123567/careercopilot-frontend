@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { extractStructuredEvents } from './MatrixLandingPage';
+import { extractStructuredEvents } from './structured-events';
 
 describe('local structured-event extraction', () => {
   it('keeps compact signals and never forwards direct identifiers', () => {

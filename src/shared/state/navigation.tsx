@@ -17,7 +17,7 @@ interface NavigationState {
   input: NavigationRequestInput | null;
   response: CareerNavigationResponse | null;
   error: string | null;
-  submit: (input: NavigationRequestInput, opts?: { mockScenario?: Parameters<typeof postNavigation>[1]['mockScenario'] }) => Promise<void>;
+  submit: (input: NavigationRequestInput) => Promise<void>;
   reset: () => void;
   addToCompare: (pathId: string) => void;
   compareIds: string[];
@@ -26,7 +26,7 @@ interface NavigationState {
 const NavigationContext = createContext<NavigationState | null>(null);
 
 export function NavigationProvider({ children }: { children: ReactNode }) {
-  const { mode, token, mockScenario } = useAuth();
+  const { token } = useAuth();
   const [phase, setPhase] = useState<RequestPhase>('idle');
   const [input, setInput] = useState<NavigationRequestInput | null>(null);
   const [response, setResponse] = useState<CareerNavigationResponse | null>(null);
@@ -35,7 +35,7 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
   const abortRef = useRef<AbortController | null>(null);
 
   const submit: NavigationState['submit'] = useCallback(
-    async (reqInput, opts) => {
+    async (reqInput) => {
       abortRef.current?.abort();
       const ctrl = new AbortController();
       abortRef.current = ctrl;
@@ -45,9 +45,7 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
       setCompareIds([]);
       try {
         const res = await postNavigation(reqInput, {
-          mode,
           token,
-          mockScenario: opts?.mockScenario ?? mockScenario,
           signal: ctrl.signal,
         });
         setResponse(res);
@@ -58,7 +56,7 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
         setPhase('error');
       }
     },
-    [mode, token, mockScenario],
+    [token],
   );
 
   const reset = useCallback(() => {

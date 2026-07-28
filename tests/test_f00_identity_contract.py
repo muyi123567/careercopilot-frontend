@@ -19,21 +19,19 @@ class IdentityContractTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, CLIENT + SESSION)
 
-    def test_demo_mode_cannot_fabricate_account_navigation(self):
-        self.assertIn("type AccessMode = 'demo' | 'authenticated'", CLIENT)
-        self.assertIn("if (opts.mode === 'demo')", CLIENT)
-        self.assertIn("合成演示不生成账户态路径", CLIENT)
+    def test_production_navigation_has_no_mock_scenario_or_synthetic_success_path(self):
+        self.assertNotIn("MockScenario", CLIENT + SESSION)
+        self.assertNotIn("mockScenario", CLIENT + SESSION)
+        self.assertNotIn("buildDataInsufficientResponse", CLIENT)
         self.assertNotIn("buildOkResponse", CLIENT)
-        self.assertIn("const [mode, setMode] = useState<AccessMode>('demo')", SESSION)
 
     def test_authenticated_mode_uses_bearer_token(self):
         self.assertIn("headers.Authorization = `Bearer ${opts.token}`", CLIENT)
         self.assertNotIn("'X-User-Id'", CLIENT)
 
-    def test_backend_scoped_session_replaces_client_session(self):
-        self.assertIn("createClientSessionId", CLIENT)
-        self.assertIn("useMemo(() => createClientSessionId(), [])", SESSION)
-        self.assertNotIn("demo-session", SESSION)
+    def test_browser_bundle_uses_no_fixed_client_session_identity(self):
+        self.assertNotIn("createClientSessionId", CLIENT + SESSION)
+        self.assertNotIn("web-session", CLIENT + SESSION)
 
     def test_api_base_is_runtime_configured(self):
         self.assertIn("window.CAREERCOPILOT_CONFIG", CLIENT)

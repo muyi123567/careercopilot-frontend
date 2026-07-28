@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { HashRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router';
 import App from './App';
 import { ApiProvider } from './shared/api/query';
 import { AuthProvider } from './shared/auth/session';
