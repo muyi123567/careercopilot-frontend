@@ -38,12 +38,12 @@ export function OnboardingPage() {
         <div className="mb-10 flex items-center justify-center gap-2">
           {STEPS.map((s, i) => (
             <button key={s.num} type="button" onClick={() => setStep(i)}
-              className={`h-2 rounded-full transition-all duration-500 ${i === step ? 'w-8 bg-brand-600' : i < step ? 'w-2 bg-brand-300' : 'w-2 bg-ink-900/10'}`} />
+              className={`h-1.5 rounded-full transition-all duration-500 ${i === step ? 'w-7 bg-brand-600' : i < step ? 'w-1.5 bg-brand-300' : 'w-1.5 bg-ink-900/10'}`} />
           ))}
         </div>
 
         {/* Step card */}
-        <div className="rounded-2xl border border-line bg-white/85 p-8 shadow-[0_8px_40px_-12px_rgba(33,29,26,0.10)] backdrop-blur-sm sm:p-10">
+        <div className="rounded-2xl border border-line/70 bg-white/90 p-7 shadow-[0_0_0_1px_rgba(33,29,26,0.03),0_8px_32px_-8px_rgba(33,29,26,0.08),0_24px_64px_-16px_rgba(181,71,46,0.05)] backdrop-blur-sm sm:p-9">
           <div className="mb-6 flex items-center gap-4">
             <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-50 to-brand-100 text-brand-700 shadow-sm">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-7 w-7"><path d={STEPS[step].icon} /></svg>
@@ -96,3 +96,4 @@ export function OnboardingPage() {
     </div>
   );
 }
+
