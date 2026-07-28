@@ -66,7 +66,7 @@ export function LoginPage() {
         </div>
 
         {/* Right: Login card */}
-        <div className="auth-card p-8 sm:p-10">
+        <div className="auth-card p-7 sm:p-9 lg:p-10">
           {/* Mobile logo */}
           <div className="mb-6 flex items-center justify-center gap-2 lg:hidden">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-white">
@@ -80,7 +80,7 @@ export function LoginPage() {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
             匿名开始推演
           </button>
-          <p className="mb-6 text-center text-xs text-ink-400">无需注册 · 不上传简历 · 不留存 · 随时关闭</p>
+          <p className="mb-7 text-center text-[11px] leading-relaxed text-ink-400">无需注册 · 不上传简历 · 不留存 · 随时关闭</p>
 
           {/* Divider */}
           <div className="mb-6 flex items-center gap-3">
@@ -106,8 +106,8 @@ export function LoginPage() {
           </div>
 
           {/* Back to home */}
-          <div className="mt-8 text-center">
-            <Link to="/" className="text-xs text-ink-400 transition-colors hover:text-brand-700">← 返回首页</Link>
+          <div className="mt-9 text-center">
+            <Link to="/" className="inline-flex items-center gap-1 text-xs text-ink-400 transition-colors hover:text-brand-700"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>返回首页</Link>
           </div>
         </div>
       </div>
@@ -117,4 +117,5 @@ export function LoginPage() {
     </div>
   );
 }
+
 
