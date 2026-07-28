@@ -208,3 +208,131 @@
     min-height: calc(100dvh - 100px);
   }
 }
+
+/* === Apple-Level Polish: Round 6 — Workspace & Results Consistency === */
+
+/* Workspace step tabs: refined active state */
+.workspace-step-active {
+  box-shadow:
+    0 0 0 1px rgba(196,85,59,0.15),
+    0 2px 8px -2px rgba(196,85,59,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+/* Workspace panel: refined entrance */
+.card.animate-slide-up {
+  animation: cardSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes cardSlideUp {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Results tab bar: refined active indicator */
+.results-tab-indicator {
+  box-shadow: 0 0 8px rgba(196,85,59,0.3);
+}
+
+/* Results stat cards: refined hover */
+.stat-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 1px rgba(33,29,26,0.05),
+    0 4px 12px -4px rgba(33,29,26,0.06),
+    0 12px 24px -8px rgba(181,71,46,0.06);
+}
+
+/* Table rows: refined hover with brand tint */
+.table-row-hover:hover {
+  background-color: rgba(226,114,91,0.03);
+}
+
+/* Drop zone: refined breathing animation */
+.dropzone-idle {
+  animation: dropzoneBreathe 3.5s ease-in-out infinite;
+}
+@keyframes dropzoneBreathe {
+  0%, 100% { border-color: rgba(33,29,26,0.14); }
+  50% { border-color: rgba(196,85,59,0.25); }
+}
+.dropzone-idle:hover {
+  animation-play-state: paused;
+  border-color: rgba(196,85,59,0.4);
+  box-shadow: 0 0 0 4px rgba(196,85,59,0.06);
+}
+
+/* Progress dots: refined pulse */
+.progress-dot-active {
+  animation: progressPulse 2.5s ease-in-out infinite;
+}
+@keyframes progressPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(196,85,59,0.25); }
+  50% { box-shadow: 0 0 0 5px rgba(196,85,59,0.08); }
+}
+
+/* Toggle switches: refined spring animation */
+.toggle-thumb {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Refined card entrance for all pages */
+.stagger > * {
+  animation: cardSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.stagger > *:nth-child(1) { animation-delay: 0s; }
+.stagger > *:nth-child(2) { animation-delay: 0.06s; }
+.stagger > *:nth-child(3) { animation-delay: 0.12s; }
+.stagger > *:nth-child(4) { animation-delay: 0.18s; }
+.stagger > *:nth-child(5) { animation-delay: 0.24s; }
+.stagger > *:nth-child(6) { animation-delay: 0.30s; }
+.stagger > *:nth-child(7) { animation-delay: 0.36s; }
+.stagger > *:nth-child(8) { animation-delay: 0.42s; }
+
+/* Refined empty state */
+.card.flex.flex-col.items-center {
+  padding: 3rem 2rem;
+}
+.card.flex.flex-col.items-center svg {
+  opacity: 0.4;
+}
+
+/* Refined button press feedback for all pages */
+button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* Refined link hover for all pages */
+a:hover {
+  opacity: 0.85;
+}
+a:active {
+  opacity: 0.7;
+}
+
+/* Refined input focus for all pages */
+input:focus, textarea:focus, select:focus {
+  border-color: #D07A5E;
+  box-shadow: 0 0 0 3px rgba(196,85,59,0.10), 0 2px 8px -2px rgba(196,85,59,0.08);
+}
+
+/* Refined disabled state */
+button:disabled, input:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Refined loading state */
+.auth-spinner {
+  border-width: 2px;
+  border-color: rgba(255,255,255,0.25);
+  border-top-color: #fff;
+}
+
+/* Reduced motion: disable all decorative animations */
+@media (prefers-reduced-motion: reduce) {
+  .dropzone-idle { animation: none; }
+  .progress-dot-active { animation: none; }
+  .card.animate-slide-up { animation: none; }
+  .stagger > * { animation: none; }
+  button:active:not(:disabled) { transform: none; }
+}
