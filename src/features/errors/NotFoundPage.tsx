@@ -53,8 +53,8 @@ export function NotFoundPage() {
           </>
         ) : (
           <>
-            <h1 className="font-display text-6xl font-bold tracking-tighter text-brand-700">404</h1>
-            <h2 className="mt-2 font-display text-xl font-semibold text-ink-800">页面未找到</h2>
+            <h1 className="font-display text-7xl font-bold tracking-tighter text-brand-700/90">404</h1>
+            <h2 className="mt-3 font-display text-xl font-semibold tracking-tight text-ink-800">页面未找到</h2>
             <p className="mt-3 max-w-md text-sm leading-relaxed text-ink-500">
               你访问的路径不存在。可能是链接已失效，或者页面已被移动。
             </p>
@@ -88,3 +88,4 @@ export function NotFoundPage() {
     </div>
   );
 }
+
