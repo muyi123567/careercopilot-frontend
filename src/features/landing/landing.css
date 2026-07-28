@@ -547,3 +547,149 @@ header .bg-brand-700 {
   .eyebrow-badge:hover { transform: none; }
 }
 
+
+/* === Apple-Level Polish: Round 1 === */
+
+/* Typography: more dramatic scale contrast */
+.landing-hero h1 {
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+
+/* Generous whitespace: Apple-level breathing room */
+.landing-hero {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+@media (min-width: 640px) {
+  .landing-hero {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .landing-hero {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+/* Route card: refined shadow + subtle inner glow */
+.route-card {
+  box-shadow:
+    0 0 0 1px rgba(33,29,26,0.04),
+    0 4px 6px -2px rgba(33,29,26,0.03),
+    0 12px 28px -8px rgba(33,29,26,0.08),
+    0 32px 64px -16px rgba(181,71,46,0.06);
+}
+.route-card:hover {
+  box-shadow:
+    0 0 0 1px rgba(33,29,26,0.06),
+    0 4px 8px -2px rgba(33,29,26,0.04),
+    0 16px 36px -8px rgba(33,29,26,0.10),
+    0 40px 80px -20px rgba(181,71,46,0.10);
+}
+
+/* CTA primary: Apple-style subtle gradient + refined shadow */
+.hero-btn-primary {
+  background: linear-gradient(180deg, #A8432C 0%, #8B3622 100%) !important;
+  box-shadow:
+    0 1px 2px rgba(139,54,34,0.3),
+    0 4px 12px -2px rgba(139,54,34,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.12);
+}
+.hero-btn-primary:hover {
+  background: linear-gradient(180deg, #B5472E 0%, #9C3C20 100%) !important;
+  box-shadow:
+    0 2px 4px rgba(139,54,34,0.3),
+    0 8px 24px -4px rgba(139,54,34,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+  transform: translateY(-1px) scale(1.02);
+}
+.hero-btn-primary:active {
+  transform: translateY(0) scale(0.98) !important;
+  box-shadow:
+    0 1px 2px rgba(139,54,34,0.3),
+    inset 0 1px 3px rgba(0,0,0,0.1) !important;
+}
+
+/* Secondary button: ghost with refined border */
+.hero-btn-secondary {
+  border: 1.5px solid rgba(33,29,26,0.12);
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(8px);
+}
+.hero-btn-secondary:hover {
+  border-color: rgba(139,54,34,0.25);
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 4px 12px -4px rgba(33,29,26,0.08);
+  transform: translateY(-1px);
+}
+
+/* Eyebrow badge: more refined */
+.eyebrow-badge {
+  letter-spacing: 0.06em;
+  border: 1px solid rgba(196,85,59,0.12);
+}
+
+/* Trust bar: more subtle, Apple-style */
+.trust-bar-gradient {
+  background: linear-gradient(90deg, #211D1A, #2E2925, #211D1A);
+  letter-spacing: 0.03em;
+}
+
+/* Accordion: refined borders + hover */
+#accordion-section > div {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+/* Navigation: refined backdrop */
+header.sticky {
+  background: rgba(250,247,242,0.88);
+  border-bottom-color: rgba(33,29,26,0.06);
+}
+
+/* Route node dots: refined sizing */
+.rt-dot {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rt-node:hover .rt-dot {
+  transform: scale(1.08);
+}
+
+/* Heading highlight: more refined underline */
+.hl-draw::after {
+  height: 0.35em;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(196,85,59,0.22), rgba(196,85,59,0.10));
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(196,85,59,0.15);
+  color: #211D1A;
+}
+
+/* Focus visible: refined ring */
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #FAF7F2, 0 0 0 4px rgba(196,85,59,0.5);
+  border-radius: 4px;
+}
+
+/* Reduced motion: respect user preference */
+@media (prefers-reduced-motion: reduce) {
+  .route-card { animation: none; }
+  .rt-node { animation: none; }
+  .rt-tracer { display: none; }
+  .compass-spin-slow, .compass-orbit, .compass-orbit-reverse { animation: none; }
+  .trust-bar-gradient::after { display: none; }
+  header .bg-brand-700 { animation: none; }
+  html { scroll-behavior: auto; }
+}
