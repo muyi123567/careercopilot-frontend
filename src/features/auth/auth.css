@@ -1,18 +1,20 @@
-/* ===== Login Page - Editorial Luxury × Trust ===== */
+/* ===== Login Page — Apple-Level Craft ===== */
 
 /* Glassmorphism login card */
 .auth-card {
   position: relative;
-  backdrop-filter: blur(16px) saturate(1.4);
-  -webkit-backdrop-filter: blur(16px) saturate(1.4);
-  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  background: rgba(255, 255, 255, 0.90);
   border-radius: 1.25rem;
   border: 1px solid transparent;
   background-clip: padding-box;
   box-shadow:
-    0 2px 4px rgba(33,29,26,0.04),
-    0 12px 40px -12px rgba(33,29,26,0.10),
-    0 32px 80px -20px rgba(181,71,46,0.08);
+    0 0 0 1px rgba(33,29,26,0.04),
+    0 2px 4px rgba(33,29,26,0.02),
+    0 8px 24px -8px rgba(33,29,26,0.08),
+    0 24px 64px -16px rgba(181,71,46,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.9);
 }
 .auth-card::before {
   content: "";
@@ -31,27 +33,23 @@
 .auth-input {
   width: 100%;
   border-radius: 0.75rem;
-  border: 1.5px solid rgba(33,29,26,0.14);
-  background: rgba(255,255,255,0.9);
-  padding: 0.7rem 1rem;
+  border: 1.5px solid rgba(33,29,26,0.12);
+  background: rgba(255,255,255,0.92);
+  padding: 0.75rem 1rem;
   font-size: 0.875rem;
   color: #2E2925;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   outline: none;
 }
-.auth-input::placeholder {
-  color: #9A9088;
-}
+.auth-input::placeholder { color: #9A9088; }
 .auth-input:focus {
   border-color: #D07A5E;
-  box-shadow: 0 0 0 3px rgba(196,85,59,0.15), 0 2px 8px -2px rgba(212,85,59,0.12);
+  box-shadow: 0 0 0 3px rgba(196,85,59,0.12), 0 0 16px -4px rgba(226,114,91,0.12), 0 2px 8px -2px rgba(212,85,59,0.08);
+  background: rgba(255,255,255,0.97);
 }
-.auth-input:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+.auth-input:disabled { opacity: 0.45; cursor: not-allowed; }
 
-/* Primary auth button (gradient) */
+/* Primary auth button */
 .auth-btn-primary {
   display: inline-flex;
   align-items: center;
@@ -64,25 +62,23 @@
   font-weight: 600;
   color: #fff;
   background: linear-gradient(145deg, #A8432C, #8B3622);
-  border: 1px solid rgba(226,114,91,0.3);
-  box-shadow: 0 4px 16px -4px rgba(181,71,46,0.40), 0 0 0 1px rgba(226,114,91,0.10);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: none;
+  box-shadow: 0 1px 2px rgba(139,54,34,0.25), 0 4px 12px -2px rgba(139,54,34,0.2), inset 0 1px 0 rgba(255,255,255,0.12);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
 }
 .auth-btn-primary:hover:not(:disabled) {
-  background: linear-gradient(145deg, #9C3C20, #7A3020);
-  box-shadow: 0 8px 28px -6px rgba(181,71,46,0.50), 0 0 0 1px rgba(226,114,91,0.15);
-  transform: translateY(-1px);
+  background: linear-gradient(145deg, #B5472E, #9C3C20);
+  box-shadow: 0 2px 4px rgba(139,54,34,0.25), 0 8px 24px -4px rgba(139,54,34,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+  transform: translateY(-1px) scale(1.01);
 }
 .auth-btn-primary:active:not(:disabled) {
-  transform: scale(0.97);
+  transform: scale(0.96) translateY(1px);
+  box-shadow: 0 1px 2px rgba(139,54,34,0.25), inset 0 2px 4px rgba(0,0,0,0.1);
 }
-.auth-btn-primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+.auth-btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
 
-/* Anonymous entry button (larger, more prominent) */
+/* Anonymous entry button (most prominent) */
 .auth-btn-anonymous {
   display: inline-flex;
   align-items: center;
@@ -95,25 +91,26 @@
   font-weight: 700;
   color: #fff;
   background: linear-gradient(145deg, #A8432C, #803422);
-  border: 1px solid rgba(226,114,91,0.35);
+  border: none;
   box-shadow:
-    0 4px 20px -4px rgba(181,71,46,0.45),
+    0 1px 2px rgba(139,54,34,0.25),
+    0 4px 16px -4px rgba(181,71,46,0.35),
     0 0 0 1px rgba(226,114,91,0.12),
     inset 0 1px 0 rgba(255,255,255,0.15);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
 }
 .auth-btn-anonymous:hover {
-  background: linear-gradient(145deg, #9C3C20, #6E2C1A);
+  background: linear-gradient(145deg, #B5472E, #8B3622);
   box-shadow:
-    0 8px 32px -6px rgba(181,71,46,0.55),
+    0 2px 4px rgba(139,54,34,0.25),
+    0 8px 32px -6px rgba(181,71,46,0.45),
     0 0 0 1px rgba(226,114,91,0.20),
+    0 0 24px -4px rgba(226,114,91,0.15),
     inset 0 1px 0 rgba(255,255,255,0.2);
   transform: translateY(-2px) scale(1.02);
 }
-.auth-btn-anonymous:active {
-  transform: scale(0.97);
-}
+.auth-btn-anonymous:active { transform: scale(0.97); }
 
 /* WeChat button */
 .auth-btn-wechat {
@@ -128,18 +125,22 @@
   font-weight: 500;
   color: #07C160;
   background: transparent;
-  border: 1.5px solid rgba(7,193,96,0.35);
+  border: 1.5px solid rgba(7,193,96,0.30);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
 }
 .auth-btn-wechat:hover {
-  background: rgba(7,193,96,0.06);
-  border-color: rgba(7,193,96,0.55);
-  box-shadow: 0 2px 12px -3px rgba(7,193,96,0.2);
+  background: rgba(7,193,96,0.05);
+  border-color: rgba(7,193,96,0.50);
+  box-shadow: 0 2px 12px -3px rgba(7,193,96,0.18), 0 0 0 1px rgba(7,193,96,0.12);
+  transform: translateY(-1px);
 }
+.auth-btn-wechat:active { transform: scale(0.97); }
 
 /* Tab switcher */
 .auth-tab {
+  position: relative;
+  overflow: hidden;
   flex: 1;
   padding: 0.6rem 0;
   font-size: 0.875rem;
@@ -152,35 +153,39 @@
   background: transparent;
   color: #6B6258;
 }
-.auth-tab.active {
-  background: rgba(168,67,44,0.10);
-  color: #8B3622;
-  box-shadow: 0 1px 4px rgba(181,71,46,0.1);
+.auth-tab::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(226,114,91,0.06), transparent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
 }
+.auth-tab.active {
+  background: rgba(168,67,44,0.08);
+  color: #8B3622;
+  box-shadow: 0 1px 4px rgba(181,71,46,0.08);
+}
+.auth-tab.active::after { opacity: 1; }
 
 /* Spinner */
 .auth-spinner {
   width: 16px;
   height: 16px;
-  border: 2px solid rgba(255,255,255,0.3);
+  border: 2px solid rgba(255,255,255,0.25);
   border-top-color: #fff;
   border-radius: 50%;
   animation: authSpin 0.6s linear infinite;
 }
-@keyframes authSpin {
-  to { transform: rotate(360deg); }
-}
+@keyframes authSpin { to { transform: rotate(360deg); } }
 
-/* Page entrance animation */
-.auth-page-enter {
-  animation: authPageIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-@keyframes authPageIn {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: none; }
-}
+/* Page entrance */
+.auth-page-enter { animation: authPageIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes authPageIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.auth-page-enter .auth-card { animation: authCardIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both; }
+@keyframes authCardIn { from { opacity: 0; transform: translateY(16px) scale(0.98); } to { opacity: 1; transform: none; } }
 
-/* Brand panel decorative elements */
+/* Brand panel decorative glow */
 .auth-brand-glow {
   position: absolute;
   width: 320px;
@@ -195,117 +200,30 @@
   position: fixed;
   bottom: 2rem;
   left: 50%;
-  transform: translateX(-50%) translateY(0);
+  transform: translateX(-50%);
   background: #2E2925;
   color: #fff;
   padding: 0.75rem 1.5rem;
   border-radius: 9999px;
   font-size: 0.8rem;
   box-shadow: 0 8px 32px -8px rgba(33,29,26,0.3);
-  animation: toastIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-  z-index: 9999;
-}
-@keyframes toastIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(12px); }
-  to { opacity: 1; transform: translateX(-50%) translateY(0); }
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .auth-layout {
-    grid-template-columns: 1fr !important;
-  }
-  .auth-brand-panel {
-    display: none !important;
-  }
-}
-
-/* === V2 Polish: Auth page enhancements === */
-
-/* Auth card: subtle entrance animation */
-.auth-page-enter .auth-card {
-  animation: authCardIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
-}
-@keyframes authCardIn {
-  from { opacity: 0; transform: translateY(16px) scale(0.98); }
-  to { opacity: 1; transform: none; }
-}
-
-/* Anonymous button: enhanced glow on hover */
-.auth-btn-anonymous:hover {
-  box-shadow:
-    0 8px 32px -6px rgba(181,71,46,0.55),
-    0 0 0 1px rgba(226,114,91,0.20),
-    0 0 24px -4px rgba(226,114,91,0.20),
-    inset 0 1px 0 rgba(255,255,255,0.2);
-}
-
-/* Input fields: enhanced focus with brand glow spread */
-.auth-input:focus {
-  border-color: #D07A5E;
-  box-shadow: 0 0 0 3px rgba(196,85,59,0.15), 0 0 16px -4px rgba(226,114,91,0.15), 0 2px 8px -2px rgba(212,85,59,0.12);
-  background: rgba(255,255,255,0.95);
-}
-
-/* Tab switcher: smoother active transition */
-.auth-tab {
-  position: relative;
-  overflow: hidden;
-}
-.auth-tab::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(226,114,91,0.06), transparent);
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-.auth-tab.active::after {
-  opacity: 1;
-}
-
-/* WeChat button: enhanced hover with green glow */
-.auth-btn-wechat:hover {
-  box-shadow: 0 2px 12px -3px rgba(7,193,96,0.2), 0 0 0 1px rgba(7,193,96,0.15);
-  transform: translateY(-1px);
-}
-.auth-btn-wechat:active {
-  transform: scale(0.97);
-}
-
-/* Primary auth button: press depth */
-.auth-btn-primary:active:not(:disabled) {
-  transform: scale(0.96) translateY(1px) !important;
-  box-shadow: 0 2px 8px -2px rgba(181,71,46,0.3) !important;
-}
-
-/* Toast: enhanced entrance */
-.auth-toast {
   animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  z-index: 9999;
 }
 @keyframes toastIn {
   from { opacity: 0; transform: translateX(-50%) translateY(16px) scale(0.9); }
   to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 }
 
-/* Brand panel trust indicators: staggered entrance */
-.auth-page-enter .auth-brand-panel > div:last-child > div {
-  animation: trustItemIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-.auth-page-enter .auth-brand-panel > div:last-child > div:nth-child(1) { animation-delay: 0.2s; }
-.auth-page-enter .auth-brand-panel > div:last-child > div:nth-child(2) { animation-delay: 0.3s; }
-.auth-page-enter .auth-brand-panel > div:last-child > div:nth-child(3) { animation-delay: 0.4s; }
-@keyframes trustItemIn {
-  from { opacity: 0; transform: translateX(-8px); }
-  to { opacity: 1; transform: none; }
+/* Responsive */
+@media (max-width: 1024px) {
+  .auth-layout { grid-template-columns: 1fr !important; }
+  .auth-brand-panel { display: none !important; }
 }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
+  .auth-page-enter { animation: none; }
   .auth-page-enter .auth-card { animation: none; }
-  .auth-page-enter .auth-brand-panel > div:last-child > div { animation: none; }
   .auth-toast { animation: none; }
 }
-
-
-
