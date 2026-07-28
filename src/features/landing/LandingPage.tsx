@@ -13,10 +13,13 @@ function useReveal() {
     }
     const io = new IntersectionObserver(
       (entries) => { entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); },
-      { threshold: 0.12 },
+      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' },
     );
-    ref.current?.querySelectorAll('.reveal').forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    const els = ref.current?.querySelectorAll('.reveal');
+    els?.forEach((el) => io.observe(el));
+    // Safety fallback: ensure content is visible even if IO doesn't fire
+    const timer = setTimeout(() => { els?.forEach((el) => el.classList.add('in')); }, 600);
+    return () => { io.disconnect(); clearTimeout(timer); };
   }, []);
   return ref;
 }
