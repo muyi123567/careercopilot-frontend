@@ -45,7 +45,7 @@
   --cx: 50%;
   --cy: 50%;
   background:
-    radial-gradient(ellipse 90% 70% at 15% 85%, rgba(226,114,91,0.20), transparent),
+    radial-gradient(ellipse 90% 70% at 15% 85%, rgba(226,114,91,0.28), transparent),
     radial-gradient(ellipse 50% 40% at 90% 15%, rgba(62,142,107,0.14), transparent),
     radial-gradient(ellipse 120% 90% at 50% -10%, rgba(244,238,228,0.95), transparent);
 }
@@ -81,7 +81,7 @@
   position: relative;
   white-space: nowrap;
   z-index: 0;
-  background: linear-gradient(135deg, #B5472E, #E2725B);
+  background: linear-gradient(135deg, #A63A22, #E2725B);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -93,7 +93,7 @@
   right: -4px;
   bottom: 0.02em;
   height: 0.38em;
-  background: linear-gradient(90deg, rgba(226,114,91,0.25), rgba(226,114,91,0.12));
+  background: linear-gradient(90deg, rgba(226,114,91,0.35), rgba(226,114,91,0.18));
   border-radius: 4px;
   z-index: -1;
   transform-origin: left center;
@@ -328,8 +328,8 @@
   right: 12px;
   width: 40px;
   height: 40px;
-  border-right: 1.5px solid rgba(226,114,91,0.3);
-  border-bottom: 1.5px solid rgba(226,114,91,0.3);
+  border-right: 2px solid rgba(226,114,91,0.45);
+  border-bottom: 2px solid rgba(226,114,91,0.45);
   border-radius: 0 0 8px 0;
   pointer-events: none;
 }
@@ -345,10 +345,11 @@
   left: -60px;
   width: 280px;
   height: 280px;
-  background: radial-gradient(circle, rgba(226,114,91,0.10), transparent 70%);
+  background: radial-gradient(circle, rgba(226,114,91,0.16), transparent 70%);
   pointer-events: none;
   z-index: -1;
 }
+
 
 
 

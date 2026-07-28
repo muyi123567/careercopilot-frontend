@@ -16,16 +16,16 @@ export default {
           300: 'oklch(82% 0.008 50 / <alpha-value>)',
         },
         brand: {
-          50: 'oklch(97% 0.02 36 / <alpha-value>)',
-          100: 'oklch(94% 0.04 36 / <alpha-value>)',
-          200: 'oklch(88% 0.07 36 / <alpha-value>)',
-          300: 'oklch(78% 0.10 36 / <alpha-value>)',
-          400: 'oklch(67% 0.13 36 / <alpha-value>)',
-          500: 'oklch(61% 0.14 36 / <alpha-value>)',
-          600: 'oklch(52% 0.15 36 / <alpha-value>)',
-          700: 'oklch(45% 0.14 36 / <alpha-value>)',
-          800: 'oklch(39% 0.13 36 / <alpha-value>)',
-          900: 'oklch(32% 0.11 36 / <alpha-value>)',
+          50: 'oklch(97% 0.03 36 / <alpha-value>)',
+          100: 'oklch(94% 0.06 36 / <alpha-value>)',
+          200: 'oklch(88% 0.10 36 / <alpha-value>)',
+          300: 'oklch(78% 0.14 36 / <alpha-value>)',
+          400: 'oklch(67% 0.18 36 / <alpha-value>)',
+          500: 'oklch(61% 0.20 36 / <alpha-value>)',
+          600: 'oklch(52% 0.21 36 / <alpha-value>)',
+          700: 'oklch(45% 0.20 36 / <alpha-value>)',
+          800: 'oklch(39% 0.18 36 / <alpha-value>)',
+          900: 'oklch(32% 0.15 36 / <alpha-value>)',
         },
         teal: {
           50: 'oklch(95% 0.03 155 / <alpha-value>)',
@@ -91,4 +91,5 @@ export default {
   },
   plugins: [],
 };
+
 
