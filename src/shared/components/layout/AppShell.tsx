@@ -16,7 +16,7 @@ export function AppShell() {
       <header className="sticky top-0 z-40 border-b border-line bg-paper/85 backdrop-blur-md shadow-[0_1px_8px_-4px_rgba(33,29,26,0.06)]">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <Link to="/" className="display text-lg font-semibold transition-colors hover:text-brand-700">CareerCopilot</Link>
+            <Link to="/" className="font-display text-lg font-bold tracking-tight text-ink-900 transition-colors hover:text-brand-700">Career<b className="text-brand-700">Copilot</b></Link>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2.5 py-0.5 text-[11px] font-medium text-brand-700">
               <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
               临时会话
@@ -43,20 +43,17 @@ export function AppShell() {
       </header>
 
       {/* Main */}
-      <main id="main" className="relative mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:py-10">
+      <main id="main" className="relative mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:py-10">
         {/* Subtle dot-grid background for functional pages */}
         <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.4]" style={{backgroundImage: 'radial-gradient(circle, rgba(33,29,26,0.04) 1px, transparent 1px)', backgroundSize: '28px 28px'}} aria-hidden="true" />
         <Outlet />
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-line bg-gradient-to-b from-transparent to-brand-50/20 py-5 text-center text-xs text-ink-400">
+      <footer className="border-t border-line/50 py-6 text-center text-[11px] text-ink-300">
         CareerCopilot · 证据优先 · 不展示未经校准的成功率
       </footer>
     </div>
   );
 }
-
-
-
 
