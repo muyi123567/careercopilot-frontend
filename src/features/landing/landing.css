@@ -1062,3 +1062,194 @@ header.sticky {
     }
   }
 }
+
+/* === Apple-Level Polish: Round 5 — Visual Depth & Interaction === */
+
+/* Hero: ensure headline is never cut off */
+.landing-hero {
+  min-height: auto;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+@media (min-width: 640px) {
+  .landing-hero {
+    min-height: calc(100vh - 140px);
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .landing-hero {
+    min-height: calc(100vh - 120px);
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+
+/* Route card: enhanced depth with inner shadow */
+.route-card {
+  box-shadow:
+    0 0 0 1px rgba(33,29,26,0.05),
+    0 1px 3px rgba(33,29,26,0.02),
+    0 4px 8px -2px rgba(33,29,26,0.04),
+    0 12px 24px -6px rgba(33,29,26,0.06),
+    0 24px 48px -12px rgba(181,71,46,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.route-card:hover {
+  box-shadow:
+    0 0 0 1px rgba(33,29,26,0.07),
+    0 2px 4px rgba(33,29,26,0.03),
+    0 8px 16px -4px rgba(33,29,26,0.06),
+    0 20px 40px -8px rgba(33,29,26,0.08),
+    0 40px 80px -16px rgba(181,71,46,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+  transform: translateY(-2px);
+}
+
+/* Route node: refined hover with scale + shadow */
+.rt-node:hover .rt-dot {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px -3px rgba(196,85,59,0.25);
+}
+.rt-node.goal:hover .rt-dot {
+  box-shadow: 0 4px 12px -3px rgba(62,142,107,0.25);
+}
+
+/* Accordion: refined active state with left accent */
+#accordion-section button[aria-expanded="true"] {
+  background: linear-gradient(90deg, rgba(226,114,91,0.04), transparent 60%);
+  box-shadow: inset 3px 0 0 0 rgba(196,85,59,0.4);
+}
+
+/* Accordion: refined number badge with gradient */
+#accordion-section button span:first-child {
+  background: linear-gradient(145deg, #FDF5F2, #F9E8E0);
+  border: 1px solid rgba(196,85,59,0.12);
+  box-shadow: 0 1px 3px rgba(196,85,59,0.08);
+}
+#accordion-section button[aria-expanded="true"] span:first-child {
+  background: linear-gradient(145deg, #C4553B, #A8432C);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 2px 6px rgba(196,85,59,0.3);
+}
+
+/* Navigation: refined logo with subtle shadow */
+header .font-display {
+  text-shadow: 0 1px 2px rgba(33,29,26,0.03);
+}
+
+/* CTA primary: enhanced 3-state interaction */
+.hero-btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+.hero-btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Eyebrow badge: refined with subtle inner shadow */
+.eyebrow-badge {
+  box-shadow: 0 1px 3px rgba(196,85,59,0.06), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+/* Trust bar: refined with subtle gradient overlay */
+.trust-bar-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Accordion panel: refined entrance */
+#accordion-section .overflow-hidden {
+  transition: grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+/* Route card status: refined pulse */
+.route-card .pulse-dot {
+  box-shadow: 0 0 0 0 rgba(62,142,107,0.4);
+}
+
+/* Refined focus ring for all interactive elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #FAF7F2, 0 0 0 4px rgba(196,85,59,0.4);
+  border-radius: 6px;
+}
+
+/* Refined card hover for all cards */
+.card {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px rgba(33,29,26,0.05),
+    0 4px 12px -4px rgba(33,29,26,0.06),
+    0 12px 24px -8px rgba(33,29,26,0.04);
+}
+
+/* Refined heading hierarchy */
+h1 { letter-spacing: -0.03em; }
+h2 { letter-spacing: -0.025em; }
+h3 { letter-spacing: -0.02em; }
+
+/* Refined body text rendering */
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Refined link transitions */
+a {
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+/* Refined button transitions */
+button {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Refined image/SVG rendering */
+svg {
+  shape-rendering: geometricPrecision;
+}
+
+/* Refined scrollbar for all browsers */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(33,29,26,0.12);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(33,29,26,0.2);
+}
+
+/* Final: ensure smooth page load */
+@media (prefers-reduced-motion: no-preference) {
+  .landing-hero .reveal {
+    animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  }
+  .route-card.reveal {
+    animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+  }
+  #accordion-section.reveal {
+    animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+  }
+}
