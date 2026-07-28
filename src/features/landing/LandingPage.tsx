@@ -201,7 +201,7 @@ export function LandingPage() {
                 {/* Accordion header */}
                 <button type="button" onMouseEnter={() => setOpenSection(s.id)}
                   className={`flex w-full items-center gap-5 px-8 py-6 text-left transition-all duration-300 ${isOpen ? 'bg-brand-50/60' : 'hover:bg-paper'}`}>
-                  <span className={`flex h-10 w-10 flex-none items-center justify-center rounded-full font-display text-sm font-bold transition-all duration-300 ${isOpen ? 'bg-brand-600 text-white scale-110' : 'bg-brand-50 text-brand-700'}`}>{s.num}</span>
+                  <span className={`flex h-10 w-10 flex-none items-center justify-center rounded-full font-display text-sm font-bold transition-all duration-300 ${isOpen ? 'bg-brand-600 text-white scale-110 shadow-[0_4px_12px_-4px_rgba(181,71,46,0.4)]' : 'bg-brand-50 text-brand-700'}`}>{isOpen ? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><path d={s.icon}/></svg> : s.num}</span>
                   <div className="flex-1">
                     <span className={`block text-lg font-bold tracking-tight transition-colors ${isOpen ? 'text-brand-800' : 'text-ink-800'}`}>{s.label}</span>
                     <span className="block text-xs text-ink-400">{s.sub}</span>
@@ -300,6 +300,8 @@ export function LandingPage() {
     </div>
   );
 }
+
+
 
 
 
