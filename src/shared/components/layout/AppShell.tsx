@@ -13,7 +13,7 @@ export function AppShell() {
       <a href="#main" className="visually-hidden focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand-600 focus:px-4 focus:py-2 focus:text-white">跳到主内容</a>
 
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-line bg-paper/85 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-line bg-paper/85 backdrop-blur-md shadow-[0_1px_8px_-4px_rgba(33,29,26,0.06)]">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <Link to="/" className="display text-lg font-semibold transition-colors hover:text-brand-700">CareerCopilot</Link>
@@ -31,7 +31,7 @@ export function AppShell() {
                 <div key={s.to} className="flex items-center">
                   {i > 0 && <span className="mx-1 h-px w-6 bg-line" />}
                   <NavLink to={s.to}
-                    className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all ${isActive ? 'bg-brand-700 text-white shadow-sm' : 'text-ink-600 hover:bg-brand-50 hover:text-brand-700'}`}>
+                    className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium transition-all duration-300 active:scale-[0.95] ${isActive ? 'bg-brand-700 text-white shadow-[0_2px_12px_-4px_rgba(181,71,46,0.4)]' : 'text-ink-600 hover:bg-brand-50 hover:text-brand-700 hover:shadow-sm'}`}>
                     <span className={`font-display text-xs font-bold ${isActive ? 'text-white/70' : 'text-brand-600'}`}>{s.num}</span>
                     <span className="hidden sm:inline">{s.label}</span>
                   </NavLink>
@@ -48,10 +48,11 @@ export function AppShell() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-line py-5 text-center text-xs text-ink-400">
+      <footer className="border-t border-line bg-gradient-to-b from-transparent to-brand-50/20 py-5 text-center text-xs text-ink-400">
         CareerCopilot · 证据优先 · 不展示未经校准的成功率
       </footer>
     </div>
   );
 }
+
 
