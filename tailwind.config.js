@@ -41,7 +41,7 @@ export default {
           500: 'oklch(62% 0.13 85 / <alpha-value>)',
           600: 'oklch(52% 0.12 85 / <alpha-value>)',
         },
-        line: 'rgba(33,29,26,0.09)',
+        line: 'rgba(33,29,26,0.14)',
         scrim: 'rgba(33,29,26,0.5)',
       },
       fontFamily: {
@@ -91,3 +91,4 @@ export default {
   },
   plugins: [],
 };
+

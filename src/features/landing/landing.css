@@ -15,9 +15,9 @@
   stroke: oklch(72% 0.01 50);
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
-  opacity: 0.04;
+  opacity: 0.14;
 }
-.landing-contour .flow { opacity: 0.03; }
+.landing-contour .flow { opacity: 0.10; }
 .landing-contour g {
   transform: translate(calc((var(--mx, 0.5) - 0.5) * var(--dx, 0px)), calc((var(--my, 0.5) - 0.5) * var(--dy, 0px)));
   transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
@@ -45,8 +45,8 @@
   --cx: 50%;
   --cy: 50%;
   background:
-    radial-gradient(ellipse 90% 70% at 15% 85%, rgba(226,114,91,0.07), transparent),
-    radial-gradient(ellipse 50% 40% at 90% 15%, rgba(62,142,107,0.05), transparent),
+    radial-gradient(ellipse 90% 70% at 15% 85%, rgba(226,114,91,0.20), transparent),
+    radial-gradient(ellipse 50% 40% at 90% 15%, rgba(62,142,107,0.14), transparent),
     radial-gradient(ellipse 120% 90% at 50% -10%, rgba(244,238,228,0.95), transparent);
 }
 /* Grain texture overlay */
@@ -54,7 +54,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
   background-size: 256px 256px;
   pointer-events: none;
   z-index: 0;
@@ -316,7 +316,7 @@
 
 /* === Dot-grid pattern for accordion container === */
 #accordion-section > div {
-  background-image: radial-gradient(circle, rgba(33,29,26,0.03) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(33,29,26,0.09) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
@@ -328,8 +328,8 @@
   right: 12px;
   width: 40px;
   height: 40px;
-  border-right: 1.5px solid rgba(226,114,91,0.15);
-  border-bottom: 1.5px solid rgba(226,114,91,0.15);
+  border-right: 1.5px solid rgba(226,114,91,0.3);
+  border-bottom: 1.5px solid rgba(226,114,91,0.3);
   border-radius: 0 0 8px 0;
   pointer-events: none;
 }
@@ -345,8 +345,10 @@
   left: -60px;
   width: 280px;
   height: 280px;
-  background: radial-gradient(circle, rgba(226,114,91,0.05), transparent 70%);
+  background: radial-gradient(circle, rgba(226,114,91,0.10), transparent 70%);
   pointer-events: none;
   z-index: -1;
 }
+
+
 
