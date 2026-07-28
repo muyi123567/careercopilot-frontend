@@ -138,7 +138,7 @@ export function ResultsPage() {
       <div className="flex gap-1 overflow-x-auto border-b border-line pb-px -mx-4 px-4 sm:mx-0 sm:px-0">
         {TABS.map((t) => (
           <button key={t.id} type="button" onClick={() => setTab(t.id)}
-            className={`relative whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 active:scale-[0.95] ${tab === t.id ? 'bg-brand-50 text-brand-700' : 'text-ink-500 hover:bg-ink-900/[0.03] hover:text-ink-800'}`}>
+            className={`relative whitespace-nowrap rounded-lg px-3.5 py-2 text-[13px] font-medium transition-all duration-200 active:scale-[0.95] sm:px-4 sm:text-sm ${tab === t.id ? 'bg-brand-50/80 text-brand-700' : 'text-ink-500 hover:bg-ink-900/[0.03] hover:text-ink-700'}`}>
             {t.label}
             {tab === t.id && <span className="absolute inset-x-3 -bottom-px h-0.5 rounded-full bg-brand-600" />}
           </button>
@@ -384,5 +384,6 @@ function Section({ title, items, tone }: { title: string; items: string[]; tone?
     <div><p className="eyebrow mb-1">{title}</p><ul className={`list-disc pl-4 text-xs ${tone ?? 'text-ink-700'}`}>{items.map((it, i) => <li key={i}>{it}</li>)}</ul></div>
   );
 }
+
 
 
