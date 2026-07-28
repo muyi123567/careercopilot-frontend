@@ -126,10 +126,10 @@ export function WorkspacePage() {
         {active === 'input' && (
           <div className="flex h-full flex-col gap-4">
             <button type="button" onClick={() => inputRef.current?.click()} onDragOver={(e) => e.preventDefault()} onDrop={onDrop}
-              className="group flex flex-1 flex-col items-center justify-center gap-3 rounded-xl border-[1.5px] border-dashed border-line py-14 transition-all duration-300 hover:border-brand-400 hover:bg-brand-50/40 hover:shadow-[0_0_0_4px_rgba(226,114,91,0.08)] active:scale-[0.99]">
+              className="group flex flex-1 flex-col items-center justify-center gap-3.5 rounded-2xl border-[1.5px] border-dashed border-line/80 py-16 transition-all duration-300 hover:border-brand-300 hover:bg-brand-50/30 active:scale-[0.99]">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-10 w-10 text-brand-500 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
-              <strong className="text-sm text-ink-700">{fileName || '拖入或选择简历'}</strong>
-              <span className="text-xs text-ink-400">PDF · TXT · MD · CSV · JSON · 本地解析，原始文件不上传</span>
+              <strong className="text-sm font-semibold text-ink-700">{fileName || '拖入或选择简历'}</strong>
+              <span className="text-[11px] text-ink-400">PDF · TXT · MD · CSV · JSON · 本地解析，原始文件不上传</span>
             </button>
             <input ref={inputRef} className="sr-only" type="file" accept=".pdf,.txt,.md,.csv,.json" onChange={onFileChange} />
           </div>
@@ -233,6 +233,7 @@ export function WorkspacePage() {
     </div>
   );
 }
+
 
 
 
