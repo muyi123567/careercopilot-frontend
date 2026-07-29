@@ -34,7 +34,7 @@ class IdentityContractTests(unittest.TestCase):
         self.assertNotIn("web-session", CLIENT + SESSION)
 
     def test_api_base_is_runtime_configured(self):
-        self.assertIn("window.CAREERCOPILOT_CONFIG", CLIENT)
+        self.assertIn("window.EVIDWAY_CONFIG", CLIENT)
         self.assertIn("cfg.apiBase", CLIENT)
 
 
