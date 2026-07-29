@@ -45,7 +45,7 @@ export function NotFoundPage() {
           <>
             <h1 className="font-display text-3xl font-semibold tracking-tight text-ink-900">网络已断开</h1>
             <p className="mt-3 max-w-md text-sm leading-relaxed text-ink-500">
-              当前设备没有网络连接。CareerCopilot 的核心推演功能需要网络支持。请检查网络设置后重试。
+              当前设备没有网络连接。见微行远 EvidWay 的核心推演功能需要网络支持。请检查网络设置后重试。
             </p>
             <div className="mt-4 rounded-xl border border-line bg-white/60 px-4 py-3 text-xs text-ink-400">
               提示：已加载的页面内容仍可浏览，但新的推演请求无法完成。
@@ -88,4 +88,5 @@ export function NotFoundPage() {
     </div>
   );
 }
+
 

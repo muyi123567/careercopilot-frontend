@@ -96,7 +96,7 @@ export function SettingsPage() {
       <div className="card p-4 sm:p-6">
         <h2 className="text-base font-semibold text-ink-800">关于</h2>
         <div className="mt-3 space-y-2 text-sm text-ink-600">
-          <p>CareerCopilot V2 · 证据优先的职业导航</p>
+          <p>见微行远 EvidWay V2 · 证据优先的职业导航</p>
           <p className="text-xs text-ink-400">版本 0.1.0 · 本地开发模式 · 不展示未经校准的成功率</p>
         </div>
       </div>
@@ -109,5 +109,6 @@ export function SettingsPage() {
     </div>
   );
 }
+
 
 

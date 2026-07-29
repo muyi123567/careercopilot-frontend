@@ -12,7 +12,7 @@ describe('getRuntimeConfig', () => {
 
   it('uses an injected backend URL', () => {
     (globalThis as { window?: Window }).window = {
-      CAREERCOPILOT_CONFIG: { apiBase: 'https://example.test' },
+      EVIDWAY_CONFIG: { apiBase: 'https://example.test' },
     } as Window;
 
     expect(getRuntimeConfig()).toMatchObject({
@@ -29,3 +29,5 @@ describe('getRuntimeConfig', () => {
     ).rejects.toThrow('尚未配置职业导航后端地址');
   });
 });
+
+

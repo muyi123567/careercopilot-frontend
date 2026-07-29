@@ -46,7 +46,7 @@ export function AuthPage() {
   return (
     <main className="auth-page">
       <div className="auth-card">
-        <h1>CareerCopilot</h1>
+        <h1>见微行远 EvidWay</h1>
         <p className="auth-subtitle">
           {mode === 'login' ? '登录你的账户' : '创建新账户'}
         </p>
@@ -98,4 +98,5 @@ export function AuthPage() {
     </main>
   );
 }
+
 

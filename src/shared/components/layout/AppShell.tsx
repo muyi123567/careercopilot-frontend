@@ -16,7 +16,7 @@ export function AppShell() {
       <header className="sticky top-0 z-40 border-b border-line bg-paper/85 backdrop-blur-md shadow-[0_1px_8px_-4px_rgba(33,29,26,0.06)]">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <Link to="/" className="font-display text-lg font-bold tracking-tight text-ink-900 transition-colors hover:text-brand-700">Career<b className="text-brand-700">Copilot</b></Link>
+            <Link to="/" className="font-display text-lg font-bold tracking-tight text-ink-900 transition-colors hover:text-brand-700">见微<b className="text-brand-700">行远</b></Link>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2.5 py-0.5 text-[11px] font-medium text-brand-700">
               <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
               临时会话
@@ -51,9 +51,10 @@ export function AppShell() {
 
       {/* Footer */}
       <footer className="border-t border-line/50 py-6 text-center text-[11px] text-ink-300">
-        CareerCopilot · 证据优先 · 不展示未经校准的成功率
+        见微行远 EvidWay · 从真实轨迹，看清下一程
       </footer>
     </div>
   );
 }
+
 

@@ -13,16 +13,16 @@ export interface RuntimeConfig {
 
 declare global {
   interface Window {
-    CAREERCOPILOT_CONFIG?: RuntimeConfig;
+    EVIDWAY_CONFIG?: RuntimeConfig;
   }
 }
 
 export function getRuntimeConfig(): RuntimeConfig {
-  // 优先使用 window.CAREERCOPILOT_CONFIG（运行时注入）
+  // 优先使用 window.EVIDWAY_CONFIG（运行时注入）
   // 其次使用 Vite 环境变量（构建时注入）
   const windowConfig = typeof window === 'undefined'
     ? {}
-    : window.CAREERCOPILOT_CONFIG ?? {};
+    : window.EVIDWAY_CONFIG ?? {};
   const envApiBase = import.meta.env.VITE_API_BASE_URL;
   return Object.freeze({
     apiBase: windowConfig.apiBase ?? envApiBase ?? undefined,
@@ -61,3 +61,5 @@ export async function postNavigation(
   });
   return validateNavigationResponse(json);
 }
+
+

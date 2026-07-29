@@ -30,7 +30,7 @@ export function LegalPage({ type }: { type: 'terms' | 'privacy' }) {
 
           {isTerms ? (
             <div className="space-y-6 text-sm leading-relaxed text-ink-600">
-              <section><h2 className="mb-2 text-base font-semibold text-ink-800">1. 服务说明</h2><p>CareerCopilot 是一款证据优先的职业导航工具，通过结构化推演帮助用户理解职业路径。本服务不构成职业建议、就业担保或任何形式的承诺。</p></section>
+              <section><h2 className="mb-2 text-base font-semibold text-ink-800">1. 服务说明</h2><p>见微行远 EvidWay 是一款证据优先的职业导航工具，通过结构化推演帮助用户理解职业路径。本服务不构成职业建议、就业担保或任何形式的承诺。</p></section>
               <section><h2 className="mb-2 text-base font-semibold text-ink-800">2. 使用条件</h2><p>使用本服务即表示你同意：(a) 提供真实、准确的个人信息；(b) 不将推演结果作为唯一决策依据；(c) 理解所有推演均基于有限数据，存在不确定性。</p></section>
               <section><h2 className="mb-2 text-base font-semibold text-ink-800">3. 匿名使用</h2><p>你可以无需注册即可使用核心推演功能。匿名会话数据仅存在于浏览器内存中，关闭页面后即消失。我们不会追踪匿名用户的身份。</p></section>
               <section><h2 className="mb-2 text-base font-semibold text-ink-800">4. 注册账户</h2><p>注册账户后，你可以保存推演历史、创建行动计划、设置检查点提醒。账户数据加密存储，你可以随时导出或删除。</p></section>
@@ -49,9 +49,10 @@ export function LegalPage({ type }: { type: 'terms' | 'privacy' }) {
           )}
         </div>
 
-        <p className="mt-6 text-center text-xs text-ink-400">CareerCopilot · 证据优先 · 不展示未经校准的成功率</p>
+        <p className="mt-6 text-center text-xs text-ink-400">见微行远 EvidWay · 证据优先 · 不展示未经校准的成功率</p>
       </div>
     </div>
   );
 }
+
 

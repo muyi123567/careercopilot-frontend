@@ -113,7 +113,7 @@ export function LandingPage() {
         <div className="mx-auto flex h-14 max-w-[1120px] items-center justify-between px-4 sm:h-[66px] sm:px-6">
           <Link to="/" className="flex items-center gap-[11px]">
             <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[9px] bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-sm"><CompassIcon /></span>
-            <span className="font-display text-[19px] font-bold tracking-tight">Career<b className="text-brand-700">Copilot</b></span>
+            <span className="font-display text-[19px] font-bold tracking-tight">见微<b className="text-brand-700">行远</b></span>
           </Link>
           <div className="flex items-center gap-3">
             <button type="button" title="微信小程序（即将上线）" className="hidden items-center gap-1.5 rounded-full border border-line bg-surface/80 px-4 py-2 text-sm font-medium text-ink-600 transition-all hover:border-teal-600/40 hover:text-teal-700 sm:flex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12h8M12 8v8"/></svg>小程序</button><Link to="/login" className="hidden items-center gap-1.5 rounded-full border border-line bg-surface/80 px-4 py-2 text-sm font-medium text-ink-600 transition-all hover:border-brand-300 hover:text-brand-700 sm:flex">
@@ -159,9 +159,9 @@ export function LandingPage() {
         </div>
         <div className="mx-auto grid w-full max-w-[1120px] items-center gap-8 sm:gap-12 lg:grid-cols-[1.5fr_1fr]">
           <div className="reveal border-l-2 border-brand-500/60 pl-5">
-            <span className="eyebrow-badge inline-flex items-center gap-2 rounded-full bg-brand-100 px-[13px] py-1.5 text-[13px] font-semibold tracking-wide text-brand-800"><ShieldIcon /> 隐私优先 · 明确授权 · 临时处理</span>
+            <span className="eyebrow-badge inline-flex items-center gap-2 rounded-full bg-brand-100 px-[13px] py-1.5 text-[13px] font-semibold tracking-wide text-brand-800"><ShieldIcon /> 证据优先 · 见微知著 · 行远自迩</span>
             <h1 className="mt-4 font-display text-[clamp(1.8rem,5vw,3.7rem)] font-semibold leading-[1.1] tracking-tight sm:mt-5">先<span className="hl-draw">想清楚方向</span>，<br/>再投出每一份简历。</h1>
-            <p className="mt-5 max-w-[30em] text-[1.075rem] leading-relaxed text-ink-600">结构化推演帮你看清职业路径。无需上传简历，授权后才发送脱敏信号。</p>
+            <p className="mt-5 max-w-[30em] text-[1.075rem] leading-relaxed text-ink-600">生涯向量模型，从群体轨迹、市场信号和你的真实反馈中形成判断。方向不是测出来的，是走出来的。</p>
             <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
               <Link to="/workspace" className="hero-btn-primary group inline-flex items-center gap-2.5 rounded-full bg-brand-700 px-6 py-3.5 text-[15px] font-semibold text-white shadow-sm hover:bg-brand-800">开始推演 <ArrowRight /></Link>
               <button type="button" onClick={() => document.getElementById('accordion-section')?.scrollIntoView({ behavior: 'smooth' })} className="hero-btn-secondary inline-flex items-center gap-2.5 rounded-full bg-ink-900/[0.04] px-6 py-3.5 text-[15px] font-semibold text-ink-700 backdrop-blur-sm hover:text-ink-900">看它怎么工作</button>
@@ -236,7 +236,7 @@ export function LandingPage() {
                       {s.id === 'trust' && (
                         <div className="rounded-[10px] bg-ink-900 p-8 text-center text-[#F3EDE6]">
                           <blockquote className="font-display text-[clamp(1.3rem,2.5vw,1.8rem)] font-medium leading-[1.4]">我们靠<b className="text-[#E8896F]">「最小必要数据」</b>建立信任。<br/>不上传原始文件、明确授权、如实说明限制——这是底色，不是功能。</blockquote>
-                          <p className="mt-4 text-sm text-[#B6ABA0]">这就是 CareerCopilot 和那些要你先交简历、再谈服务的产品的区别。</p>
+                          <p className="mt-4 text-sm text-[#B6ABA0]">这就是 见微行远 和那些要你先交简历、再谈服务的产品的区别。</p>
                         </div>
                       )}
                       {/* Capabilities */}
@@ -269,8 +269,8 @@ export function LandingPage() {
                       {/* CTA */}
                       {s.id === 'cta' && (
                         <div className="py-4 text-center">
-                          <h3 className="font-display text-2xl font-semibold">先想清楚，再行动。</h3>
-                          <p className="mx-auto mt-2 max-w-[28em] text-sm text-ink-500">不上传原始文件，明确授权后临时处理。先看清限制，再决定下一步。</p>
+                          <h3 className="font-display text-2xl font-semibold">见微知著，行远自迩。</h3>
+                          <p className="mx-auto mt-2 max-w-[28em] text-sm text-ink-500">从职业轨迹的细微信号中形成判断，用一次次真实行动验证方向。</p>
                           <Link to="/workspace" className="group mt-5 inline-flex items-center gap-2 rounded-full bg-brand-700 px-6 py-3 text-[15px] font-semibold text-white shadow-sm transition-all hover:-translate-y-px hover:bg-brand-800 hover:shadow-md">开始推演 <ArrowRight /></Link>
                         </div>
                       )}
@@ -288,7 +288,7 @@ export function LandingPage() {
         <div className="mx-auto flex max-w-[1120px] flex-wrap items-start justify-between gap-8">
           <div>
             <div className="flex items-center gap-[10px] text-base text-ink-800">
-              <span className="flex h-[26px] w-[26px] items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-white"><CompassIcon /></span>CareerCopilot
+              <span className="flex h-[26px] w-[26px] items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-white"><CompassIcon /></span>见微行远
             </div>
             <p className="mt-3 text-[13px] leading-relaxed text-ink-500">原始文件本地解析<br/>仅在授权后发送脱敏结构化信号</p>
           </div>
@@ -298,11 +298,13 @@ export function LandingPage() {
             <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-left text-ink-600 transition-colors hover:text-brand-700">回到顶部</button>
           </nav>
         </div>
-        <div className="mx-auto mt-8 max-w-[1120px] border-t border-line pt-5 text-center text-[12.5px] text-ink-400">© 2026 CareerCopilot · 原始文件本地解析 · 授权后临时处理</div>
+        <div className="mx-auto mt-8 max-w-[1120px] border-t border-line pt-5 text-center text-[12.5px] text-ink-400">© 2026 见微行远 · 原始文件本地解析 · 授权后临时处理</div>
       </footer>
     </div>
   );
 }
+
+
 
 
 
