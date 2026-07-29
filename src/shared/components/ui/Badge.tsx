@@ -50,3 +50,44 @@ function Badge({
 }
 
 export { Badge, badgeVariants }
+
+/* ===== EvidWay business badge components ===== */
+
+export function PathTypeChip({ type }: { type: string }) {
+  const map: Record<string, string> = {
+    same_industry: '本行业',
+    adjacent: '邻近迁移',
+    cross_industry: '跨行业',
+  };
+  return <Badge variant="secondary">{map[type] ?? type}</Badge>;
+}
+
+export function EvidenceGradeBadge({ grade }: { grade: string }) {
+  const map: Record<string, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
+    strong: { label: '强证据', variant: 'default' },
+    moderate: { label: '中等', variant: 'secondary' },
+    weak: { label: '弱证据', variant: 'outline' },
+    insufficient: { label: '不足', variant: 'destructive' },
+  };
+  const item = map[grade] ?? { label: grade, variant: 'outline' as const };
+  return <Badge variant={item.variant}>{item.label}</Badge>;
+}
+
+export function ClassificationTag({ kind }: { kind: string }) {
+  const map: Record<string, string> = {
+    fact: '事实',
+    inference: '推断',
+    recommendation: '建议',
+  };
+  return <Badge variant="outline">{map[kind] ?? kind}</Badge>;
+}
+
+export function UncertaintyPill({ level }: { level: string }) {
+  const map: Record<string, string> = {
+    low: '低不确定',
+    medium: '中不确定',
+    high: '高不确定',
+    unknown: '未知',
+  };
+  return <Badge variant="ghost">{map[level] ?? level}</Badge>;
+}

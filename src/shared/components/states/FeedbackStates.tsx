@@ -34,7 +34,7 @@ export function ErrorState({
       )}
       <div className="mt-4 flex flex-wrap gap-2">
         {onRetry && (
-          <Button variant="danger" size="sm" onClick={onRetry}>
+          <Button variant="destructive" size="sm" onClick={onRetry}>
             重试
           </Button>
         )}
