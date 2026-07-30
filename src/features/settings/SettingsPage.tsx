@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getStoredAuth, clearStoredAuth } from '../auth/useAuth';
+import { useAuth } from '../auth/useAuth';
 
 export function SettingsPage() {
   const navigate = useNavigate();
-  const auth = getStoredAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const [toast, setToast] = useState('');
 
   function showToast(msg: string) {
@@ -12,8 +12,8 @@ export function SettingsPage() {
     setTimeout(() => setToast(''), 3000);
   }
 
-  function handleLogout() {
-    clearStoredAuth();
+  async function handleLogout() {
+    await logout();
     navigate('/login');
   }
 
@@ -31,19 +31,19 @@ export function SettingsPage() {
           <div className="flex items-center justify-between rounded-xl border border-line bg-paper px-4 py-3">
             <div>
               <p className="text-sm font-medium text-ink-700">登录状态</p>
-              <p className="text-xs text-ink-400">{auth.uid ? `已登录：${auth.uid}` : '匿名会话（未登录）'}</p>
+              <p className="text-xs text-ink-400">{isAuthenticated ? `已登录：${user?.display_name || user?.email || user?.user_id}` : '匿名会话（未登录）'}</p>
             </div>
-            <span className={`h-2.5 w-2.5 rounded-full ${auth.uid ? 'bg-teal-500' : 'bg-ink-300'}`} />
+            <span className={`h-2.5 w-2.5 rounded-full ${isAuthenticated ? 'bg-teal-500' : 'bg-ink-300'}`} />
           </div>
           <div className="flex items-center justify-between rounded-xl border border-line bg-paper px-4 py-3">
             <div>
-              <p className="text-sm font-medium text-ink-700">Token 有效期</p>
-              <p className="text-xs text-ink-400">JWT HS256 · 2 小时自动过期</p>
+              <p className="text-sm font-medium text-ink-700">会话类型</p>
+              <p className="text-xs text-ink-400">Cookie 会话 · 服务端管理</p>
             </div>
-            <span className="rounded-full bg-gold-50 px-2.5 py-0.5 text-[11px] font-medium text-gold-600">2h</span>
+            <span className="rounded-full bg-gold-50 px-2.5 py-0.5 text-[11px] font-medium text-gold-600">HttpOnly</span>
           </div>
         </div>
-        {auth.uid && (
+        {isAuthenticated && (
           <button type="button" onClick={handleLogout}
             className="mt-4 rounded-full border border-red-200 bg-red-50 px-5 py-2 text-sm font-medium text-red-700 transition-all hover:bg-red-100 active:scale-95">
             退出登录
@@ -109,6 +109,3 @@ export function SettingsPage() {
     </div>
   );
 }
-
-
-

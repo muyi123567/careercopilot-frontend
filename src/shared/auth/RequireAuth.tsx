@@ -9,9 +9,8 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useJwtAuth();
 
   if (!isAuthenticated) {
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return <>{children}</>;
 }
-

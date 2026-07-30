@@ -1,58 +1,66 @@
-import { useState, useCallback } from 'react';
+/**
+ * Cookie-session auth hook.
+ * Server sets HttpOnly cookie on login/register; no localStorage token.
+ * Auth state verified via GET /api/v1/auth/me.
+ */
+import { useState, useCallback, useEffect } from 'react';
 import { getRuntimeConfig } from '../../shared/api/client';
 
-const TOKEN_KEY = 'cc_access_token';
-const UID_KEY = 'cc_uid';
-
-interface AuthResponse {
-  access_token: string;
-  token_type: string;
-  uid: string;
+interface UserInfo {
+  user_id: string;
+  status: string;
+  display_name: string | null;
+  email?: string;
 }
 
 interface AuthState {
-  token: string | null;
-  uid: string | null;
+  user: UserInfo | null;
   loading: boolean;
   error: string;
 }
 
-export function getStoredAuth(): { token: string | null; uid: string | null } {
-  return {
-    token: localStorage.getItem(TOKEN_KEY),
-    uid: localStorage.getItem(UID_KEY),
-  };
+function getApiBase(): string {
+  const apiBase = getRuntimeConfig().apiBase?.replace(/\/$/, '');
+  if (!apiBase) throw new Error('后端地址未配置');
+  return apiBase;
 }
 
-export function clearStoredAuth() {
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(UID_KEY);
-}
-
-function storeAuth(data: AuthResponse) {
-  localStorage.setItem(TOKEN_KEY, data.access_token);
-  localStorage.setItem(UID_KEY, data.uid);
+async function fetchMe(): Promise<UserInfo | null> {
+  try {
+    const apiBase = getApiBase();
+    const res = await fetch(`${apiBase}/api/v1/auth/me`, {
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (res.ok) return await res.json();
+    return null;
+  } catch {
+    return null;
+  }
 }
 
 export function useAuth() {
-  const stored = getStoredAuth();
   const [state, setState] = useState<AuthState>({
-    token: stored.token,
-    uid: stored.uid,
-    loading: false,
+    user: null,
+    loading: true,
     error: '',
   });
+
+  // On mount, check existing session via /auth/me
+  useEffect(() => {
+    (async () => {
+      const user = await fetchMe();
+      setState({ user, loading: false, error: '' });
+    })();
+  }, []);
 
   const login = useCallback(async (email: string, password: string) => {
     setState((s) => ({ ...s, loading: true, error: '' }));
     try {
-      const apiBase = getRuntimeConfig().apiBase?.replace(/\/$/, '');
-      if (!apiBase) {
-        setState((s) => ({ ...s, loading: false, error: '尚未配置后端服务地址，无法登录。' }));
-        return false;
-      }
+      const apiBase = getApiBase();
       const res = await fetch(`${apiBase}/api/v1/auth/login`, {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
@@ -65,9 +73,9 @@ export function useAuth() {
         setState((s) => ({ ...s, loading: false, error: (detail as { detail?: string }).detail || `登录失败 (${res.status})` }));
         return false;
       }
-      const data: AuthResponse = await res.json();
-      storeAuth(data);
-      setState({ token: data.access_token, uid: data.uid, loading: false, error: '' });
+      // Cookie set by server; verify session
+      const user = await fetchMe();
+      setState({ user, loading: false, error: '' });
       return true;
     } catch {
       setState((s) => ({ ...s, loading: false, error: '网络连接失败，请检查网络后重试。' }));
@@ -78,13 +86,10 @@ export function useAuth() {
   const register = useCallback(async (email: string, password: string) => {
     setState((s) => ({ ...s, loading: true, error: '' }));
     try {
-      const apiBase = getRuntimeConfig().apiBase?.replace(/\/$/, '');
-      if (!apiBase) {
-        setState((s) => ({ ...s, loading: false, error: '尚未配置后端服务地址，无法注册。' }));
-        return false;
-      }
+      const apiBase = getApiBase();
       const res = await fetch(`${apiBase}/api/v1/auth/register`, {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
@@ -97,9 +102,9 @@ export function useAuth() {
         setState((s) => ({ ...s, loading: false, error: (detail as { detail?: string }).detail || `注册失败 (${res.status})` }));
         return false;
       }
-      const data: AuthResponse = await res.json();
-      storeAuth(data);
-      setState({ token: data.access_token, uid: data.uid, loading: false, error: '' });
+      // Cookie set by server; verify session
+      const user = await fetchMe();
+      setState({ user, loading: false, error: '' });
       return true;
     } catch {
       setState((s) => ({ ...s, loading: false, error: '网络连接失败，请检查网络后重试。' }));
@@ -107,46 +112,24 @@ export function useAuth() {
     }
   }, []);
 
-  const wechatLogin = useCallback(async (code: string) => {
-    setState((s) => ({ ...s, loading: true, error: '' }));
+  const logout = useCallback(async () => {
     try {
-      const apiBase = getRuntimeConfig().apiBase?.replace(/\/$/, '');
-      if (!apiBase) {
-        setState((s) => ({ ...s, loading: false, error: '尚未配置后端服务地址，无法登录。' }));
-        return false;
-      }
-      const res = await fetch(`${apiBase}/api/v1/auth/wechat-login`, {
+      const apiBase = getApiBase();
+      await fetch(`${apiBase}/api/v1/auth/logout`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code }),
+        credentials: 'include',
       });
-      if (res.status === 401) {
-        setState((s) => ({ ...s, loading: false, error: '微信授权失败，请重试。' }));
-        return false;
-      }
-      if (res.status === 501) {
-        setState((s) => ({ ...s, loading: false, error: '微信登录暂未开放，请使用邮箱登录。' }));
-        return false;
-      }
-      if (!res.ok) {
-        const detail = await res.json().catch(() => ({}));
-        setState((s) => ({ ...s, loading: false, error: (detail as { detail?: string }).detail || `微信登录失败 (${res.status})` }));
-        return false;
-      }
-      const data: AuthResponse = await res.json();
-      storeAuth(data);
-      setState({ token: data.access_token, uid: data.uid, loading: false, error: '' });
-      return true;
-    } catch {
-      setState((s) => ({ ...s, loading: false, error: '网络连接失败，请检查网络后重试。' }));
-      return false;
-    }
+    } catch { /* best effort */ }
+    setState({ user: null, loading: false, error: '' });
   }, []);
 
-  const logout = useCallback(() => {
-    clearStoredAuth();
-    setState({ token: null, uid: null, loading: false, error: '' });
-  }, []);
-
-  return { ...state, login, register, wechatLogin, logout, isAuthenticated: !!state.token };
+  return {
+    ...state,
+    token: null, // backward compat
+    uid: state.user?.user_id ?? null,
+    login,
+    register,
+    logout,
+    isAuthenticated: !!state.user,
+  };
 }

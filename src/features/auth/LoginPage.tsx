@@ -13,7 +13,7 @@ export function LoginPage() {
   }
 
   function handleAuthSuccess() {
-    navigate('/workspace');
+    navigate('/occupations');
   }
 
   return (
@@ -83,9 +83,9 @@ export function LoginPage() {
           <p className="mb-6 text-center text-[11px] leading-relaxed text-ink-400">小程序内免注册 · 一键授权即可使用</p>
 
           {/* Anonymous entry */}
-          <button type="button" className="auth-btn-anonymous mb-6" onClick={() => navigate('/workspace')}>
+          <button type="button" className="auth-btn-anonymous mb-6" onClick={() => navigate('/occupations')}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
-            匿名开始推演
+            匿名探索职业
           </button>
           <p className="mb-7 text-center text-[11px] leading-relaxed text-ink-400">无需注册 · 不上传简历 · 不留存 · 随时关闭</p>
 
@@ -111,5 +111,3 @@ export function LoginPage() {
     </div>
   );
 }
-
-

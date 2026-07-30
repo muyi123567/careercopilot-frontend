@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { AppShell } from './shared/components/layout/AppShell';
 import { LandingPage } from './features/landing/LandingPage';
 import { WorkspacePage } from './features/workspace/WorkspacePage';
@@ -12,14 +13,29 @@ import { OnboardingPage } from './features/onboarding/OnboardingPage';
 import { HistoryPage } from './features/history/HistoryPage';
 import { CareerMapPage } from './features/career-map/CareerMapPage';
 import { RadarPage } from './features/radar/RadarPage';
+import { OccupationSearchPage } from './features/occupations/OccupationSearchPage';
+import { OccupationDetailPage } from './features/occupations/OccupationDetailPage';
 
 export default function App() {
+  const navigate = useNavigate();
+
+  // Global 401 listener: redirect to login
+  useEffect(() => {
+    function handleUnauthorized() {
+      navigate('/login');
+    }
+    window.addEventListener('auth:unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
+  }, [navigate]);
+
   return (
     <Routes>
       {/* 全宽独立布局页面 */}
       <Route index element={<LandingPage />} />
       <Route path="login" element={<LoginPage />} />
       <Route path="onboarding" element={<OnboardingPage />} />
+      <Route path="occupations" element={<OccupationSearchPage />} />
+      <Route path="occupations/:slug" element={<OccupationDetailPage />} />
       <Route path="terms" element={<LegalPage type="terms" />} />
       <Route path="privacy" element={<LegalPage type="privacy" />} />
       <Route path="404" element={<NotFoundPage />} />
