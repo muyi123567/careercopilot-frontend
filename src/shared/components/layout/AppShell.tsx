@@ -1,7 +1,8 @@
 import { NavLink, Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useCookieAuth } from '../../auth/AuthContext';
 import { useCredits } from '../../api/hooks';
+import { BrandMark } from '../BrandMark';
 
 // --- Navigation data (grouped for sidebar) ---
 
@@ -50,8 +51,72 @@ function NavIcon({ d, className }: { d: string; className?: string }) {
   );
 }
 
-export function AppShell() {
+/* User dropdown menu */
+function UserMenu() {
   const { user, logout } = useCookieAuth();
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
+  const menuItems = [
+    { label: '概览', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6', to: '/app' },
+    { label: '我的档案', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', to: '/app/profile' },
+    { label: '设置', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z', to: '/app/settings' },
+  ];
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 rounded-lg px-1.5 py-1 transition-colors hover:bg-ink-100/60"
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
+        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-ink-900 text-[10px] font-medium text-white">
+          {(user?.display_name ?? 'U').charAt(0).toUpperCase()}
+        </div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`h-3.5 w-3.5 text-ink-400 transition-transform ${open ? 'rotate-180' : ''}`} aria-hidden="true">
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full z-50 mt-1.5 w-44 rounded-xl border border-line bg-surface py-1.5 shadow-lift animate-slide-up" role="menu">
+          {menuItems.map((item) => (
+            <button
+              key={item.to}
+              role="menuitem"
+              onClick={() => { setOpen(false); navigate(item.to); }}
+              className="flex w-full items-center gap-2.5 px-3.5 py-2 text-sm text-ink-700 transition-colors hover:bg-ink-100/50"
+            >
+              <NavIcon d={item.icon} className="h-4 w-4 text-ink-400" />
+              {item.label}
+            </button>
+          ))}
+          <div className="mx-3 my-1.5 border-t border-line" />
+          <button
+            role="menuitem"
+            onClick={() => { setOpen(false); void logout(); }}
+            className="flex w-full items-center gap-2.5 px-3.5 py-2 text-sm text-red-600 transition-colors hover:bg-red-50"
+          >
+            <NavIcon d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" className="h-4 w-4" />
+            退出登录
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function AppShell() {
   const { data: credits } = useCredits();
   const location = useLocation();
   const navigate = useNavigate();
@@ -66,7 +131,8 @@ export function AppShell() {
     <div className="flex min-h-[100dvh] bg-paper">
       {/* === Desktop sidebar === */}
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-line bg-surface lg:flex">
-        <div className="flex h-14 items-center border-b border-line px-5">
+        <div className="flex h-14 items-center gap-2 border-b border-line px-5">
+          <BrandMark size={20} className="text-ink-900" />
           <Link to="/app" className="text-[15px] font-bold tracking-tight text-ink-900">
             见微<span className="text-accent-500">行远</span>
           </Link>
@@ -110,13 +176,7 @@ export function AppShell() {
         </nav>
 
         <div className="border-t border-line p-4">
-          <p className="truncate text-xs font-medium text-ink-600">{user?.display_name ?? '用户'}</p>
-          <button
-            onClick={() => void logout()}
-            className="mt-1 text-xs text-ink-400 underline-offset-2 transition-colors hover:text-ink-700 hover:underline"
-          >
-            退出登录
-          </button>
+          <UserMenu />
         </div>
       </aside>
 
@@ -125,6 +185,7 @@ export function AppShell() {
         {/* Top bar */}
         <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-line bg-surface/90 px-4 backdrop-blur-sm sm:px-6">
           <div className="flex items-center gap-3 lg:hidden">
+            <BrandMark size={18} className="text-ink-900" />
             <Link to="/app" className="text-sm font-bold text-ink-900">
               见微<span className="text-accent-500">行远</span>
             </Link>
@@ -156,9 +217,14 @@ export function AppShell() {
               </svg>
             </button>
 
-            {/* Avatar */}
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-ink-900 text-xs font-medium text-white" aria-hidden="true">
-              {(user?.display_name ?? 'U').charAt(0).toUpperCase()}
+            {/* User dropdown (desktop) */}
+            <div className="hidden lg:block">
+              <UserMenu />
+            </div>
+
+            {/* Avatar (mobile - simple) */}
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-ink-900 text-[10px] font-medium text-white lg:hidden" aria-hidden="true">
+              {((() => { try { return ''; } catch { return 'U'; } })())}
             </div>
           </div>
         </header>

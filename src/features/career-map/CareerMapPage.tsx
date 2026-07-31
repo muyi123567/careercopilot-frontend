@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useOccupations, type Occupation } from '../../shared/api/hooks';
+import { EmptyMap } from '../../shared/components/illustrations/EmptyStates';
 
 function GroupSection({ group, items }: { group: string; items: Occupation[] }) {
   const [open, setOpen] = useState(true);
@@ -66,18 +67,26 @@ export function CareerMapPage() {
         <p className="mt-1 text-sm text-ink-500">浏览可选路径，找到你的下一程方向</p>
       </section>
 
-      {/* Current node guidance */}
-      <div className="rounded-xl border border-dashed border-line p-4">
+      {/* Current node -> target node path visualization */}
+      <div className="rounded-xl border border-line bg-surface p-4">
         <div className="flex items-center gap-3">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ink-900 text-xs font-bold text-white" aria-hidden="true">
-            你
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-medium text-ink-800">先告诉我们你现在做什么</p>
-            <p className="text-xs text-ink-400">设定当前职业后，可以看到从这里出发的推荐路径。</p>
+          {/* Current node (solid) */}
+          <div className="flex flex-col items-center gap-1">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ink-900 text-xs font-bold text-white">你</span>
+            <span className="text-[10px] text-ink-400">当前</span>
           </div>
-          <Link to="/app/profile" className="shrink-0 text-xs font-medium text-accent-600 hover:text-accent-700">设定</Link>
+          {/* Dashed path */}
+          <div className="flex-1 border-t-2 border-dashed border-ink-200" />
+          {/* Target node (hollow) */}
+          <div className="flex flex-col items-center gap-1">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-dashed border-ink-300 text-xs text-ink-400">?</span>
+            <span className="text-[10px] text-ink-400">目标</span>
+          </div>
         </div>
+        <p className="mt-3 text-center text-xs text-ink-400">
+          设定当前职业后，可以看到从这里出发的推荐路径。
+          <Link to="/app/profile" className="ml-1 font-medium text-accent-600 hover:text-accent-700">去设定</Link>
+        </p>
       </div>
 
       {/* Search */}
@@ -116,10 +125,12 @@ export function CareerMapPage() {
           </button>
         </div>
       ) : groups.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-line p-8 text-center">
-          <p className="text-sm text-ink-400">
-            {search ? `没有找到匹配「${search}」的职业，换个关键词试试。` : '暂无职业数据。'}
+        <div className="flex flex-col items-center rounded-xl border border-dashed border-line p-10 text-center">
+          <EmptyMap />
+          <p className="mt-3 text-sm font-medium text-ink-600">
+            {search ? `没有找到匹配「${search}」的职业` : '暂无职业数据'}
           </p>
+          <p className="mt-1 text-xs text-ink-400">换个关键词试试，或等待数据更新。</p>
         </div>
       ) : (
         <div className="space-y-3">

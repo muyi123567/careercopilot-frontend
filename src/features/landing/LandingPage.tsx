@@ -1,180 +1,165 @@
-import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './landing.css';
+import { BrandMark } from '../../shared/components/BrandMark';
 
-/* ===== Scroll Reveal ===== */
-function useReveal() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (rm || !('IntersectionObserver' in window)) {
-      ref.current?.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => { entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); },
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' },
-    );
-    const els = ref.current?.querySelectorAll('.reveal');
-    els?.forEach((el) => io.observe(el));
-    const timer = setTimeout(() => { els?.forEach((el) => el.classList.add('in')); }, 600);
-    return () => { io.disconnect(); clearTimeout(timer); };
-  }, []);
-  return ref;
-}
-
-/* ===== Icons ===== */
-const CompassIcon = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-[17px] w-[17px]"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>);
-const ArrowRight = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 transition-transform group-hover:translate-x-[3px]"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>);
-
-/* ===== Evidence Data ===== */
-const EVIDENCE_CARDS = [
+/* Feature data for bento section */
+const FEATURES = [
   {
-    tag: '群体轨迹',
-    tagColor: 'bg-brand-50 text-brand-700',
-    title: '后端 → 技术 PM，38% 的迁移概率',
-    body: '基于 128 条真实转岗轨迹。不是测试分数，是走过这条路的人留下的脚印。',
-    source: '来源：脉脉职言 + 拉勾 JD 分析',
+    icon: 'M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7',
+    title: '群体轨迹证据',
+    desc: '基于真实转岗轨迹统计，每条建议标注样本量和数据来源，不编造确定性。',
+    large: true,
   },
   {
-    tag: '市场信号',
-    tagColor: 'bg-teal-50 text-teal-700',
-    title: '技术 PM 需求同比 +15%，一线集中',
-    body: '市场热度不等于个人适合度。我们标注样本量和截止时间，不编一个好看的总分。',
-    source: '来源：Boss 直聘 2025 Q4 数据',
+    icon: 'M13 10V3L4 14h7v7l9-11h-7z',
+    title: '下一步行动',
+    desc: '不给你岗位表，给你可验证的下一步。',
+    large: false,
   },
   {
-    tag: '个人反馈',
-    tagColor: 'bg-gold-50 text-gold-600',
-    title: '「帮团队砍掉没人用的功能」',
-    body: '这就是产品判断的雏形。你已经在做「该不该做」的取舍了——只是还没命名它。',
-    source: '来源：匿名对话 · 不留存',
+    icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
+    title: '隐私优先',
+    desc: '原始文件本地解析，授权后仅发送结构化信号。',
+    large: false,
   },
 ];
 
-/* ===== Main Component ===== */
 export function LandingPage() {
-  const rootRef = useReveal();
-  const [activeChat, setActiveChat] = useState(false);
-
   return (
-    <div ref={rootRef} className="min-h-screen overflow-x-clip bg-[linear-gradient(168deg,#FAF7F2_0%,#F7F1E8_38%,#F4EDE2_68%,#FAF7F2_100%)] font-sans text-ink-800 antialiased">
-
-      {/* Trust Bar */}
-      <div className="trust-bar-gradient flex items-center justify-center gap-2 px-4 py-2 text-xs tracking-wide text-ink-300">
-        <span>原始文件本地解析</span>
-        <span className="h-1 w-1 rounded-full bg-current opacity-40" />
-        <span>授权后仅发送结构化信号</span>
-        <span className="h-1 w-1 rounded-full bg-current opacity-40" />
-        <span>随时关闭，不留痕迹</span>
-      </div>
-
+    <div className="min-h-[100dvh] bg-paper bg-dot-grid font-sans text-ink-800 antialiased">
       {/* Nav */}
-      <header className="sticky top-0 z-[100] border-b border-line/60 bg-paper/90 backdrop-blur-[16px]">
-        <div className="mx-auto flex h-14 max-w-[1120px] items-center justify-between px-4 sm:h-16 sm:px-6">
-          <Link to="/" className="flex items-center gap-2.5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-sm"><CompassIcon /></span>
-            <span className="font-display text-lg font-bold tracking-tight">见微<b className="text-brand-700">行远</b></span>
+      <header className="sticky top-0 z-50 border-b border-line bg-paper/90 backdrop-blur-sm">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+          <Link to="/" className="flex items-center gap-2">
+            <BrandMark size={24} className="text-ink-900" />
+            <span className="text-[15px] font-bold tracking-tight text-ink-900">见微行远</span>
           </Link>
+          <nav className="hidden items-center gap-6 text-sm text-ink-500 md:flex">
+            <a href="#features" className="transition-colors hover:text-ink-900">产品</a>
+            <Link to="/occupations" className="transition-colors hover:text-ink-900">职业库</Link>
+            <a href="#how" className="transition-colors hover:text-ink-900">工作原理</a>
+          </nav>
           <div className="flex items-center gap-3">
-            <Link to="/login" className="hidden rounded-full border border-line bg-surface/80 px-4 py-2 text-sm font-medium text-ink-600 transition-all hover:border-brand-300 hover:text-brand-700 sm:block">登录</Link>
-            <Link to="/workspace" className="group inline-flex items-center gap-2 rounded-full bg-brand-700 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:bg-brand-800">
-              开始推演 <ArrowRight />
+            <Link to="/login" className="text-sm font-medium text-ink-600 transition-colors hover:text-ink-900">
+              登录
+            </Link>
+            <Link to="/login" className="rounded-lg bg-ink-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-ink-700">
+              开始使用
             </Link>
           </div>
         </div>
       </header>
 
-      {/* === Section 1: Hero — Statement, not sales pitch === */}
-      <section className="landing-hero relative px-4 pb-16 pt-14 sm:px-6 sm:pb-20 sm:pt-20">
-        <div className="mx-auto max-w-[1120px]">
-          <div className="reveal max-w-[680px]">
-            <p className="text-xs font-semibold uppercase tracking-widest text-brand-600">证据型职业导航 · 生涯向量模型</p>
-            <h1 className="mt-5 font-display text-[clamp(2rem,5.5vw,3.8rem)] font-semibold leading-[1.08] tracking-tight">
-              从真实轨迹，<br className="hidden sm:block" />看清下一程。
-            </h1>
-            <p className="mt-6 max-w-[32em] text-base leading-relaxed text-ink-600 sm:text-lg">
-              方向不是测出来的，是走出来的。见微行远从群体轨迹、市场变化和你的真实反馈中形成判断——每一条建议都可追溯来源，信息不足处诚实标注「未知」。
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link to="/workspace" className="hero-btn-primary group inline-flex items-center justify-center gap-2.5 rounded-full bg-brand-700 px-7 py-3.5 text-[15px] font-semibold text-white shadow-sm hover:bg-brand-800">
-                开始推演 <ArrowRight />
-              </Link>
-              <Link to="/onboarding" className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[15px] font-medium text-ink-600 transition-colors hover:text-brand-700">
-                了解它怎么工作
-              </Link>
+      {/* Hero - Vercel center-icon style */}
+      <section className="relative flex min-h-[calc(100dvh-4rem)] flex-col items-center justify-center px-4 pt-20 pb-16 text-center">
+        {/* Brand mark with pulse ring */}
+        <div className="relative mb-8">
+          <div className="animate-pulse-ring absolute inset-0 rounded-full border border-ink-900/10" style={{ margin: '-12px' }} />
+          <BrandMark size={120} className="text-ink-900" animate />
+        </div>
+
+        {/* Headline - max 2 lines */}
+        <h1 className="text-4xl font-bold tracking-tight text-ink-900 md:text-5xl lg:text-6xl">
+          从真实轨迹，看清下一程
+        </h1>
+
+        {/* Subtext - max 20 words */}
+        <p className="mt-4 max-w-[480px] text-base leading-relaxed text-ink-500">
+          证据型职业导航，用你的真实经历生成可验证的下一步行动
+        </p>
+
+        {/* CTAs - 1 primary + 1 secondary */}
+        <div className="mt-8 flex items-center gap-3">
+          <Link to="/login" className="rounded-lg bg-ink-900 px-6 py-3 text-sm font-medium text-white transition-all hover:bg-ink-700 active:scale-95">
+            免费开始
+          </Link>
+          <a href="#features" className="rounded-lg border border-line px-6 py-3 text-sm font-medium text-ink-700 transition-colors hover:border-ink-300 hover:bg-surface">
+            了解更多
+          </a>
+        </div>
+      </section>
+
+      {/* Product showcase - perspective tilt */}
+      <section className="px-4 pb-20 sm:px-6">
+        <div className="mx-auto max-w-4xl">
+          <div className="stagger grid gap-4 sm:grid-cols-3">
+            <div className="rounded-xl border border-line bg-surface p-4 shadow-card sm:col-span-1">
+              <div className="mb-2 h-2 w-16 rounded bg-accent-100" />
+              <div className="space-y-1.5">
+                <div className="h-3 w-full rounded bg-ink-100" />
+                <div className="h-3 w-3/4 rounded bg-ink-100" />
+                <div className="h-3 w-1/2 rounded bg-ink-100" />
+              </div>
+              <p className="mt-3 text-[10px] font-medium text-ink-400">职业地图</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface p-4 shadow-card sm:col-span-1">
+              <div className="mb-2 flex gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-success-500/40" />
+                <span className="h-2 w-2 rounded-full bg-accent-500/40" />
+                <span className="h-2 w-2 rounded-full bg-ink-200" />
+              </div>
+              <div className="space-y-1.5">
+                <div className="h-3 w-full rounded bg-ink-100" />
+                <div className="h-3 w-2/3 rounded bg-ink-100" />
+              </div>
+              <p className="mt-3 text-[10px] font-medium text-ink-400">证据台账</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface p-4 shadow-card sm:col-span-1">
+              <div className="mb-2 h-2 w-12 rounded bg-accent-500/30" />
+              <div className="space-y-1.5">
+                <div className="h-3 w-full rounded bg-ink-100" />
+                <div className="h-3 w-4/5 rounded bg-ink-100" />
+                <div className="h-3 w-3/5 rounded bg-ink-100" />
+              </div>
+              <p className="mt-3 text-[10px] font-medium text-ink-400">行动推荐</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* === Section 2: Evidence Trail — the product's voice, not feature list === */}
-      <section className="px-4 pb-16 sm:px-6 sm:pb-20">
-        <div className="mx-auto max-w-[1120px]">
-          <div className="reveal mb-8 flex items-baseline justify-between">
-            <h2 className="font-display text-xl font-semibold tracking-tight sm:text-2xl">三类证据，一个判断</h2>
-            <span className="text-xs text-ink-400">不编总分，不造确定性</span>
-          </div>
-          <div className="reveal grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {EVIDENCE_CARDS.map((card) => (
-              <article key={card.tag} className="group flex flex-col rounded-2xl border border-line/70 bg-surface p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-8px_rgba(33,29,26,0.08)]">
-                <span className={`mb-3 inline-flex w-fit rounded-full px-2.5 py-1 text-[11px] font-semibold ${card.tagColor}`}>{card.tag}</span>
-                <h3 className="text-[15px] font-semibold leading-snug text-ink-800">{card.title}</h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-500">{card.body}</p>
-                <p className="mt-4 border-t border-line/50 pt-3 text-[11px] text-ink-400">{card.source}</p>
-              </article>
+      {/* Features - Bento 2+1 asymmetric (SKILL: no 3x2 equal grid) */}
+      <section id="features" className="px-4 pb-20 sm:px-6">
+        <div className="mx-auto max-w-4xl">
+          <p className="mb-8 text-[11px] font-medium uppercase tracking-[0.18em] text-ink-400">
+            产品特性
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {FEATURES.map((f) => (
+              <div
+                key={f.title}
+                className={`rounded-xl border border-line p-6 transition-colors hover:border-ink-200 ${
+                  f.large ? 'bg-accent-50/50 sm:col-span-2' : 'bg-surface'
+                }`}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mb-3 h-6 w-6 text-ink-600" aria-hidden="true">
+                  <path d={f.icon} />
+                </svg>
+                <h3 className="text-sm font-semibold text-ink-900">{f.title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-ink-500">{f.desc}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* === Section 3: Proof — show the conversation, don't describe it === */}
-      <section className="px-4 pb-16 sm:px-6 sm:pb-20">
-        <div className="mx-auto grid max-w-[1120px] items-center gap-8 lg:grid-cols-[1fr_1.2fr]">
-          <div className="reveal">
-            <h2 className="font-display text-xl font-semibold tracking-tight sm:text-2xl">不给你一张岗位表，<br />给你「下一步做什么、为什么」</h2>
-            <p className="mt-4 text-sm leading-relaxed text-ink-500">
-              匿名对话，不留存。先别急着想「适合不适合」——从你已经做过的事里，找到产品判断的雏形。
-            </p>
-            <button
-              type="button"
-              onClick={() => setActiveChat(!activeChat)}
-              className="mt-6 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-5 py-2.5 text-sm font-medium text-ink-700 transition-all hover:border-brand-300 hover:text-brand-700"
-            >
-              {activeChat ? '收起对话' : '看一段真实对话'}
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`h-4 w-4 transition-transform duration-300 ${activeChat ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6"/></svg>
-            </button>
+      {/* CTA close - left-aligned text + right button (SKILL: not centered) */}
+      <section className="border-t border-line px-4 py-16 sm:px-6">
+        <div className="mx-auto flex max-w-4xl flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+          <div>
+            <h2 className="text-xl font-bold tracking-tight text-ink-900 sm:text-2xl">
+              见微知著，行远自迩
+            </h2>
+            <p className="mt-2 text-sm text-ink-500">从职业轨迹的细微信号中形成判断，用真实行动验证方向。</p>
           </div>
-          <div className={`reveal transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${activeChat ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0 lg:grid-rows-[1fr] lg:opacity-100'}`}>
-            <div className="overflow-hidden">
-              <div className="rounded-2xl bg-ink-900 p-6 sm:p-8">
-                <p className="mb-4 text-[11px] font-medium uppercase tracking-widest text-ink-400">匿名对话 · 不留存</p>
-                <div className="flex flex-col gap-2.5">
-                  <div className="self-end rounded-2xl rounded-br-md bg-brand-500 px-4 py-2.5 text-sm text-white">我到底适不适合做产品？</div>
-                  <div className="self-start rounded-2xl rounded-bl-md bg-ink-700 px-4 py-2.5 text-sm text-ink-200">先别急着想「适合不适合」。你之前做过最像产品的决定是什么？</div>
-                  <div className="self-end rounded-2xl rounded-br-md bg-brand-500 px-4 py-2.5 text-sm text-white">好像是帮团队砍掉了一个没人用的功能。</div>
-                  <div className="self-start rounded-2xl rounded-bl-md bg-ink-700 px-4 py-2.5 text-sm text-ink-200">那就是产品判断的雏形——你已经在做「该不该做」的取舍了。</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* === Section 4: CTA — one line, one action === */}
-      <section className="reveal px-4 pb-20 sm:px-6 sm:pb-24">
-        <div className="mx-auto max-w-[1120px] border-t border-line/50 pt-12 text-center">
-          <p className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">见微知著，行远自迩。</p>
-          <p className="mx-auto mt-3 max-w-[24em] text-sm text-ink-500">从职业轨迹的细微信号中形成判断，用一次次真实行动验证方向。</p>
-          <Link to="/workspace" className="group mt-8 inline-flex items-center gap-2.5 rounded-full bg-brand-700 px-8 py-4 text-base font-semibold text-white shadow-sm transition-all hover:-translate-y-px hover:bg-brand-800 hover:shadow-md">
-            开始推演 <ArrowRight />
+          <Link to="/login" className="shrink-0 rounded-lg bg-ink-900 px-6 py-3 text-sm font-medium text-white transition-all hover:bg-ink-700 active:scale-95">
+            免费开始
           </Link>
         </div>
       </section>
 
-      {/* Footer — one line */}
-      <footer className="border-t border-line/40 py-6 text-center text-xs text-ink-400">
-        <p>© 2026 见微行远 EvidWay · 证据型职业导航 · 原始文件本地解析 · 授权后临时处理</p>
+      {/* Footer */}
+      <footer className="border-t border-line py-8 text-center text-xs text-ink-400">
+        <p>见微行远 EvidWay · 从真实轨迹，看清下一程</p>
+        <p className="mt-1 text-ink-300">原始文件本地解析 · 授权后临时处理 · 不留存</p>
       </footer>
     </div>
   );

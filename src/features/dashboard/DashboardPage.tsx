@@ -1,14 +1,25 @@
 import { Link } from 'react-router-dom';
 import { useCookieAuth } from '../../shared/auth/AuthContext';
 import { useNotifications, useEvidenceDocuments, useCredits } from '../../shared/api/hooks';
+import { DonutChart } from '../../shared/components/charts/DonutChart';
+import { TrendChart } from '../../shared/components/charts/TrendChart';
+import { OnboardingGuide } from '../../shared/components/OnboardingGuide';
 
-function SkeletonBlock({ lines = 2 }: { lines?: number }) {
+function StatCard({ icon, value, label, sub }: { icon: string; value: string | number; label: string; sub?: string }) {
   return (
-    <div className="animate-pulse space-y-2 rounded-xl border border-line bg-surface p-4">
-      <div className="h-3 w-20 rounded bg-ink-200" />
-      {Array.from({ length: lines }).map((_, i) => (
-        <div key={i} className={`h-4 rounded bg-ink-100 ${i === 0 ? 'w-full' : 'w-2/3'}`} />
-      ))}
+    <div className="rounded-xl border border-line bg-surface p-4">
+      <div className="flex items-center gap-3">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent-50">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4 text-accent-600" aria-hidden="true">
+            <path d={icon} />
+          </svg>
+        </span>
+        <div>
+          <p className="text-lg font-bold text-ink-900">{value}</p>
+          <p className="text-[10px] font-medium text-ink-400">{label}</p>
+        </div>
+      </div>
+      {sub && <p className="mt-2 text-[10px] text-ink-400">{sub}</p>}
     </div>
   );
 }
@@ -22,6 +33,19 @@ export function DashboardPage() {
   const hour = new Date().getHours();
   const greeting = hour < 12 ? '早上好' : hour < 18 ? '下午好' : '晚上好';
   const topAction = notifications.data?.[0];
+  const evidenceCount = evidence.data?.length ?? 0;
+  const processedCount = evidence.data?.filter((d) => d.status === 'processed').length ?? 0;
+
+  // Mock trend data (will come from API later)
+  const trendData = [0, 1, 1, 2, 2, 3, 3, 3, 4, 5, 5, 6];
+  const trendLabels = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+
+  const onboardingSteps = [
+    { label: '上传第一份简历', done: evidenceCount > 0, to: '/app/documents' },
+    { label: '确认技能标签', done: false, to: '/app/profile' },
+    { label: '设定目标职业', done: false, to: '/app/career-map' },
+    { label: '完成第一次行动', done: false, to: '/app/actions' },
+  ];
 
   return (
     <div className="space-y-6">
@@ -30,9 +54,7 @@ export function DashboardPage() {
         <h1 className="text-xl font-bold tracking-tight text-ink-900 sm:text-2xl">
           {greeting}，{user?.display_name ?? '探索者'}
         </h1>
-        <p className="mt-1 text-sm text-ink-500">从真实轨迹，看清下一程</p>
-        {/* Goal not set -> guidance card */}
-        <div className="mt-4 rounded-xl border border-dashed border-line p-4">
+        <div className="mt-3 rounded-xl border border-dashed border-line p-4">
           <div className="flex items-center gap-3">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-50">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4.5 w-4.5 text-accent-600" aria-hidden="true">
@@ -50,61 +72,71 @@ export function DashboardPage() {
         </div>
       </section>
 
-      {/* Today's #1 action */}
-      <section>
-        <h2 className="mb-3 text-sm font-semibold text-ink-800">今天最重要的一件事</h2>
-        {notifications.isLoading ? (
-          <SkeletonBlock lines={2} />
-        ) : notifications.isError ? (
-          <div className="rounded-xl border border-line bg-surface p-4">
-            <p className="text-sm text-ink-500">暂时无法获取推荐，不影响其他操作。</p>
-          </div>
-        ) : topAction ? (
-          <div className="rounded-xl border border-line bg-surface p-5 shadow-card">
-            <div className="flex items-start gap-3">
-              <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent-50">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4 text-accent-600" aria-hidden="true">
-                  <path d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-ink-900">{topAction.title}</p>
-                <p className="mt-1 text-sm leading-relaxed text-ink-500">{topAction.body}</p>
-                <Link
-                  to="/app/actions"
-                  className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-accent-500 px-3.5 py-2 text-xs font-medium text-white transition-colors hover:bg-accent-600"
-                >
-                  开始行动
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5" aria-hidden="true">
-                    <path d="M5 12h14m-6-6l6 6-6 6" />
-                  </svg>
-                </Link>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="rounded-xl border border-dashed border-line p-6 text-center">
-            <p className="text-sm text-ink-500">完成档案后，系统会为你推荐下一步行动。</p>
-            <Link to="/app/documents" className="mt-2 inline-block text-sm font-medium text-accent-600 hover:text-accent-700">
-              上传简历开始
-            </Link>
-          </div>
-        )}
+      {/* Stats cards */}
+      <section className="grid grid-cols-3 gap-3">
+        <StatCard
+          icon="M13 10V3L4 14h7v7l9-11h-7z"
+          value={credits.isLoading ? '—' : credits.data?.balance ?? 0}
+          label="积分"
+        />
+        <StatCard
+          icon="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          value={evidence.isLoading ? '—' : evidenceCount}
+          label="证据"
+          sub={processedCount > 0 ? `${processedCount} 份已解析` : undefined}
+        />
+        <StatCard
+          icon="M13 10V3L4 14h7v7l9-11h-7z"
+          value={notifications.data?.length ?? 0}
+          label="推荐行动"
+        />
       </section>
 
-      {/* Stats row */}
-      <section className="grid grid-cols-3 gap-3">
-        <div className="rounded-xl border border-line bg-surface p-3 text-center">
-          <p className="text-lg font-bold text-ink-900">{credits.isLoading ? '—' : credits.data?.balance ?? 0}</p>
-          <p className="text-[10px] font-medium text-ink-400">积分</p>
+      {/* Charts area */}
+      <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <div className="rounded-xl border border-line bg-surface p-4">
+          <p className="mb-2 text-sm font-semibold text-ink-800">证据完成度</p>
+          <DonutChart value={processedCount} total={Math.max(evidenceCount, 1)} label="已解析 / 总上传" height={160} />
         </div>
-        <div className="rounded-xl border border-line bg-surface p-3 text-center">
-          <p className="text-lg font-bold text-ink-900">{evidence.isLoading ? '—' : evidence.data?.length ?? 0}</p>
-          <p className="text-[10px] font-medium text-ink-400">证据</p>
+        <div className="rounded-xl border border-line bg-surface p-4">
+          <p className="mb-2 text-sm font-semibold text-ink-800">行动趋势</p>
+          <TrendChart data={trendData} labels={trendLabels} height={160} />
         </div>
-        <div className="rounded-xl border border-line bg-surface p-3 text-center">
-          <p className="text-lg font-bold text-ink-900">—</p>
-          <p className="text-[10px] font-medium text-ink-400">连续天数</p>
+      </section>
+
+      {/* Onboarding guide + Today's action */}
+      <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <OnboardingGuide steps={onboardingSteps} />
+
+        {/* Today's #1 action */}
+        <div className="rounded-xl border border-line bg-surface p-4">
+          <p className="mb-3 text-sm font-semibold text-ink-800">今天最重要的一件事</p>
+          {notifications.isLoading ? (
+            <div className="animate-pulse space-y-2">
+              <div className="h-4 w-3/4 rounded bg-ink-100" />
+              <div className="h-3 w-full rounded bg-ink-100" />
+            </div>
+          ) : topAction ? (
+            <div>
+              <div className="flex items-start gap-2.5">
+                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-50">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3 text-accent-600" aria-hidden="true">
+                    <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-ink-900">{topAction.title}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-ink-500 line-clamp-2">{topAction.body}</p>
+                </div>
+              </div>
+              <Link to="/app/actions" className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-accent-500 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-accent-600">
+                开始行动
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3" aria-hidden="true"><path d="M5 12h14m-6-6l6 6-6 6" /></svg>
+              </Link>
+            </div>
+          ) : (
+            <p className="text-sm text-ink-400">完成档案后，系统会为你推荐下一步行动。</p>
+          )}
         </div>
       </section>
 
@@ -112,20 +144,16 @@ export function DashboardPage() {
       <section>
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-semibold text-ink-800">最近证据</h2>
-          <Link to="/app/profile/evidence" className="text-xs font-medium text-accent-600 hover:text-accent-700">
-            证据台账
-          </Link>
+          <Link to="/app/profile/evidence" className="text-xs font-medium text-accent-600 hover:text-accent-700">证据台账</Link>
         </div>
         {evidence.isLoading ? (
-          <SkeletonBlock lines={3} />
-        ) : evidence.isError ? (
-          <p className="rounded-xl border border-line bg-surface px-4 py-3 text-sm text-ink-500">加载失败，请稍后重试。</p>
+          <div className="animate-pulse rounded-xl border border-line bg-surface p-4">
+            <div className="h-4 w-1/2 rounded bg-ink-100" />
+          </div>
         ) : !evidence.data?.length ? (
           <div className="rounded-xl border border-dashed border-line p-6 text-center">
             <p className="text-sm text-ink-500">还没有证据，没关系 — 从一份简历开始就够了。</p>
-            <Link to="/app/documents" className="mt-2 inline-block text-sm font-medium text-accent-600 hover:text-accent-700">
-              上传第一份文档
-            </Link>
+            <Link to="/app/documents" className="mt-2 inline-block text-sm font-medium text-accent-600 hover:text-accent-700">上传第一份文档</Link>
           </div>
         ) : (
           <ul className="divide-y divide-line rounded-xl border border-line bg-surface">
@@ -148,15 +176,6 @@ export function DashboardPage() {
           </ul>
         )}
       </section>
-
-      {/* More actions link */}
-      {notifications.data && notifications.data.length > 1 && (
-        <div className="text-center">
-          <Link to="/app/actions" className="text-xs font-medium text-ink-400 underline-offset-2 hover:text-ink-700 hover:underline">
-            还有 {notifications.data.length - 1} 条推荐行动
-          </Link>
-        </div>
-      )}
     </div>
   );
 }

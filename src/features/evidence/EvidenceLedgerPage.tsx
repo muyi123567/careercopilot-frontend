@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useEvidenceDocuments, type EvidenceDocument } from '../../shared/api/hooks';
+import { EmptyEvidence } from '../../shared/components/illustrations/EmptyStates';
 
 const STATUS_MAP: Record<string, { label: string; cls: string }> = {
   processed: { label: '已解析', cls: 'bg-success-50 text-success-600' },
@@ -12,14 +13,12 @@ function TimelineItem({ doc }: { doc: EvidenceDocument }) {
   const status = STATUS_MAP[doc.status] ?? STATUS_MAP.uploaded;
   return (
     <li className="relative flex gap-4 pb-6 last:pb-0">
-      {/* Timeline line + node */}
       <div className="flex flex-col items-center">
         <span className={`z-10 h-3 w-3 shrink-0 rounded-full border-2 ${
           doc.status === 'processed' ? 'border-success-500 bg-success-50' : doc.status === 'failed' ? 'border-red-400 bg-red-50' : 'border-ink-300 bg-surface'
         }`} aria-hidden="true" />
         <span className="w-px flex-1 bg-line" aria-hidden="true" />
       </div>
-      {/* Content */}
       <div className="min-w-0 flex-1 -mt-0.5">
         <div className="rounded-xl border border-line bg-surface p-3.5 transition-colors hover:border-accent-200">
           <div className="flex items-start justify-between gap-2">
@@ -49,6 +48,10 @@ function TimelineItem({ doc }: { doc: EvidenceDocument }) {
 export function EvidenceLedgerPage() {
   const { data, isLoading, isError, refetch } = useEvidenceDocuments();
 
+  const total = data?.length ?? 0;
+  const processed = data?.filter((d) => d.status === 'processed').length ?? 0;
+  const pending = data?.filter((d) => d.status === 'pending' || d.status === 'uploaded').length ?? 0;
+
   return (
     <div className="space-y-5">
       {/* Header */}
@@ -64,6 +67,24 @@ export function EvidenceLedgerPage() {
           上传文档
         </Link>
       </section>
+
+      {/* Stats bar */}
+      {total > 0 && (
+        <section className="grid grid-cols-3 gap-3">
+          <div className="rounded-xl border border-line bg-surface p-3 text-center">
+            <p className="text-lg font-bold text-ink-900">{total}</p>
+            <p className="text-[10px] font-medium text-ink-400">总证据</p>
+          </div>
+          <div className="rounded-xl border border-line bg-surface p-3 text-center">
+            <p className="text-lg font-bold text-success-600">{processed}</p>
+            <p className="text-[10px] font-medium text-ink-400">已解析</p>
+          </div>
+          <div className="rounded-xl border border-line bg-surface p-3 text-center">
+            <p className="text-lg font-bold text-accent-600">{pending}</p>
+            <p className="text-[10px] font-medium text-ink-400">待处理</p>
+          </div>
+        </section>
+      )}
 
       {/* Content */}
       {isLoading ? (
@@ -89,10 +110,8 @@ export function EvidenceLedgerPage() {
           </button>
         </div>
       ) : !data?.length ? (
-        <div className="rounded-xl border border-dashed border-line p-10 text-center">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mx-auto h-10 w-10 text-ink-300" aria-hidden="true">
-            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
+        <div className="flex flex-col items-center rounded-xl border border-dashed border-line p-10 text-center">
+          <EmptyEvidence />
           <p className="mt-3 text-sm font-medium text-ink-600">还没有证据，没关系</p>
           <p className="mt-1 text-xs text-ink-400">从一份简历开始就够了。上传后系统会自动提取技能和经历。</p>
           <Link
@@ -104,7 +123,7 @@ export function EvidenceLedgerPage() {
         </div>
       ) : (
         <>
-          <p className="text-xs text-ink-400">共 {data.length} 份证据，按时间倒序</p>
+          <p className="text-xs text-ink-400">共 {total} 份证据，按时间倒序</p>
           <ul>
             {data.map((doc) => (
               <TimelineItem key={doc.id} doc={doc} />

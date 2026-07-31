@@ -84,8 +84,31 @@ button:disabled {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Brand mark animations */
+@keyframes dash-flow {
+  to { stroke-dashoffset: -8; }
+}
+@keyframes pulse-ring {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.05); }
+}
+.animate-dash-flow {
+  animation: dash-flow 3s linear infinite;
+}
+.animate-pulse-ring {
+  animation: pulse-ring 4s ease-in-out infinite;
+}
+
+/* Dot grid background for tech feel */
+.bg-dot-grid {
+  background-image: radial-gradient(circle, rgba(33,29,26,0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .stagger > * { animation: none; }
+  .animate-dash-flow { animation: none; }
+  .animate-pulse-ring { animation: none; }
   button:active:not(:disabled) { transform: none; }
 }
