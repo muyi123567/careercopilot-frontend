@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-import { useEvidenceDocuments, type EvidenceDocument } from '../../shared/api/hooks';
+import { useEvidenceDocuments, useEvidenceItems, type EvidenceDocument } from '../../shared/api/hooks';
 import { EmptyEvidence } from '../../shared/components/illustrations/EmptyStates';
+import { FactCandidateCard } from '../../shared/components/FactCandidateCard';
 
 const STATUS_MAP: Record<string, { label: string; cls: string }> = {
   processed: { label: '已解析', cls: 'bg-success-50 text-success-600' },
@@ -20,7 +21,7 @@ function TimelineItem({ doc }: { doc: EvidenceDocument }) {
         <span className="w-px flex-1 bg-line" aria-hidden="true" />
       </div>
       <div className="min-w-0 flex-1 -mt-0.5">
-        <div className="rounded-xl border border-line bg-surface p-3.5 transition-colors hover:border-accent-200">
+        <Link to={`/app/documents/${doc.id}`} className="block rounded-xl border border-line bg-surface p-3.5 transition-colors hover:border-accent-200">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
               <p className="truncate text-sm font-medium text-ink-800">{doc.filename}</p>
@@ -39,18 +40,19 @@ function TimelineItem({ doc }: { doc: EvidenceDocument }) {
             </span>
             <span className="text-[10px] text-ink-300">来源：用户上传</span>
           </div>
-        </div>
+        </Link>
       </div>
     </li>
   );
 }
 
 export function EvidenceLedgerPage() {
-  const { data, isLoading, isError, refetch } = useEvidenceDocuments();
+  const { data: documents, isLoading: docsLoading, isError: docsError, refetch } = useEvidenceDocuments();
+  const { data: items, isLoading: itemsLoading } = useEvidenceItems();
 
-  const total = data?.length ?? 0;
-  const processed = data?.filter((d) => d.status === 'processed').length ?? 0;
-  const pending = data?.filter((d) => d.status === 'pending' || d.status === 'uploaded').length ?? 0;
+  const total = documents?.length ?? 0;
+  const processed = documents?.filter((d) => d.status === 'processed').length ?? 0;
+  const pendingItems = items?.filter((i) => i.status === 'pending').length ?? 0;
 
   return (
     <div className="space-y-5">
@@ -80,14 +82,26 @@ export function EvidenceLedgerPage() {
             <p className="text-[10px] font-medium text-ink-400">已解析</p>
           </div>
           <div className="rounded-xl border border-line bg-surface p-3 text-center">
-            <p className="text-lg font-bold text-accent-600">{pending}</p>
-            <p className="text-[10px] font-medium text-ink-400">待处理</p>
+            <p className="text-lg font-bold text-accent-600">{pendingItems}</p>
+            <p className="text-[10px] font-medium text-ink-400">待确认</p>
           </div>
         </section>
       )}
 
-      {/* Content */}
-      {isLoading ? (
+      {/* Pending evidence items for confirmation */}
+      {!itemsLoading && items && items.filter((i) => i.status === 'pending').length > 0 && (
+        <section>
+          <h2 className="mb-3 text-sm font-semibold text-ink-800">待确认的提取结果</h2>
+          <div className="space-y-3">
+            {items.filter((i) => i.status === 'pending').slice(0, 5).map((item) => (
+              <FactCandidateCard key={item.id} item={item} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Document timeline */}
+      {docsLoading ? (
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="flex gap-4">
@@ -102,14 +116,14 @@ export function EvidenceLedgerPage() {
             </div>
           ))}
         </div>
-      ) : isError ? (
+      ) : docsError ? (
         <div className="rounded-xl border border-line bg-surface p-6 text-center">
           <p className="text-sm text-ink-500">加载证据文档失败，请检查网络后重试。</p>
           <button onClick={() => void refetch()} className="mt-2 text-sm font-medium text-accent-600 underline underline-offset-2 hover:text-accent-700">
             重试
           </button>
         </div>
-      ) : !data?.length ? (
+      ) : !documents?.length ? (
         <div className="flex flex-col items-center rounded-xl border border-dashed border-line p-10 text-center">
           <EmptyEvidence />
           <p className="mt-3 text-sm font-medium text-ink-600">还没有证据，没关系</p>
@@ -123,9 +137,9 @@ export function EvidenceLedgerPage() {
         </div>
       ) : (
         <>
-          <p className="text-xs text-ink-400">共 {total} 份证据，按时间倒序</p>
+          <h2 className="text-sm font-semibold text-ink-800">文档时间线</h2>
           <ul>
-            {data.map((doc) => (
+            {documents.map((doc) => (
               <TimelineItem key={doc.id} doc={doc} />
             ))}
           </ul>

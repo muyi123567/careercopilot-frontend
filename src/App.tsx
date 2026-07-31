@@ -13,6 +13,7 @@ import { DashboardPage } from './features/dashboard/DashboardPage';
 import { CareerMapPage } from './features/career-map/CareerMapPage';
 import { EvidenceLedgerPage } from './features/evidence/EvidenceLedgerPage';
 import { DocumentsPage } from './features/documents/DocumentsPage';
+import { DocumentDetailPage } from './features/documents/DocumentDetailPage';
 import { ProfilePage } from './features/profile/ProfilePage';
 import { SettingsPage } from './features/settings/SettingsPage';
 import { ActionsPage } from './features/actions/ActionsPage';
@@ -49,6 +50,7 @@ export default function App() {
         <Route path="profile" element={<ProfilePage />} />
         <Route path="profile/evidence" element={<EvidenceLedgerPage />} />
         <Route path="documents" element={<DocumentsPage />} />
+        <Route path="documents/:id" element={<DocumentDetailPage />} />
         <Route path="actions" element={<ActionsPage />} />
         <Route path="decisions" element={<DecisionsPage />} />
         <Route path="radar" element={<RadarPage />} />
