@@ -142,7 +142,7 @@ export function OccupationSearchPage() {
             <p className="text-xs font-medium text-ink-400">热门搜索</p>
             <div className="mt-3 flex flex-wrap gap-2">
               {['产品经理', '数据分析师', '前端工程师', 'UI设计师', '市场营销', '人力资源'].map(tag => (
-                <button key={tag} onClick={() => { setQuery(tag); doSearch(tag); }} className="rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs text-ink-600 transition-colors hover:border-brand-400 hover:text-accent-600">
+                <button key={tag} onClick={() => { setQuery(tag); doSearch(tag); }} className="rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs text-ink-600 transition-colors hover:border-accent-400 hover:text-accent-600">
                   {tag}
                 </button>
               ))}
