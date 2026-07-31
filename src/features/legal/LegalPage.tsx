@@ -10,20 +10,20 @@ export function LegalPage({ type }: { type: 'terms' | 'privacy' }) {
       </div>
 
       <div className="relative z-10 mx-auto max-w-3xl px-6 py-16">
-        <Link to="/login" className="mb-8 inline-flex items-center gap-2 text-sm text-ink-400 transition-colors hover:text-brand-700">
+        <Link to="/login" className="mb-8 inline-flex items-center gap-2 text-sm text-ink-400 transition-colors hover:text-accent-600">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
           返回登录
         </Link>
 
         <div className="rounded-2xl border border-line/70 bg-white/90 p-7 shadow-[0_0_0_1px_rgba(33,29,26,0.03),0_8px_32px_-8px_rgba(33,29,26,0.07)] backdrop-blur-sm sm:p-10 lg:p-12">
           <div className="mb-8 flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-50 text-accent-600">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
                 {isTerms ? <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></> : <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></>}
               </svg>
             </span>
             <div>
-              <h1 className="font-display text-2xl font-bold tracking-tight text-ink-900">{isTerms ? '用户协议' : '隐私政策'}</h1>
+              <h1 className="text-2xl font-bold tracking-tight text-ink-900">{isTerms ? '用户协议' : '隐私政策'}</h1>
               <p className="text-xs text-ink-400">最后更新：2026 年 7 月 28 日</p>
             </div>
           </div>

@@ -67,8 +67,8 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
       {/* Agreement */}
       <label className="flex items-start gap-2.5 text-xs text-ink-500 cursor-pointer select-none">
-        <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5 h-3.5 w-3.5 rounded border-line text-brand-600 accent-[oklch(52%_0.21_36)]" />
-        <span>我已阅读并同意<a href="#" className="text-brand-700 underline underline-offset-2 hover:text-brand-800">《用户协议》</a>和<a href="#" className="text-brand-700 underline underline-offset-2 hover:text-brand-800">《隐私政策》</a></span>
+        <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5 h-3.5 w-3.5 rounded border-line text-accent-500 accent-accent-500" />
+        <span>我已阅读并同意<a href="#" className="text-accent-600 underline underline-offset-2 hover:text-accent-700">《用户协议》</a>和<a href="#" className="text-accent-600 underline underline-offset-2 hover:text-accent-700">《隐私政策》</a></span>
       </label>
 
       {/* Error */}
