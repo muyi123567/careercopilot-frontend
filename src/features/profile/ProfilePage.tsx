@@ -1,105 +1,157 @@
-export function ProfilePage() {
-  const skills = [
-    { name: 'Python', level: 85, category: '技术' },
-    { name: '分布式系统', level: 60, category: '技术' },
-    { name: 'SQL', level: 75, category: '技术' },
-    { name: '产品需求分析', level: 35, category: '产品' },
-    { name: '用户研究', level: 25, category: '产品' },
-    { name: '项目管理', level: 55, category: '通用' },
-    { name: '技术写作', level: 70, category: '通用' },
-    { name: '数据分析', level: 65, category: '技术' },
-  ];
+import { Link } from 'react-router-dom';
+import { useProfile, useResumeSkills } from '../../shared/api/hooks';
 
-  const timeline = [
-    { period: '2024.07 - 至今', role: '后端开发工程师', org: '某科技公司', highlights: ['主导微服务拆分', '搭建 CI/CD 流水线'] },
-    { period: '2023.01 - 2024.06', role: '初级后端开发', org: '某创业公司', highlights: ['参与核心业务系统开发', '负责数据库优化'] },
-    { period: '2019.09 - 2023.06', role: '计算机科学与技术 本科', org: '某大学', highlights: ['ACM 校赛银奖', '毕业设计：分布式任务调度'] },
-  ];
-
-  const preferences = [
-    { label: '工作城市', value: '一线 / 新一线' },
-    { label: '薪资预期', value: '25-40K' },
-    { label: '工作模式', value: '混合办公优先' },
-    { label: '行业偏好', value: '互联网 / AI / 金融科技' },
-    { label: '岗位类型', value: '技术 / 技术管理 / 技术产品' },
-  ];
-
+function SkillBar({ name, level, category }: { name: string; level: number; category: string }) {
+  const colorMap: Record<string, string> = {
+    '技术': 'bg-accent-500',
+    '产品': 'bg-success-500',
+    '通用': 'bg-ink-400',
+  };
   return (
-    <div className="space-y-4 sm:space-y-6">
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">记忆画像</p>
-        <h1 className="mt-1.5 font-display text-2xl font-semibold tracking-tight text-ink-900 sm:text-3xl">你的职业轮廓</h1>
-        <p className="mt-1 text-sm text-ink-500">基于推演过程中提取的结构化信号构建。所有数据仅用于为你生成路径建议。</p>
+    <div className="flex items-center gap-3">
+      <span className="w-24 shrink-0 text-xs font-medium text-ink-700">{name}</span>
+      <div className="h-2 flex-1 overflow-hidden rounded-full bg-ink-100">
+        <div className={`h-full rounded-full transition-all duration-700 ${colorMap[category] ?? 'bg-ink-400'}`} style={{ width: `${level}%` }} />
       </div>
-
-      {/* Skills radar */}
-      <div className="card p-4 sm:p-6">
-        <h2 className="text-base font-semibold text-ink-800">技能图谱</h2>
-        <div className="mt-4 space-y-3">
-          {skills.map((s) => (
-            <div key={s.name} className="flex items-center gap-3">
-              <span className="w-24 shrink-0 text-xs font-medium text-ink-700">{s.name}</span>
-              <div className="h-4 flex-1 overflow-hidden rounded-full bg-ink-900/5">
-                <div
-                  className={`h-full rounded-full transition-all duration-700 ${s.category === '技术' ? 'bg-gradient-to-r from-brand-400 to-brand-600' : s.category === '产品' ? 'bg-gradient-to-r from-teal-500 to-teal-600' : 'bg-gradient-to-r from-gold-400 to-gold-500'}`}
-                  style={{ width: `${s.level}%` }}
-                />
-              </div>
-              <span className="w-8 text-right text-[11px] font-semibold text-ink-500">{s.level}%</span>
-              <span className={`w-10 text-right text-[10px] ${s.category === '技术' ? 'text-brand-600' : s.category === '产品' ? 'text-teal-600' : 'text-gold-600'}`}>{s.category}</span>
-            </div>
-          ))}
-        </div>
-        <div className="mt-4 flex gap-4 border-t border-line pt-3">
-          <span className="flex items-center gap-1.5 text-[11px] text-ink-400"><span className="h-2 w-2 rounded-full bg-brand-500" />技术</span>
-          <span className="flex items-center gap-1.5 text-[11px] text-ink-400"><span className="h-2 w-2 rounded-full bg-teal-500" />产品</span>
-          <span className="flex items-center gap-1.5 text-[11px] text-ink-400"><span className="h-2 w-2 rounded-full bg-gold-500" />通用</span>
-        </div>
-      </div>
-
-      {/* Experience timeline */}
-      <div className="card p-4 sm:p-6">
-        <h2 className="text-base font-semibold text-ink-800">经历时间线</h2>
-        <div className="relative mt-4 space-y-0 pl-6">
-          <span className="absolute bottom-2 left-[9px] top-2 w-[2px] bg-[repeating-linear-gradient(180deg,rgba(33,29,26,0.16)_0_5px,transparent_5px_10px)]" />
-          {timeline.map((t, i) => (
-            <div key={i} className="relative pb-6 last:pb-0">
-              <span className={`absolute -left-6 top-1 flex h-5 w-5 items-center justify-center rounded-full border-[1.5px] ${i === 0 ? 'border-brand-500 bg-brand-500 text-white' : 'border-line bg-surface text-ink-400'}`}>
-                <span className="h-1.5 w-1.5 rounded-full bg-current" />
-              </span>
-              <div className="ml-2 rounded-xl border border-line bg-paper p-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-brand-700">{t.period}</span>
-                  {i === 0 && <span className="rounded-full bg-brand-50 px-2 py-0.5 text-[10px] font-medium text-brand-700">当前</span>}
-                </div>
-                <h4 className="mt-1 text-sm font-semibold text-ink-800">{t.role}</h4>
-                <p className="text-xs text-ink-500">{t.org}</p>
-                <div className="mt-2 flex flex-wrap gap-1.5">
-                  {t.highlights.map((h) => (
-                    <span key={h} className="rounded-full bg-ink-900/5 px-2 py-0.5 text-[10px] text-ink-600">{h}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Preferences */}
-      <div className="card p-4 sm:p-6">
-        <h2 className="text-base font-semibold text-ink-800">偏好与约束</h2>
-        <div className="mt-4 grid gap-3 grid-cols-1 sm:grid-cols-2">
-          {preferences.map((p) => (
-            <div key={p.label} className="rounded-xl border border-line bg-paper px-4 py-3">
-              <p className="text-xs text-ink-400">{p.label}</p>
-              <p className="mt-0.5 text-sm font-medium text-ink-700">{p.value}</p>
-            </div>
-          ))}
-        </div>
-        <p className="mt-3 text-xs text-ink-400">偏好数据来自推演过程中的结构化提取。登录后可手动修正。</p>
-      </div>
+      <span className="w-8 text-right text-[11px] font-semibold text-ink-500">{level}%</span>
     </div>
   );
 }
 
+export function ProfilePage() {
+  const { data: profile, isLoading, isError, refetch } = useProfile();
+  const { data: skills } = useResumeSkills();
 
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="animate-pulse space-y-2">
+          <div className="h-6 w-40 rounded bg-ink-200" />
+          <div className="h-4 w-64 rounded bg-ink-100" />
+        </div>
+        <div className="animate-pulse rounded-xl border border-line bg-surface p-6">
+          <div className="h-4 w-24 rounded bg-ink-200" />
+          <div className="mt-4 space-y-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-3 w-full rounded bg-ink-100" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (isError) {
+    return (
+      <div className="space-y-6">
+        <h1 className="text-xl font-bold tracking-tight text-ink-900 sm:text-2xl">我的档案</h1>
+        <div className="rounded-xl border border-line bg-surface p-6 text-center">
+          <p className="text-sm text-ink-500">加载档案失败，请检查网络后重试。</p>
+          <button onClick={() => void refetch()} className="mt-2 text-sm font-medium text-accent-600 underline underline-offset-2 hover:text-accent-700">
+            重试
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const displaySkills = skills ?? profile?.skills ?? [];
+  const hasData = displaySkills.length > 0 || profile?.current_occupation || profile?.target_occupation;
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <section>
+        <h1 className="text-xl font-bold tracking-tight text-ink-900 sm:text-2xl">我的档案</h1>
+        <p className="mt-1 text-sm text-ink-500">基于证据提取构建的职业轮廓，所有数据仅用于路径建议</p>
+      </section>
+
+      {/* Empty state - no data yet */}
+      {!hasData ? (
+        <div className="rounded-xl border border-dashed border-line p-10 text-center">
+          <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto h-20 w-20 text-ink-300" aria-hidden="true">
+            <circle cx="40" cy="28" r="10" />
+            <path d="M22 62c0-10 8-18 18-18s18 8 18 18" />
+            <path d="M56 20l4-4M62 14l2-2" strokeDasharray="2 2" opacity="0.5" />
+          </svg>
+          <p className="mt-3 text-sm font-medium text-ink-600">档案还是空的，没关系</p>
+          <p className="mt-1 text-xs text-ink-400">上传简历后，系统会自动提取你的技能和经历。</p>
+          <Link to="/app/documents" className="mt-4 inline-block rounded-lg bg-ink-900 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-ink-700">
+            上传第一份简历
+          </Link>
+        </div>
+      ) : (
+        <>
+          {/* Completion progress */}
+          {profile?.completion_pct !== undefined && (
+            <div className="rounded-xl border border-line bg-surface p-4">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold text-ink-800">档案完成度</p>
+                <span className="text-sm font-bold text-accent-600">{profile.completion_pct}%</span>
+              </div>
+              <div className="mt-2 h-2 overflow-hidden rounded-full bg-ink-100">
+                <div className="h-full rounded-full bg-accent-500 transition-all duration-500" style={{ width: `${profile.completion_pct}%` }} />
+              </div>
+            </div>
+          )}
+
+          {/* Current / Target occupation */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="rounded-xl border border-line bg-surface p-4">
+              <p className="text-xs font-medium text-ink-400">当前职业</p>
+              <p className="mt-1 text-sm font-semibold text-ink-900">{profile?.current_occupation ?? '未设定'}</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface p-4">
+              <p className="text-xs font-medium text-ink-400">目标职业</p>
+              <p className="mt-1 text-sm font-semibold text-ink-900">{profile?.target_occupation ?? '未设定'}</p>
+              {!profile?.target_occupation && (
+                <Link to="/app/career-map" className="mt-1 inline-block text-xs font-medium text-accent-600 hover:text-accent-700">去设定</Link>
+              )}
+            </div>
+          </div>
+
+          {/* Skills */}
+          {displaySkills.length > 0 && (
+            <div className="rounded-xl border border-line bg-surface p-4 sm:p-6">
+              <h2 className="text-sm font-semibold text-ink-800">技能图谱</h2>
+              <div className="mt-4 space-y-3">
+                {displaySkills.map((s) => (
+                  <SkillBar key={s.name} name={s.name} level={s.level} category={s.category} />
+                ))}
+              </div>
+              <div className="mt-4 flex gap-4 border-t border-line pt-3">
+                <span className="flex items-center gap-1.5 text-[11px] text-ink-400"><span className="h-2 w-2 rounded-full bg-accent-500" />技术</span>
+                <span className="flex items-center gap-1.5 text-[11px] text-ink-400"><span className="h-2 w-2 rounded-full bg-success-500" />产品</span>
+                <span className="flex items-center gap-1.5 text-[11px] text-ink-400"><span className="h-2 w-2 rounded-full bg-ink-400" />通用</span>
+              </div>
+            </div>
+          )}
+
+          {/* Constraints / Preferences */}
+          {profile?.constraints && Object.keys(profile.constraints).length > 0 && (
+            <div className="rounded-xl border border-line bg-surface p-4 sm:p-6">
+              <h2 className="text-sm font-semibold text-ink-800">偏好与约束</h2>
+              <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {Object.entries(profile.constraints).map(([label, value]) => (
+                  <div key={label} className="rounded-xl border border-line bg-paper px-4 py-3">
+                    <p className="text-xs text-ink-400">{label}</p>
+                    <p className="mt-0.5 text-sm font-medium text-ink-700">{value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Quick links */}
+      <div className="flex flex-wrap gap-3">
+        <Link to="/app/profile/evidence" className="rounded-lg border border-line px-4 py-2 text-xs font-medium text-ink-600 transition-colors hover:bg-ink-100/50">证据台账</Link>
+        <Link to="/app/documents" className="rounded-lg border border-line px-4 py-2 text-xs font-medium text-ink-600 transition-colors hover:bg-ink-100/50">文档管理</Link>
+        <Link to="/app/settings" className="rounded-lg border border-line px-4 py-2 text-xs font-medium text-ink-600 transition-colors hover:bg-ink-100/50">设置</Link>
+      </div>
+    </div>
+  );
+}

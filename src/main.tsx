@@ -4,6 +4,7 @@ import { HashRouter } from 'react-router-dom';
 import App from './App';
 import { ApiProvider } from './shared/api/query';
 import { CookieAuthProvider } from './shared/auth/AuthContext';
+import { Toaster } from './shared/components/ui/toast';
 import './index.css';
 
 const rootEl = document.getElementById('root');
@@ -20,7 +21,9 @@ createRoot(rootEl).render(
     <ApiProvider>
       <CookieAuthProvider>
         <HashRouter>
-          <App />
+          <Toaster>
+            <App />
+          </Toaster>
         </HashRouter>
       </CookieAuthProvider>
     </ApiProvider>

@@ -2,7 +2,7 @@
  * TanStack Query hooks for authenticated API endpoints.
  * Uses apiFetch (cookie credentials, 401 auto-redirect).
  */
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiFetch, publicFetch, ApiError } from './fetch';
 
 // --- Types ---
@@ -14,6 +14,7 @@ export interface GpsNotification {
   body: string;
   action_url?: string;
   created_at: string;
+  read?: boolean;
 }
 
 export interface Occupation {
@@ -33,9 +34,35 @@ export interface EvidenceDocument {
   size_bytes?: number;
 }
 
+export interface EvidenceItem {
+  id: string;
+  kind: string;
+  label: string;
+  value: string;
+  status: 'pending' | 'confirmed' | 'rejected' | 'revised';
+  source_document_id?: string;
+  created_at: string;
+}
+
 export interface CreditsInfo {
   balance: number;
   plan: string;
+}
+
+export interface UserProfile {
+  user_id: string;
+  display_name?: string;
+  target_occupation?: string;
+  current_occupation?: string;
+  skills?: { name: string; level: number; category: string }[];
+  constraints?: Record<string, string>;
+  completion_pct?: number;
+}
+
+export interface PresignResponse {
+  upload_id: string;
+  url: string;
+  fields?: Record<string, string>;
 }
 
 // --- Hooks ---
@@ -48,6 +75,31 @@ export function useNotifications() {
       if (!res.ok) throw new ApiError(res.status, '获取推荐行动失败');
       const data = await res.json();
       return Array.isArray(data) ? data : data.items ?? [];
+    },
+  });
+}
+
+export function useUnreadCount() {
+  return useQuery<number, ApiError>({
+    queryKey: ['gps', 'unread-count'],
+    queryFn: async () => {
+      const res = await apiFetch('/api/v1/gps/notifications/unread-count');
+      if (!res.ok) throw new ApiError(res.status, '获取未读数失败');
+      const data = await res.json();
+      return typeof data === 'number' ? data : data.count ?? data.unread_count ?? 0;
+    },
+  });
+}
+
+export function useMarkNotificationRead() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await apiFetch(`/api/v1/gps/notifications/${id}/read`, { method: 'POST' });
+      if (!res.ok) throw new ApiError(res.status, '标记已读失败');
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['gps'] });
     },
   });
 }
@@ -77,13 +129,125 @@ export function useEvidenceDocuments() {
   });
 }
 
+export function useEvidenceItems() {
+  return useQuery<EvidenceItem[], ApiError>({
+    queryKey: ['evidence', 'items'],
+    queryFn: async () => {
+      const res = await apiFetch('/api/v1/evidence/items');
+      if (!res.ok) throw new ApiError(res.status, '获取证据条目失败');
+      const data = await res.json();
+      return Array.isArray(data) ? data : data.items ?? [];
+    },
+  });
+}
+
+export function useConfirmEvidence() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await apiFetch(`/api/v1/evidence/items/${id}/confirm`, { method: 'POST' });
+      if (!res.ok) throw new ApiError(res.status, '确认失败');
+    },
+    onSuccess: () => { void qc.invalidateQueries({ queryKey: ['evidence', 'items'] }); },
+  });
+}
+
+export function useRejectEvidence() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await apiFetch(`/api/v1/evidence/items/${id}/reject`, { method: 'POST' });
+      if (!res.ok) throw new ApiError(res.status, '拒绝失败');
+    },
+    onSuccess: () => { void qc.invalidateQueries({ queryKey: ['evidence', 'items'] }); },
+  });
+}
+
 export function useCredits() {
   return useQuery<CreditsInfo, ApiError>({
     queryKey: ['credits'],
     queryFn: async () => {
-      const res = await apiFetch('/api/v1/billing/credits');
+      const res = await apiFetch('/api/v1/credits/balance');
       if (!res.ok) throw new ApiError(res.status, '获取积分信息失败');
       return res.json();
+    },
+  });
+}
+
+export function useProfile() {
+  return useQuery<UserProfile, ApiError>({
+    queryKey: ['profile'],
+    queryFn: async () => {
+      const res = await apiFetch('/api/v1/memory/profile');
+      if (!res.ok) throw new ApiError(res.status, '获取档案失败');
+      return res.json();
+    },
+  });
+}
+
+export function useUpdateProfile() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: Partial<UserProfile>) => {
+      const res = await apiFetch('/api/v1/memory/profile', {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new ApiError(res.status, '更新档案失败');
+      return res.json();
+    },
+    onSuccess: () => { void qc.invalidateQueries({ queryKey: ['profile'] }); },
+  });
+}
+
+// --- Document Upload ---
+
+export function usePresignUpload() {
+  return useMutation<PresignResponse, ApiError, { filename: string; content_type: string }>({
+    mutationFn: async ({ filename, content_type }) => {
+      const res = await apiFetch('/api/v1/uploads/presign', {
+        method: 'POST',
+        body: JSON.stringify({ filename, content_type }),
+      });
+      if (!res.ok) throw new ApiError(res.status, '获取上传凭证失败');
+      return res.json();
+    },
+  });
+}
+
+export function useCompleteUpload() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (uploadId: string) => {
+      const res = await apiFetch(`/api/v1/uploads/${uploadId}/complete`, { method: 'POST' });
+      if (!res.ok) throw new ApiError(res.status, '确认上传失败');
+    },
+    onSuccess: () => { void qc.invalidateQueries({ queryKey: ['evidence', 'documents'] }); },
+  });
+}
+
+export function useParseResume() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (documentId: string) => {
+      const res = await apiFetch('/api/v1/resume/parse', {
+        method: 'POST',
+        body: JSON.stringify({ document_id: documentId }),
+      });
+      if (!res.ok) throw new ApiError(res.status, '触发解析失败');
+    },
+    onSuccess: () => { void qc.invalidateQueries({ queryKey: ['evidence'] }); },
+  });
+}
+
+export function useResumeSkills() {
+  return useQuery<{ name: string; level: number; category: string }[], ApiError>({
+    queryKey: ['resume', 'skills'],
+    queryFn: async () => {
+      const res = await apiFetch('/api/v1/resume/skills');
+      if (!res.ok) throw new ApiError(res.status, '获取技能失败');
+      const data = await res.json();
+      return Array.isArray(data) ? data : [];
     },
   });
 }

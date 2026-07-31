@@ -1,33 +1,89 @@
-import { useRef, useState, type ChangeEvent, type DragEvent } from 'react';
-import { useEvidenceDocuments } from '../../shared/api/hooks';
+import { useRef, useState, useCallback, type ChangeEvent, type DragEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { useEvidenceDocuments, usePresignUpload, useCompleteUpload, useParseResume } from '../../shared/api/hooks';
+import { EmptyEvidence } from '../../shared/components/illustrations/EmptyStates';
 
 const STATUS_MAP: Record<string, { label: string; cls: string }> = {
   processed: { label: '已解析', cls: 'bg-success-50 text-success-600' },
-  pending: { label: '处理中', cls: 'bg-accent-50 text-accent-600' },
+  pending: { label: '解析中', cls: 'bg-accent-50 text-accent-600' },
+  parsing: { label: '解析中', cls: 'bg-accent-50 text-accent-600' },
   failed: { label: '解析失败', cls: 'bg-red-50 text-red-600' },
   uploaded: { label: '已上传', cls: 'bg-ink-100 text-ink-500' },
 };
 
+type UploadState = 'idle' | 'presigning' | 'uploading' | 'completing' | 'parsing' | 'done' | 'error';
+
 export function DocumentsPage() {
   const { data, isLoading, isError, refetch } = useEvidenceDocuments();
+  const presign = usePresignUpload();
+  const complete = useCompleteUpload();
+  const parse = useParseResume();
+
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [uploadState, setUploadState] = useState<UploadState>('idle');
+  const [uploadError, setUploadError] = useState('');
+  const [uploadFileName, setUploadFileName] = useState('');
+
+  const handleUpload = useCallback(async (file: File) => {
+    setUploadError('');
+    setUploadFileName(file.name);
+
+    // Step 1: Get presigned URL
+    setUploadState('presigning');
+    try {
+      const presignData = await presign.mutateAsync({
+        filename: file.name,
+        content_type: file.type || 'application/octet-stream',
+      });
+
+      // Step 2: Upload to OSS via presigned URL
+      setUploadState('uploading');
+      const putRes = await fetch(presignData.url, {
+        method: 'PUT',
+        body: file,
+        headers: { 'Content-Type': file.type || 'application/octet-stream' },
+      });
+      if (!putRes.ok) throw new Error('文件上传失败');
+
+      // Step 3: Confirm upload complete
+      setUploadState('completing');
+      await complete.mutateAsync(presignData.upload_id);
+
+      // Step 4: Trigger parse
+      setUploadState('parsing');
+      await parse.mutateAsync(presignData.upload_id);
+
+      setUploadState('done');
+      void refetch();
+      setTimeout(() => setUploadState('idle'), 2000);
+    } catch (err) {
+      setUploadState('error');
+      setUploadError(err instanceof Error ? err.message : '上传失败，请重试');
+    }
+  }, [presign, complete, parse, refetch]);
 
   function onFileChange(e: ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
     if (f) void handleUpload(f);
+    e.target.value = '';
   }
+
   function onDrop(e: DragEvent) {
     e.preventDefault();
     setDragOver(false);
     const f = e.dataTransfer.files?.[0];
     if (f) void handleUpload(f);
   }
-  async function handleUpload(_file: File) {
-    // TODO: implement actual upload via apiFetch POST /api/v1/evidence/documents
-    void refetch();
-  }
+
+  const isUploading = ['presigning', 'uploading', 'completing', 'parsing'].includes(uploadState);
+  const uploadStepLabel: Record<string, string> = {
+    presigning: '获取上传凭证...',
+    uploading: '上传文件中...',
+    completing: '确认上传...',
+    parsing: '触发解析...',
+    done: '上传成功，正在解析',
+  };
 
   return (
     <div className="space-y-5">
@@ -39,21 +95,53 @@ export function DocumentsPage() {
       {/* Upload zone */}
       <button
         type="button"
-        onClick={() => inputRef.current?.click()}
+        onClick={() => !isUploading && inputRef.current?.click()}
         onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
         onDragLeave={() => setDragOver(false)}
         onDrop={onDrop}
+        disabled={isUploading}
         className={`flex w-full flex-col items-center justify-center gap-3 rounded-xl border-[1.5px] border-dashed py-12 transition-all duration-200 ${
-          dragOver ? 'border-accent-400 bg-accent-50/50' : 'border-line hover:border-accent-300 hover:bg-accent-50/30'
+          isUploading
+            ? 'border-accent-300 bg-accent-50/30 cursor-wait'
+            : dragOver
+              ? 'border-accent-400 bg-accent-50/50'
+              : 'border-line hover:border-accent-300 hover:bg-accent-50/30'
         }`}
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-9 w-9 text-ink-400" aria-hidden="true">
-          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" /><path d="M17 8l-5-5-5 5" /><path d="M12 3v12" />
-        </svg>
-        <span className="text-sm font-medium text-ink-700">拖入文件，或点击选择</span>
-        <span className="text-xs text-ink-400">支持 PDF、DOCX、TXT、MD（最大 5MB）</span>
+        {isUploading ? (
+          <>
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-accent-200 border-t-accent-500" />
+            <span className="text-sm font-medium text-ink-700">{uploadStepLabel[uploadState]}</span>
+            <span className="text-xs text-ink-400">{uploadFileName}</span>
+          </>
+        ) : uploadState === 'done' ? (
+          <>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-9 w-9 text-success-500" aria-hidden="true">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="text-sm font-medium text-success-600">上传成功</span>
+          </>
+        ) : (
+          <>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-9 w-9 text-ink-400" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" /><path d="M17 8l-5-5-5 5" /><path d="M12 3v12" />
+            </svg>
+            <span className="text-sm font-medium text-ink-700">拖入文件，或点击选择</span>
+            <span className="text-xs text-ink-400">支持 PDF、DOCX、TXT、MD（最大 5MB）</span>
+          </>
+        )}
       </button>
       <input ref={inputRef} className="sr-only" type="file" accept=".pdf,.docx,.txt,.md" onChange={onFileChange} />
+
+      {/* Upload error */}
+      {uploadState === 'error' && (
+        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+          <p className="text-sm text-red-700">{uploadError}</p>
+          <button onClick={() => setUploadState('idle')} className="mt-1 text-xs font-medium text-red-800 underline underline-offset-2">
+            关闭
+          </button>
+        </div>
+      )}
 
       {/* Document list */}
       {isLoading ? (
@@ -73,9 +161,10 @@ export function DocumentsPage() {
           <button onClick={() => void refetch()} className="mt-2 text-sm font-medium text-accent-600 underline underline-offset-2">重试</button>
         </div>
       ) : !data?.length ? (
-        <div className="rounded-xl border border-dashed border-line p-8 text-center">
-          <p className="text-sm text-ink-500">还没有文档，没关系 — 上传第一份简历就够了。</p>
-          <Link to="/app/profile/evidence" className="mt-2 inline-block text-xs text-ink-400 hover:text-ink-600">查看证据台账</Link>
+        <div className="flex flex-col items-center rounded-xl border border-dashed border-line p-10 text-center">
+          <EmptyEvidence />
+          <p className="mt-3 text-sm font-medium text-ink-600">还没有文档，没关系</p>
+          <p className="mt-1 text-xs text-ink-400">上传第一份简历就够了。系统会自动提取技能和经历。</p>
         </div>
       ) : (
         <ul className="divide-y divide-line rounded-xl border border-line bg-surface">
@@ -101,6 +190,15 @@ export function DocumentsPage() {
             );
           })}
         </ul>
+      )}
+
+      {/* Link to evidence ledger */}
+      {data && data.length > 0 && (
+        <div className="text-center">
+          <Link to="/app/profile/evidence" className="text-xs font-medium text-ink-400 underline-offset-2 hover:text-ink-700 hover:underline">
+            查看证据台账
+          </Link>
+        </div>
       )}
     </div>
   );
