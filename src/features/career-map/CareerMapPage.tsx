@@ -1,9 +1,8 @@
 import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { useOccupations, type Occupation } from '../../shared/api/hooks';
+import { useOccupations, useProfile, useUpdateProfile, type Occupation } from '../../shared/api/hooks';
 import { EmptyMap } from '../../shared/components/illustrations/EmptyStates';
 
-function GroupSection({ group, items }: { group: string; items: Occupation[] }) {
+function GroupSection({ group, items, onSetTarget, targetSlug }: { group: string; items: Occupation[]; onSetTarget: (title: string) => void; targetSlug?: string }) {
   const [open, setOpen] = useState(true);
   return (
     <div className="rounded-xl border border-line bg-surface">
@@ -23,13 +22,22 @@ function GroupSection({ group, items }: { group: string; items: Occupation[] }) 
       {open && (
         <ul className="divide-y divide-line border-t border-line">
           {items.slice(0, 8).map((occ) => (
-            <li key={occ.slug} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-ink-100/30">
-              <span className="h-2 w-2 shrink-0 rounded-full border border-ink-300" aria-hidden="true" />
+            <li key={occ.slug} className="group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-ink-100/30">
+              <span className={`h-2 w-2 shrink-0 rounded-full border ${occ.title === targetSlug ? 'border-accent-500 bg-accent-500' : 'border-ink-300'}`} aria-hidden="true" />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm text-ink-800">{occ.title}</p>
                 {occ.description && <p className="mt-0.5 truncate text-xs text-ink-400">{occ.description}</p>}
               </div>
-              {occ.esco_code && <span className="shrink-0 font-mono text-[10px] text-ink-300">{occ.esco_code}</span>}
+              {occ.title === targetSlug ? (
+                <span className="shrink-0 rounded-full bg-accent-50 px-2 py-0.5 text-[10px] font-medium text-accent-600">目标</span>
+              ) : (
+                <button
+                  onClick={() => onSetTarget(occ.title)}
+                  className="shrink-0 rounded-lg border border-line px-2 py-1 text-[10px] font-medium text-ink-500 opacity-0 transition-all hover:border-accent-300 hover:text-accent-600 group-hover:opacity-100"
+                >
+                  设为目标
+                </button>
+              )}
             </li>
           ))}
           {items.length > 8 && (
@@ -43,7 +51,18 @@ function GroupSection({ group, items }: { group: string; items: Occupation[] }) 
 
 export function CareerMapPage() {
   const { data, isLoading, isError, refetch } = useOccupations();
+  const { data: profile } = useProfile();
+  const updateProfile = useUpdateProfile();
   const [search, setSearch] = useState('');
+  const [justSet, setJustSet] = useState('');
+
+  const targetOcc = profile?.target_occupation;
+
+  function handleSetTarget(title: string) {
+    updateProfile.mutate({ target_occupation: title }, {
+      onSuccess: () => { setJustSet(title); setTimeout(() => setJustSet(''), 3000); },
+    });
+  }
 
   const groups = useMemo(() => {
     if (!data) return [];
@@ -67,26 +86,42 @@ export function CareerMapPage() {
         <p className="mt-1 text-sm text-ink-500">浏览可选路径，找到你的下一程方向</p>
       </section>
 
+      {/* Success toast */}
+      {justSet && (
+        <div className="rounded-xl border border-success-500/20 bg-success-50 px-4 py-3 text-sm text-success-700">
+          已将「{justSet}」设为目标职业
+        </div>
+      )}
+
       {/* Current node -> target node path visualization */}
       <div className="rounded-xl border border-line bg-surface p-4">
         <div className="flex items-center gap-3">
-          {/* Current node (solid) */}
           <div className="flex flex-col items-center gap-1">
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ink-900 text-xs font-bold text-white">你</span>
             <span className="text-[10px] text-ink-400">当前</span>
           </div>
-          {/* Dashed path */}
           <div className="flex-1 border-t-2 border-dashed border-ink-200" />
-          {/* Target node (hollow) */}
           <div className="flex flex-col items-center gap-1">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-dashed border-ink-300 text-xs text-ink-400">?</span>
-            <span className="text-[10px] text-ink-400">目标</span>
+            {targetOcc ? (
+              <>
+                <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-accent-500 bg-accent-50 text-xs font-bold text-accent-600">
+                  {targetOcc.charAt(0)}
+                </span>
+                <span className="max-w-[80px] truncate text-[10px] font-medium text-accent-600">{targetOcc}</span>
+              </>
+            ) : (
+              <>
+                <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-dashed border-ink-300 text-xs text-ink-400">?</span>
+                <span className="text-[10px] text-ink-400">目标</span>
+              </>
+            )}
           </div>
         </div>
-        <p className="mt-3 text-center text-xs text-ink-400">
-          设定当前职业后，可以看到从这里出发的推荐路径。
-          <Link to="/app/profile" className="ml-1 font-medium text-accent-600 hover:text-accent-700">去设定</Link>
-        </p>
+        {!targetOcc && (
+          <p className="mt-3 text-center text-xs text-ink-400">
+            在下方列表中点击「设为目标」，即可设定你的目标职业。
+          </p>
+        )}
       </div>
 
       {/* Search */}
@@ -136,7 +171,7 @@ export function CareerMapPage() {
         <div className="space-y-3">
           <p className="text-xs text-ink-400">共 {data?.length ?? 0} 个职业，{groups.length} 个分类</p>
           {groups.slice(0, 12).map(([group, items]) => (
-            <GroupSection key={group} group={group} items={items} />
+            <GroupSection key={group} group={group} items={items} onSetTarget={handleSetTarget} targetSlug={targetOcc} />
           ))}
         </div>
       )}
