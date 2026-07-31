@@ -1,7 +1,7 @@
 import { NavLink, Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import { useCookieAuth } from '../../auth/AuthContext';
-import { useCredits } from '../../api/hooks';
+import { useCredits, useUnreadCount } from '../../api/hooks';
 import { BrandMark } from '../BrandMark';
 
 // --- Navigation data (grouped for sidebar) ---
@@ -118,6 +118,7 @@ function UserMenu() {
 
 export function AppShell() {
   const { data: credits } = useCredits();
+  const { data: unreadCount } = useUnreadCount();
   const location = useLocation();
   const navigate = useNavigate();
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -215,6 +216,11 @@ export function AppShell() {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5" aria-hidden="true">
                 <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
+              {(unreadCount ?? 0) > 0 && (
+                <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold text-white">
+                  {unreadCount! > 99 ? '99+' : unreadCount}
+                </span>
+              )}
             </button>
 
             {/* User dropdown (desktop) */}
