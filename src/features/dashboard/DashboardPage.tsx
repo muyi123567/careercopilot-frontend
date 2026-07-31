@@ -47,8 +47,20 @@ export function DashboardPage() {
     { label: '完成第一次行动', done: false, to: '/app/actions' },
   ];
 
+  const hasError = notifications.isError || evidence.isError || credits.isError;
+
   return (
     <div className="space-y-6">
+      {/* Error banner */}
+      {hasError && (
+        <div className="flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4 shrink-0 text-red-500" aria-hidden="true">
+            <path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          <p className="text-sm text-red-700">部分数据加载失败，显示的可能不是最新状态。</p>
+        </div>
+      )}
+
       {/* Welcome + goal guidance */}
       <section>
         <h1 className="text-xl font-bold tracking-tight text-ink-900 sm:text-2xl">
