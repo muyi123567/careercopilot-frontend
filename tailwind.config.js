@@ -14,6 +14,8 @@ export default {
           500: '#6B6258',
           400: '#9A9088',
           300: '#C4BBB2',
+          200: '#E5DFD8',
+          100: '#F0ECE6',
         },
         brand: {
           50: '#FDF5F2',
@@ -26,6 +28,23 @@ export default {
           700: '#8B3622',
           800: '#722C1C',
           900: '#5C2316',
+        },
+        accent: {
+          50: '#FFFBEB',
+          100: '#FEF3C7',
+          200: '#FDE68A',
+          300: '#FCD34D',
+          400: '#FBBF24',
+          500: '#D97706',
+          600: '#B45309',
+          700: '#92400E',
+        },
+        success: {
+          50: '#ECFDF5',
+          100: '#D1FAE5',
+          500: '#059669',
+          600: '#047857',
+          700: '#065F46',
         },
         teal: {
           50: '#EDF7F2',
@@ -41,12 +60,12 @@ export default {
           500: '#A67E2E',
           600: '#8A6824',
         },
-        line: 'rgba(33,29,26,0.14)',
+        line: 'rgba(33,29,26,0.10)',
         scrim: 'rgba(33,29,26,0.5)',
       },
       fontFamily: {
-        sans: ['Inter', '"Noto Sans SC"', '"PingFang SC"', '"Microsoft YaHei"', 'system-ui', 'sans-serif'],
-        display: ['Fraunces', '"Noto Serif SC"', 'Georgia', 'serif'],
+        sans: ['system-ui', '-apple-system', '"PingFang SC"', '"Noto Sans SC"', '"Microsoft YaHei"', 'sans-serif'],
+        display: ['system-ui', '-apple-system', '"PingFang SC"', '"Noto Sans SC"', 'sans-serif'],
       },
       borderRadius: {
         xl: '0.875rem',
@@ -54,38 +73,26 @@ export default {
         '3xl': '1.75rem',
       },
       boxShadow: {
-        card: '0 1px 3px rgba(33,29,26,0.04), 0 8px 24px -12px rgba(33,29,26,0.14)',
-        lift: '0 2px 8px rgba(33,29,26,0.05), 0 24px 48px -16px rgba(33,29,26,0.22)',
-        glow: '0 0 0 1px rgba(226,114,91,0.1), 0 8px 32px -8px rgba(226,114,91,0.2)',
-        focus: '0 0 0 3px rgba(196,85,59,0.4)',
+        card: '0 1px 3px rgba(33,29,26,0.04), 0 4px 16px -8px rgba(33,29,26,0.08)',
+        lift: '0 2px 8px rgba(33,29,26,0.05), 0 16px 32px -12px rgba(33,29,26,0.14)',
+        focus: '0 0 0 3px rgba(217,119,6,0.25)',
       },
       transitionTimingFunction: {
         'out-quart': 'cubic-bezier(0.25, 1, 0.5, 1)',
-        'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
-        spring: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
       },
       keyframes: {
         'slide-up': {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '0%': { opacity: '0', transform: 'translateY(12px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         'fade-in': {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
-        'drawer-in': {
-          '0%': { transform: 'translateX(100%)' },
-          '100%': { transform: 'translateX(0)' },
-        },
-        'float': {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-6px)' },
-        },
       },
       animation: {
-        'slide-up': 'slide-up 0.6s cubic-bezier(0.16,1,0.3,1) both',
-        'fade-in': 'fade-in 0.5s ease-out both',
-        'float': 'float 4s ease-in-out infinite',
+        'slide-up': 'slide-up 0.4s cubic-bezier(0.16,1,0.3,1) both',
+        'fade-in': 'fade-in 0.3s ease-out both',
       },
     },
   },

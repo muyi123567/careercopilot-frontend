@@ -3,8 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import App from './App';
 import { ApiProvider } from './shared/api/query';
-import { AuthProvider } from './shared/auth/session';
-import { NavigationProvider } from './shared/state/navigation';
+import { CookieAuthProvider } from './shared/auth/AuthContext';
 import './index.css';
 
 const rootEl = document.getElementById('root');
@@ -19,14 +18,11 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
 createRoot(rootEl).render(
   <StrictMode>
     <ApiProvider>
-      <AuthProvider>
-        <NavigationProvider>
-          <HashRouter>
-            <App />
-          </HashRouter>
-        </NavigationProvider>
-      </AuthProvider>
+      <CookieAuthProvider>
+        <HashRouter>
+          <App />
+        </HashRouter>
+      </CookieAuthProvider>
     </ApiProvider>
   </StrictMode>,
 );
-

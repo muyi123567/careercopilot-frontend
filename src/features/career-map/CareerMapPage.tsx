@@ -1,96 +1,134 @@
-const DEMO_NODES = [
-  { id: 'n1', role: '后端开发工程师', period: '2024.07 - 至今', probability: null, type: 'current' as const, stats: { sampleSize: 342, avgTransitionMonths: 0 } },
-  { id: 'n2', role: '高级后端工程师', period: '典型路径 · 1-2 年', probability: 72, type: 'deepen' as const, stats: { sampleSize: 342, avgTransitionMonths: 14 } },
-  { id: 'n3', role: '技术产品经理', period: '邻近迁移 · 6-12 月', probability: 38, type: 'adjacent' as const, stats: { sampleSize: 128, avgTransitionMonths: 9 } },
-  { id: 'n4', role: '独立开发者', period: '跨行业探索 · 不确定', probability: 15, type: 'explore' as const, stats: { sampleSize: 56, avgTransitionMonths: 18 } },
-];
+import { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { useOccupations, type Occupation } from '../../shared/api/hooks';
 
-const typeColors: Record<string, string> = {
-  current: 'border-brand-500 bg-brand-500 text-white',
-  deepen: 'border-brand-300 bg-brand-50 text-brand-700',
-  adjacent: 'border-teal-600 bg-teal-50 text-teal-700',
-  explore: 'border-gold-400 bg-gold-50 text-gold-600',
-};
-
-const typeLabels: Record<string, string> = {
-  current: '当前',
-  deepen: '本行业深化',
-  adjacent: '邻近迁移',
-  explore: '跨行业探索',
-};
-
-export function CareerMapPage() {
+function GroupSection({ group, items }: { group: string; items: Occupation[] }) {
+  const [open, setOpen] = useState(true);
   return (
-    <div className="space-y-6">
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">职业地图</p>
-        <h1 className="mt-1.5 font-display text-2xl font-semibold tracking-tight text-ink-900 sm:text-3xl">群体轨迹详情</h1>
-        <p className="mt-1 text-sm text-ink-500">基于群体轨迹统计的转岗路径可视化。所有概率均标注样本量和数据来源。</p>
-      </div>
-
-      {/* Timeline visualization */}
-      <div className="card p-6">
-        <h2 className="mb-4 text-base font-semibold text-ink-800">路径节点时间线</h2>
-        <div className="relative space-y-0 pl-8">
-          <span className="absolute bottom-4 left-[13px] top-4 w-[2px] bg-[repeating-linear-gradient(180deg,rgba(33,29,26,0.16)_0_5px,transparent_5px_10px)]" />
-          {DEMO_NODES.map((node) => (
-            <div key={node.id} className="relative pb-8 last:pb-0">
-              <span className={`absolute -left-8 top-1 flex h-7 w-7 items-center justify-center rounded-full border-[1.5px] text-xs font-bold ${typeColors[node.type]}`}>
-                {node.type === 'current' ? '●' : `${node.probability}%`}
-              </span>
-              <div className="ml-2 rounded-xl border border-line bg-paper p-4 transition-all duration-200 hover:border-brand-200 hover:shadow-sm">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-semibold text-ink-800">{node.role}</h3>
-                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${node.type === 'current' ? 'bg-brand-50 text-brand-700' : node.type === 'adjacent' ? 'bg-teal-50 text-teal-700' : node.type === 'explore' ? 'bg-gold-50 text-gold-600' : 'bg-brand-50 text-brand-700'}`}>
-                    {typeLabels[node.type]}
-                  </span>
-                </div>
-                <p className="mt-1 text-xs text-ink-400">{node.period}</p>
-                {node.probability !== null && (
-                  <div className="mt-3">
-                    <div className="flex items-center justify-between text-[11px] text-ink-400">
-                      <span>转岗概率（群体统计）</span>
-                      <span className="font-semibold text-ink-600">{node.probability}%</span>
-                    </div>
-                    <div className="mt-1 h-2 overflow-hidden rounded-full bg-ink-900/5">
-                      <div className={`h-full rounded-full transition-all duration-700 ${node.type === 'adjacent' ? 'bg-gradient-to-r from-teal-500 to-teal-600' : node.type === 'explore' ? 'bg-gradient-to-r from-gold-400 to-gold-500' : 'bg-gradient-to-r from-brand-400 to-brand-600'}`} style={{ width: `${node.probability}%` }} />
-                    </div>
-                  </div>
-                )}
-                <div className="mt-2 flex gap-4 text-[10px] text-ink-400">
-                  <span>样本量：n={node.stats.sampleSize}</span>
-                  {node.stats.avgTransitionMonths > 0 && <span>平均转型周期：{node.stats.avgTransitionMonths} 个月</span>}
-                </div>
+    <div className="rounded-xl border border-line bg-surface">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex w-full items-center justify-between px-4 py-3 text-left"
+        aria-expanded={open}
+      >
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold text-ink-800">{group}</span>
+          <span className="rounded-full bg-ink-100 px-2 py-0.5 text-[10px] font-medium text-ink-500">{items.length}</span>
+        </div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`h-4 w-4 text-ink-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} aria-hidden="true">
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </button>
+      {open && (
+        <ul className="divide-y divide-line border-t border-line">
+          {items.slice(0, 8).map((occ) => (
+            <li key={occ.slug} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-ink-100/30">
+              <span className="h-2 w-2 shrink-0 rounded-full border border-ink-300" aria-hidden="true" />
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm text-ink-800">{occ.title}</p>
+                {occ.description && <p className="mt-0.5 truncate text-xs text-ink-400">{occ.description}</p>}
               </div>
-            </div>
+              {occ.esco_code && <span className="shrink-0 font-mono text-[10px] text-ink-300">{occ.esco_code}</span>}
+            </li>
           ))}
-        </div>
-      </div>
-
-      {/* Stats summary */}
-      <div className="grid gap-4 sm:grid-cols-3">
-        <div className="card relative overflow-hidden p-5">
-          <span className="absolute left-0 top-0 h-full w-1 bg-brand-500" />
-          <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">总样本量</p>
-          <p className="display mt-1 text-2xl font-bold text-brand-800">526</p>
-          <p className="text-[11px] text-ink-400">来自脉脉、拉勾、Boss 直聘</p>
-        </div>
-        <div className="card relative overflow-hidden p-5">
-          <span className="absolute left-0 top-0 h-full w-1 bg-teal-500" />
-          <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">数据截止</p>
-          <p className="display mt-1 text-2xl font-bold text-teal-700">2025.12</p>
-          <p className="text-[11px] text-ink-400">存在 6 个月滞后</p>
-        </div>
-        <div className="card relative overflow-hidden p-5">
-          <span className="absolute left-0 top-0 h-full w-1 bg-gold-500" />
-          <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">覆盖地域</p>
-          <p className="display mt-1 text-2xl font-bold text-gold-600">一线 + 新一线</p>
-          <p className="text-[11px] text-ink-400">二三线城市数据不足</p>
-        </div>
-      </div>
-
-      <p className="text-xs text-ink-400">概率为群体统计结果，不代表个人成功率。我们明确标注 Unknown 状态，绝不伪造确定性。</p>
+          {items.length > 8 && (
+            <li className="px-4 py-2 text-center text-xs text-ink-400">还有 {items.length - 8} 个，请搜索查看</li>
+          )}
+        </ul>
+      )}
     </div>
   );
 }
 
+export function CareerMapPage() {
+  const { data, isLoading, isError, refetch } = useOccupations();
+  const [search, setSearch] = useState('');
+
+  const groups = useMemo(() => {
+    if (!data) return [];
+    const filtered = search.trim()
+      ? data.filter((o) => o.title.toLowerCase().includes(search.toLowerCase()) || (o.group ?? '').toLowerCase().includes(search.toLowerCase()))
+      : data;
+    const map = new Map<string, Occupation[]>();
+    for (const occ of filtered) {
+      const key = occ.group || '其他';
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(occ);
+    }
+    return Array.from(map.entries()).sort((a, b) => b[1].length - a[1].length);
+  }, [data, search]);
+
+  return (
+    <div className="space-y-5">
+      {/* Header */}
+      <section>
+        <h1 className="text-xl font-bold tracking-tight text-ink-900 sm:text-2xl">职业地图</h1>
+        <p className="mt-1 text-sm text-ink-500">浏览可选路径，找到你的下一程方向</p>
+      </section>
+
+      {/* Current node guidance */}
+      <div className="rounded-xl border border-dashed border-line p-4">
+        <div className="flex items-center gap-3">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ink-900 text-xs font-bold text-white" aria-hidden="true">
+            你
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-medium text-ink-800">先告诉我们你现在做什么</p>
+            <p className="text-xs text-ink-400">设定当前职业后，可以看到从这里出发的推荐路径。</p>
+          </div>
+          <Link to="/app/profile" className="shrink-0 text-xs font-medium text-accent-600 hover:text-accent-700">设定</Link>
+        </div>
+      </div>
+
+      {/* Search */}
+      <div className="relative">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400" aria-hidden="true">
+          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          type="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="搜索职业名称或分类..."
+          className="w-full rounded-xl border border-line bg-surface py-2.5 pl-10 pr-4 text-sm text-ink-800 placeholder:text-ink-400 focus:border-accent-400 focus:outline-none focus:ring-2 focus:ring-accent-500/20"
+          aria-label="搜索职业"
+        />
+      </div>
+
+      {/* Content */}
+      {isLoading ? (
+        <div className="space-y-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="animate-pulse rounded-xl border border-line bg-surface p-4">
+              <div className="h-4 w-28 rounded bg-ink-200" />
+              <div className="mt-3 space-y-2">
+                <div className="h-3.5 w-full rounded bg-ink-100" />
+                <div className="h-3.5 w-3/4 rounded bg-ink-100" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : isError ? (
+        <div className="rounded-xl border border-line bg-surface p-6 text-center">
+          <p className="text-sm text-ink-500">加载职业数据失败，请检查网络后重试。</p>
+          <button onClick={() => void refetch()} className="mt-2 text-sm font-medium text-accent-600 underline underline-offset-2 hover:text-accent-700">
+            重试
+          </button>
+        </div>
+      ) : groups.length === 0 ? (
+        <div className="rounded-xl border border-dashed border-line p-8 text-center">
+          <p className="text-sm text-ink-400">
+            {search ? `没有找到匹配「${search}」的职业，换个关键词试试。` : '暂无职业数据。'}
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          <p className="text-xs text-ink-400">共 {data?.length ?? 0} 个职业，{groups.length} 个分类</p>
+          {groups.slice(0, 12).map(([group, items]) => (
+            <GroupSection key={group} group={group} items={items} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
