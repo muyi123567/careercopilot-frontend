@@ -86,8 +86,12 @@ export function LoginPage() {
           {/* Email login/register form */}
           <LoginForm onSuccess={handleAuthSuccess} />
 
-          {/* Back to home */}
-          <div className="mt-8 text-center">
+          {/* Forgot password + Back to home */}
+          <div className="mt-8 flex items-center justify-center gap-4">
+            <Link to="/forgot-password" className="text-xs text-ink-400 transition-colors hover:text-accent-600">
+              忘记密码？
+            </Link>
+            <span className="h-3 w-px bg-line" />
             <Link to="/" className="text-xs text-ink-400 transition-colors hover:text-ink-700">
               返回首页
             </Link>
