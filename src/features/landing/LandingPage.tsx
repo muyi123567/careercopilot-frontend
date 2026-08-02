@@ -111,6 +111,29 @@ function FlowDiagram() {
   );
 }
 
+
+/* ─── Raycast-style rotating feature text ─── */
+const FEATURES = ['解析你的简历', '匹配群体轨迹', '生成行动实验', '追踪决策质量', '量化技能成长', '推荐下一步'];
+function FeatureWall() {
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setActive(i => (i + 1) % FEATURES.length), 2500);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <div className="mx-auto max-w-3xl text-center">
+      <h3 className="text-xl font-semibold text-white/80 sm:text-2xl">见微行远还能做什么？</h3>
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
+        {FEATURES.map((f, i) => (
+          <span key={f} className={`cursor-default text-lg font-medium transition-all duration-500 sm:text-xl ${i === active ? 'scale-110 bg-gradient-to-r from-brand-300 to-gold-400 bg-clip-text text-transparent' : 'text-white/25 hover:text-white/50'}`}>
+            {f}{i < FEATURES.length - 1 ? '、' : '。'}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ─── Main Page ─── */
 export function LandingPage() {
   return (
@@ -147,17 +170,17 @@ export function LandingPage() {
         </div>
         <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center gap-16 px-4 py-24 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex max-w-[520px] flex-col items-center text-center lg:items-start lg:text-left">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-1.5 text-xs text-white/50">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-1.5 text-xs text-white/50 animate-[fade-in-up_0.8s_ease_both]" style={{ animationDelay: '0.1s' }}>
               <span className="h-1.5 w-1.5 rounded-full bg-brand-400 animate-[breathe_3s_ease-in-out_infinite]" />
               证据型职业导航 · 不编造确定性
             </div>
-            <h1 className="text-5xl font-semibold leading-[1.08] tracking-tight sm:text-6xl">
+            <h1 className="text-5xl font-semibold leading-[1.08] tracking-tight sm:text-6xl animate-[fade-in-up_0.8s_ease_both]" style={{ animationDelay: '0.25s' }}>
               从真实轨迹，<br className="hidden sm:block" /><span className="bg-gradient-to-r from-brand-300 via-gold-400 to-brand-400 bg-clip-text text-transparent">看清下一程</span>
             </h1>
-            <p className="mt-6 max-w-sm text-base leading-relaxed text-white/40">
+            <p className="mt-6 max-w-sm text-base leading-relaxed text-white/40 animate-[fade-in-up_0.8s_ease_both]" style={{ animationDelay: '0.4s' }}>
               用你的真实经历生成可验证的下一步行动。每条建议标注样本量和数据来源。
             </p>
-            <div className="mt-8 flex items-center gap-3">
+            <div className="mt-8 flex items-center gap-3 animate-[fade-in-up_0.8s_ease_both]" style={{ animationDelay: '0.55s' }}>
               <Link to="/login" className="rounded-full bg-white px-6 py-2.5 text-sm font-medium text-ink-900 shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all hover:bg-white/90 hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] active:scale-95">免费开始</Link>
               <Link to="/occupations" className="rounded-full border border-white/15 px-6 py-2.5 text-sm font-medium text-white/60 transition-all hover:border-white/30 hover:text-white">浏览职业库</Link>
             </div>
@@ -167,6 +190,13 @@ export function LandingPage() {
             <FlowDiagram />
           </div>
         </div>
+      </section>
+
+      {/* === Feature Wall (Raycast-style rotating text) === */}
+      <section className="px-4 py-24 sm:px-6">
+        <RevealSection>
+          <FeatureWall />
+        </RevealSection>
       </section>
 
       {/* === Feature blocks (AnySearch-style: text left + visual right) === */}

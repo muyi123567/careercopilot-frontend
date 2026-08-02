@@ -15,6 +15,9 @@
 | AnySearch Console | Plan 用量面板、配额进度条、设置页绑定卡片网格 |
 | Linear.app | 暗色 Hero + 产品 mockup、Kanban 展示面板 |
 | AnySearch Home | scroll-reveal 动效、SVG 流程示意图、虚线连接动画 |
+| Raycast | fadeInUp 交错入场、FeatureWall 文字轮播、毛玻璃质感、产品卡片渐变 |
+| Stripe | 移动端底部 Tab 栏设计（无背景色块、颜色+字重区分选中态） |
+| Notion | 侧边栏抽屉导航（移动端左侧滑入） |
 
 ## 色彩系统 (Tailwind 自定义)
 
@@ -29,7 +32,10 @@
 - breathe: 呼吸光效 (opacity 0.4-1, scale 1-1.08, 6s)
 - dash: SVG 虚线流动 (strokeDashoffset 14-0, 2s linear)
 - slide-up: 入场动画 (translateY 8px-0 + opacity)
-- scroll-reveal: IntersectionObserver + cubic-bezier(0.16,1,0.3,1) 900ms + scale 0.98-1
+- scroll-reveal（IntersectionObserver + spring 缓动）
+- fade-in-up: opacity 0→1 + translateY(20px→0), 0.8s ease, 交错延迟 0.1s/0.25s/0.4s/0.55s
+- slide-in-left: translateX(-100%)→0, 0.25s ease（移动端导航抽屉）
+- FeatureWall 自动高亮轮播: 2.5s 间隔, scale-110 + 渐变色高亮当前项: IntersectionObserver + cubic-bezier(0.16,1,0.3,1) 900ms + scale 0.98-1
 - nav items: hover:scale-[1.02] + active:scale-[0.98]
 
 ## 路由结构

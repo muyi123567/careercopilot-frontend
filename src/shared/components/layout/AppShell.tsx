@@ -227,12 +227,13 @@ export function AppShell() {
           ))}
         </nav>
 
-        <div className="border-t border-line px-3 py-2.5">
-          <div className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition-colors hover:bg-ink-100/40">
-            <UserMenu />
-            <Link to="/app/subscription" className="ml-auto text-[11px] font-medium text-brand-600 underline-offset-2 transition-colors hover:text-brand-700 hover:underline">
-              升级 Pro
-            </Link>
+        <div className="border-t border-line px-3 py-3">
+          <div className="flex items-center justify-between rounded-lg bg-gradient-to-r from-ink-50 to-brand-50/30 px-3 py-2.5">
+            <div className="flex items-center gap-2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4 text-brand-500"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span className="text-[11px] font-medium text-ink-600">帮助与反馈</span>
+            </div>
+            <span className="text-[10px] text-ink-300">v0.1</span>
           </div>
         </div>
       </aside>
@@ -242,13 +243,18 @@ export function AppShell() {
         {/* Top bar */}
         <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-line bg-surface/90 px-4 backdrop-blur-sm sm:px-6">
           <div className="flex items-center gap-3 lg:hidden">
+            <button onClick={() => setSheetOpen(true)} className="flex h-8 w-8 items-center justify-center rounded-lg text-ink-500 transition-colors hover:bg-ink-100" aria-label="打开导航">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5"><path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+            </button>
             <span className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-brand-500 to-brand-700 text-white"><CompassIcon size={12} /></span>
             <Link to="/app" className="text-sm font-bold text-ink-900">
               见微<span className="text-accent-500">行远</span>
             </Link>
           </div>
-          <div className="hidden items-center lg:flex">
-            <span className="text-sm font-medium text-ink-600">{currentLabel}</span>
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-semibold text-ink-800">{currentLabel}</span>
+            <span className="hidden sm:block h-3.5 w-px bg-ink-200" />
+            <span className="hidden sm:block text-xs text-ink-400 italic">见微知著，行远自迩</span>
           </div>
 
           <div className="flex items-center gap-2.5">
@@ -299,33 +305,39 @@ export function AppShell() {
         </main>
       </div>
 
-      {/* === Mobile bottom tab bar (4+1) === */}
-      <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface/95 backdrop-blur-sm lg:hidden" aria-label="底部导航">
-        <div className="mx-auto flex max-w-md items-end justify-around px-2 pb-1.5 pt-1">
+      {/* === Mobile bottom tab bar (Stripe/Notion style) === */}
+      <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-ink-100/80 bg-white/[0.92] backdrop-blur-xl lg:hidden" aria-label="底部导航">
+        <div className="mx-auto flex max-w-lg items-center justify-around px-4 pb-[calc(0.5rem+env(safe-area-inset-bottom))] pt-2">
           {TAB_LEFT.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.end}
               className={({ isActive }) =>
-                `flex flex-col items-center gap-0.5 rounded-lg px-3 py-1.5 text-[10px] font-medium transition-colors ${
-                  isActive ? 'text-accent-600' : 'text-ink-400'
+                `relative flex flex-col items-center gap-1 px-3 py-1.5 transition-all duration-200 ${
+                  isActive ? 'text-brand-600 scale-105' : 'text-ink-300 hover:text-ink-500'
                 }`
               }
             >
-              <NavIcon d={item.icon} className="h-5 w-5" />
-              {item.label}
+              {({ isActive }) => (
+                <>
+                  <NavIcon d={item.icon} className={`h-[22px] w-[22px] transition-all duration-200 ${isActive ? 'drop-shadow-[0_1px_3px_rgba(196,85,59,0.3)]' : ''}`} />
+                  <span className={`text-[10px] leading-none ${isActive ? 'font-bold' : 'font-medium'}`}>{item.label}</span>
+                  {isActive && <span className="absolute -top-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-brand-500" />}
+                </>
+              )}
             </NavLink>
           ))}
 
-          {/* Center + button */}
+          {/* Center + button (floating) */}
           <button
             onClick={() => setSheetOpen(true)}
-            className="relative -top-3 flex h-12 w-12 items-center justify-center rounded-full bg-ink-900 text-white shadow-lift transition-transform active:scale-95"
-            aria-label="快速操作"
+            className="relative -top-4 mx-1 flex h-13 w-13 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 via-brand-600 to-brand-700 text-white shadow-[0_6px_20px_rgba(196,85,59,0.35)] transition-all duration-200 active:scale-90 active:shadow-[0_2px_8px_rgba(196,85,59,0.3)] hover:shadow-[0_8px_24px_rgba(196,85,59,0.45)] hover:-translate-y-0.5"
+            aria-label="打开导航"
+            style={{ height: '52px', width: '52px' }}
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5" aria-hidden="true">
-              <path d="M12 5v14m-7-7h14" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="h-5 w-5" aria-hidden="true">
+              <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
           </button>
 
@@ -335,43 +347,58 @@ export function AppShell() {
               to={item.to}
               end={item.end}
               className={({ isActive }) =>
-                `flex flex-col items-center gap-0.5 rounded-lg px-3 py-1.5 text-[10px] font-medium transition-colors ${
-                  isActive ? 'text-accent-600' : 'text-ink-400'
+                `relative flex flex-col items-center gap-1 px-3 py-1.5 transition-all duration-200 ${
+                  isActive ? 'text-brand-600 scale-105' : 'text-ink-300 hover:text-ink-500'
                 }`
               }
             >
-              <NavIcon d={item.icon} className="h-5 w-5" />
-              {item.label}
+              {({ isActive }) => (
+                <>
+                  <NavIcon d={item.icon} className={`h-[22px] w-[22px] transition-all duration-200 ${isActive ? 'drop-shadow-[0_1px_3px_rgba(196,85,59,0.3)]' : ''}`} />
+                  <span className={`text-[10px] leading-none ${isActive ? 'font-bold' : 'font-medium'}`}>{item.label}</span>
+                  {isActive && <span className="absolute -top-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-brand-500" />}
+                </>
+              )}
             </NavLink>
           ))}
         </div>
-        <div className="h-[env(safe-area-inset-bottom)]" />
       </nav>
 
       {/* Global Command+K palette */}
       <CookieBanner />
       <CommandPalette />
 
-      {/* === Action Sheet (mobile + button) === */}
+      {/* === Mobile Navigation Drawer === */}
       {sheetOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="快速操作">
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="导航菜单">
           <div className="absolute inset-0 bg-scrim" onClick={() => setSheetOpen(false)} />
-          <div className="absolute inset-x-0 bottom-0 rounded-t-2xl bg-surface p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] animate-slide-up">
-            <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-ink-200" />
-            <p className="mb-3 text-sm font-semibold text-ink-800">快速操作</p>
-            <div className="grid grid-cols-3 gap-3">
-              <button onClick={() => { setSheetOpen(false); navigate('/app/documents'); }} className="flex flex-col items-center gap-2 rounded-xl border border-line p-4 transition-colors hover:bg-ink-100/50">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-6 w-6 text-ink-600"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
-                <span className="text-xs text-ink-600">上传证据</span>
+          <div className="absolute inset-y-0 left-0 w-72 bg-surface shadow-2xl animate-[slide-in-left_0.25s_ease] overflow-y-auto">
+            <div className="flex h-14 items-center gap-2 border-b border-line px-5">
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-white"><CompassIcon size={14} /></span>
+              <span className="text-[15px] font-bold text-ink-900">见微<span className="text-accent-500">行远</span></span>
+              <button onClick={() => setSheetOpen(false)} className="ml-auto flex h-7 w-7 items-center justify-center rounded-lg text-ink-400 hover:bg-ink-100" aria-label="关闭">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4"><path d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
-              <button onClick={() => { setSheetOpen(false); navigate('/app/actions'); }} className="flex flex-col items-center gap-2 rounded-xl border border-line p-4 transition-colors hover:bg-ink-100/50">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-6 w-6 text-ink-600"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                <span className="text-xs text-ink-600">记录行动</span>
-              </button>
-              <button onClick={() => { setSheetOpen(false); navigate('/app/decisions'); }} className="flex flex-col items-center gap-2 rounded-xl border border-line p-4 transition-colors hover:bg-ink-100/50">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-6 w-6 text-ink-600"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
-                <span className="text-xs text-ink-600">写决策</span>
-              </button>
+            </div>
+            <nav className="px-3 py-4">
+              {NAV_GROUPS.map((group, gi) => (
+                <div key={group.label}>
+                  {gi > 0 && <div className="mx-3 my-3 border-t border-line" />}
+                  <p className="mb-1.5 px-3 text-[10px] font-semibold uppercase tracking-wider text-ink-300">{group.label}</p>
+                  <div className="space-y-0.5">
+                    {group.items.map((item) => (
+                      <button key={item.to} onClick={() => { setSheetOpen(false); navigate(item.to); }}
+                        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${location.pathname === item.to ? 'font-semibold text-ink-900 bg-brand-50/60' : 'font-medium text-ink-500 hover:bg-ink-100/60'}`}>
+                        <NavIcon d={item.icon} className="h-[18px] w-[18px] shrink-0" />
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </nav>
+            <div className="border-t border-line px-4 py-3">
+              <p className="text-[10px] text-ink-300 italic">见微知著，行远自迩</p>
             </div>
           </div>
         </div>
