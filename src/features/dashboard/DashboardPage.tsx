@@ -4,12 +4,13 @@ import { useNotifications, useEvidenceDocuments, useCredits } from '../../shared
 import { DonutChart } from '../../shared/components/charts/DonutChart';
 import { TrendChart } from '../../shared/components/charts/TrendChart';
 import { OnboardingGuide } from '../../shared/components/OnboardingGuide';
+import { DailyCheckIn } from '../../shared/components/DailyCheckIn';
 
 function StatCard({ icon, value, label, sub }: { icon: string; value: string | number; label: string; sub?: string }) {
   return (
     <div className="rounded-xl border border-line bg-surface p-4">
       <div className="flex items-center gap-3">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent-50">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-brand-50 to-accent-50 ring-1 ring-brand-100">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4 text-accent-600" aria-hidden="true">
             <path d={icon} />
           </svg>
@@ -61,28 +62,35 @@ export function DashboardPage() {
         </div>
       )}
 
-      {/* Welcome + goal guidance */}
-      <section>
-        <h1 className="text-xl font-bold tracking-tight text-ink-900 sm:text-2xl">
-          {greeting}，{user?.display_name ?? '探索者'}
-        </h1>
-        <div className="mt-3 rounded-xl border border-dashed border-line p-4">
-          <div className="flex items-center gap-3">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-50">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4.5 w-4.5 text-accent-600" aria-hidden="true">
-                <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-              </svg>
+      {/* Plan usage panel (AnySearch-style) */}
+      <section className="rounded-xl border border-line bg-surface p-5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <span className="flex h-6 items-center gap-1.5 rounded-full bg-brand-50 px-2.5 text-[11px] font-semibold text-brand-700">
+              <svg viewBox="0 0 24 24" fill="currentColor" className="h-3 w-3"><path d="M12 2l2.4 7.2H22l-6 4.8 2.4 7.2-6.4-4.8L5.6 21.2 8 14 2 9.2h7.6z"/></svg>
+              免费版
             </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-ink-800">设定目标职业，获得个性化推荐</p>
-              <p className="mt-0.5 text-xs text-ink-400">还没有目标？没关系，先看看地图找找方向。</p>
-            </div>
-            <Link to="/app/career-map" className="shrink-0 rounded-lg bg-ink-900 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-ink-700">
-              去看看
-            </Link>
+            <span className="text-sm font-bold text-ink-900">{greeting}，{user?.display_name ?? '探索者'}</span>
+          </div>
+          <Link to="/app/subscription" className="text-xs font-medium text-brand-600 hover:text-brand-700">升级套餐</Link>
+        </div>
+        <div className="mt-4">
+          <div className="mb-1.5 flex items-center justify-between text-xs">
+            <span className="font-medium text-ink-600">本月积分用量</span>
+            <span className="text-ink-400">剩余 {credits.data?.balance ?? '—'}</span>
+          </div>
+          <div className="h-2 overflow-hidden rounded-full bg-ink-100">
+            <div className="h-full rounded-full bg-gradient-to-r from-brand-400 to-brand-500 transition-all duration-700" style={{ width: '12%' }} />
+          </div>
+          <div className="mt-2 flex items-center gap-4 text-[10px] text-ink-400">
+            <span className="flex items-center gap-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>每日签到 +5</span>
+            <span>已用 {Math.max(0, 100 - (credits.data?.balance ?? 100))} / 100</span>
           </div>
         </div>
       </section>
+
+      {/* Daily check-in */}
+      <DailyCheckIn />
 
       {/* Stats cards */}
       <section className="grid grid-cols-3 gap-3">
@@ -106,12 +114,12 @@ export function DashboardPage() {
 
       {/* Charts area */}
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <div className="rounded-xl border border-line bg-surface p-4">
-          <p className="mb-2 text-sm font-semibold text-ink-800">证据完成度</p>
+        <div className="rounded-xl border border-line border-l-[3px] border-l-brand-400 bg-surface p-4 transition-all duration-200 hover:shadow-card hover:border-l-brand-500">
+          <div className="mb-2 flex items-center gap-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4 text-brand-500"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><p className="text-sm font-semibold text-ink-800">证据完成度</p></div>
           <DonutChart value={processedCount} total={Math.max(evidenceCount, 1)} label="已解析 / 总上传" height={160} />
         </div>
-        <div className="rounded-xl border border-line bg-surface p-4">
-          <p className="mb-2 text-sm font-semibold text-ink-800">行动趋势</p>
+        <div className="rounded-xl border border-line bg-surface p-4 transition-shadow duration-200 hover:shadow-card">
+          <div className="mb-2 flex items-center gap-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4 text-brand-500"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg><p className="text-sm font-semibold text-ink-800">行动趋势</p></div>
           <TrendChart data={trendData} labels={trendLabels} height={160} />
         </div>
       </section>
@@ -155,7 +163,7 @@ export function DashboardPage() {
       {/* Recent evidence */}
       <section>
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-ink-800">最近证据</h2>
+          <h2 className="text-sm font-semibold text-ink-800">快速开始</h2>
           <Link to="/app/profile/evidence" className="text-xs font-medium text-accent-600 hover:text-accent-700">证据台账</Link>
         </div>
         {evidence.isLoading ? (
@@ -163,9 +171,9 @@ export function DashboardPage() {
             <div className="h-4 w-1/2 rounded bg-ink-100" />
           </div>
         ) : !evidence.data?.length ? (
-          <div className="rounded-xl border border-dashed border-line p-6 text-center">
-            <p className="text-sm text-ink-500">还没有证据，没关系 — 从一份简历开始就够了。</p>
-            <Link to="/app/documents" className="mt-2 inline-block text-sm font-medium text-accent-600 hover:text-accent-700">上传第一份文档</Link>
+          <div className="rounded-xl border border-dashed border-brand-200 bg-brand-50/50 p-6 text-center">
+            <p className="text-sm text-ink-500">上传一份简历，系统会自动提取你的技能和经历。</p>
+            <Link to="/app/documents" className="mt-2 inline-block text-sm font-medium text-accent-600 hover:text-accent-700">上传简历开始</Link>
           </div>
         ) : (
           <ul className="divide-y divide-line rounded-xl border border-line bg-surface">

@@ -89,6 +89,14 @@ export default {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
+        dash: {
+          from: { strokeDashoffset: '14' },
+          to: { strokeDashoffset: '0' },
+        },
+        breathe: {
+          '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+          '50%': { opacity: '1', transform: 'scale(1.08)' },
+        },
       },
       animation: {
         'slide-up': 'slide-up 0.4s cubic-bezier(0.16,1,0.3,1) both',

@@ -2,7 +2,15 @@ import { NavLink, Outlet, Link, useLocation, useNavigate } from 'react-router-do
 import { useState, useRef, useEffect } from 'react';
 import { useCookieAuth } from '../../auth/AuthContext';
 import { useCredits, useUnreadCount } from '../../api/hooks';
-import { BrandMark } from '../BrandMark';
+import { CommandPalette } from '../CommandPalette';
+import { AlertDialog } from '../ui/AlertDialog';
+
+const CompassIcon = ({ size, className }: { size?: number; className?: string }) => (
+  <svg width={size ?? 20} height={size ?? 20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M15.5 8.5l-2 5-5 2 2-5z" />
+  </svg>
+);
 
 // --- Navigation data (grouped for sidebar) ---
 
@@ -21,6 +29,7 @@ const NAV_GROUPS = [
       { to: '/app/actions', label: '行动实验', icon: 'M13 10V3L4 14h7v7l9-11h-7z', end: false },
       { to: '/app/decisions', label: '决策记录', icon: 'M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4', end: false },
       { to: '/app/radar', label: '市场雷达', icon: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z', end: false },
+      { to: '/app/paths/new', label: '路径分析', icon: 'M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7', end: false },
     ],
   },
   {
@@ -28,6 +37,8 @@ const NAV_GROUPS = [
     items: [
       { to: '/app/documents', label: '文档管理', icon: 'M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z', end: false },
       { to: '/app/profile', label: '我的档案', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', end: false },
+      { to: '/app/assistant', label: '导航问答', icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v7a2 2 0 01-2 2h-5l-5 5v-5z', end: false },
+      { to: '/app/memory', label: '记忆管理', icon: 'M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4', end: false },
       { to: '/app/settings', label: '设置', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z', end: false },
     ],
   },
@@ -56,6 +67,7 @@ function UserMenu() {
   const { user, logout } = useCookieAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [logoutOpen, setLogoutOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -104,7 +116,7 @@ function UserMenu() {
           <div className="mx-3 my-1.5 border-t border-line" />
           <button
             role="menuitem"
-            onClick={() => { setOpen(false); void logout(); }}
+            onClick={() => { setOpen(false); setLogoutOpen(true); }}
             className="flex w-full items-center gap-2.5 px-3.5 py-2 text-sm text-red-600 transition-colors hover:bg-red-50"
           >
             <NavIcon d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" className="h-4 w-4" />
@@ -112,6 +124,35 @@ function UserMenu() {
           </button>
         </div>
       )}
+
+      <AlertDialog
+        open={logoutOpen}
+        onClose={() => setLogoutOpen(false)}
+        onConfirm={() => void logout()}
+        title="退出登录"
+        description="确定要退出当前账户吗？"
+        confirmLabel="退出"
+        variant="danger"
+      />
+    </div>
+  );
+}
+
+function CookieBanner() {
+  const [show, setShow] = useState(() => !localStorage.getItem('cookie-accepted'));
+  if (!show) return null;
+  return (
+    <div className="fixed inset-x-0 bottom-0 z-[70] border-t border-line bg-surface/95 px-4 py-3 backdrop-blur-sm animate-slide-up">
+      <div className="mx-auto flex max-w-4xl flex-col items-center gap-3 sm:flex-row sm:justify-between">
+        <div className="text-center sm:text-left">
+          <p className="text-xs font-semibold text-ink-800">Cookie 偏好设置</p>
+          <p className="mt-0.5 text-[11px] text-ink-500">我们使用必要 Cookie 保持网站正常运行，不会追踪你的个人数据。</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <button onClick={() => { localStorage.setItem('cookie-accepted', '1'); setShow(false); }} className="rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-ink-600 transition-colors hover:bg-ink-100/50">知道了</button>
+          <button onClick={() => { localStorage.setItem('cookie-accepted', '1'); setShow(false); }} className="rounded-lg bg-ink-900 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-ink-700">继续</button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -133,13 +174,23 @@ export function AppShell() {
       {/* === Desktop sidebar === */}
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-line bg-surface lg:flex">
         <div className="flex h-14 items-center gap-2 border-b border-line px-5">
-          <BrandMark size={20} className="text-ink-900" />
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-white"><CompassIcon size={14} /></span>
           <Link to="/app" className="text-[15px] font-bold tracking-tight text-ink-900">
             见微<span className="text-accent-500">行远</span>
           </Link>
         </div>
 
         <nav className="flex-1 overflow-y-auto px-3 py-4" aria-label="主导航">
+          {/* Resource pack CTA */}
+          <Link to="/app/subscription" className="mb-4 flex items-center gap-2.5 rounded-xl border border-brand-200 bg-gradient-to-r from-brand-50 to-accent-50 px-3.5 py-3 transition-all duration-200 hover:shadow-[0_2px_12px_rgba(196,85,59,0.12)] hover:scale-[1.01] active:scale-[0.99]">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-500 text-white">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </span>
+            <div>
+              <p className="text-xs font-semibold text-ink-800">开通资源包</p>
+              <p className="text-[10px] text-ink-400">解锁全部 AI 分析能力</p>
+            </div>
+          </Link>
           {NAV_GROUPS.map((group, gi) => (
             <div key={group.label}>
               {gi > 0 && <div className="mx-3 my-3 border-t border-line" />}
@@ -156,7 +207,7 @@ export function AppShell() {
                       `relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors duration-150 ${
                         isActive
                           ? 'font-semibold text-ink-900'
-                          : 'font-medium text-ink-500 hover:bg-ink-100/60 hover:text-ink-800'
+                          : 'font-medium text-ink-500 hover:bg-ink-100/60 hover:text-ink-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-150'
                       }`
                     }
                   >
@@ -176,8 +227,13 @@ export function AppShell() {
           ))}
         </nav>
 
-        <div className="border-t border-line p-4">
-          <UserMenu />
+        <div className="border-t border-line px-3 py-2.5">
+          <div className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition-colors hover:bg-ink-100/40">
+            <UserMenu />
+            <Link to="/app/subscription" className="ml-auto text-[11px] font-medium text-brand-600 underline-offset-2 transition-colors hover:text-brand-700 hover:underline">
+              升级 Pro
+            </Link>
+          </div>
         </div>
       </aside>
 
@@ -186,7 +242,7 @@ export function AppShell() {
         {/* Top bar */}
         <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-line bg-surface/90 px-4 backdrop-blur-sm sm:px-6">
           <div className="flex items-center gap-3 lg:hidden">
-            <BrandMark size={18} className="text-ink-900" />
+            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-brand-500 to-brand-700 text-white"><CompassIcon size={12} /></span>
             <Link to="/app" className="text-sm font-bold text-ink-900">
               见微<span className="text-accent-500">行远</span>
             </Link>
@@ -291,6 +347,10 @@ export function AppShell() {
         </div>
         <div className="h-[env(safe-area-inset-bottom)]" />
       </nav>
+
+      {/* Global Command+K palette */}
+      <CookieBanner />
+      <CommandPalette />
 
       {/* === Action Sheet (mobile + button) === */}
       {sheetOpen && (
