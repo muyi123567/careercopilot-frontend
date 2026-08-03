@@ -6,6 +6,8 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 CLIENT = (ROOT / "src" / "shared" / "api" / "client.ts").read_text(encoding="utf-8")
 SESSION = (ROOT / "src" / "shared" / "auth" / "session.tsx").read_text(encoding="utf-8")
+FETCH = (ROOT / "src" / "shared" / "api" / "fetch.ts").read_text(encoding="utf-8")
+CSRF = (ROOT / "src" / "shared" / "api" / "csrf.ts").read_text(encoding="utf-8")
 
 
 class IdentityContractTests(unittest.TestCase):
@@ -25,9 +27,15 @@ class IdentityContractTests(unittest.TestCase):
         self.assertNotIn("buildDataInsufficientResponse", CLIENT)
         self.assertNotIn("buildOkResponse", CLIENT)
 
-    def test_authenticated_mode_uses_bearer_token(self):
-        self.assertIn("headers.Authorization = `Bearer ${opts.token}`", CLIENT)
+    def test_authenticated_mode_uses_cookie_session(self):
+        self.assertNotIn("Authorization = `Bearer", CLIENT)
         self.assertNotIn("'X-User-Id'", CLIENT)
+        self.assertIn("credentials: 'include'", FETCH)
+        self.assertIn("X-CSRF-Token", FETCH)
+        self.assertNotIn("localStorage.setItem", CLIENT + SESSION + CSRF)
+        self.assertNotIn("localStorage.getItem", CLIENT + SESSION + CSRF)
+        self.assertNotIn("cc_token", CLIENT + SESSION)
+        self.assertNotIn("cc_uid", CLIENT + SESSION)
 
     def test_browser_bundle_uses_no_fixed_client_session_identity(self):
         self.assertNotIn("createClientSessionId", CLIENT + SESSION)

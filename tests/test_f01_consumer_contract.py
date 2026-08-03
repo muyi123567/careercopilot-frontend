@@ -26,7 +26,7 @@ class StructuredConsumerTests(unittest.TestCase):
         )
 
     def test_authenticated_flow_uses_v2_endpoint(self):
-        self.assertIn("`${apiBase}/api/v2/navigation`", CLIENT)
+        self.assertIn("apiFetch('/api/v2/navigation'", CLIENT)
         self.assertIn("validateNavigationResponse(json)", CLIENT)
 
     def test_frontend_does_not_parse_llm_text(self):
