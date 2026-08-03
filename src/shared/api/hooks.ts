@@ -67,8 +67,9 @@ export interface UserProfile {
 
 export interface PresignResponse {
   upload_id: string;
-  url: string;
-  fields?: Record<string, string>;
+  presigned_url: string;
+  object_key: string;
+  expires_in: number;
 }
 
 // --- Hooks ---
@@ -243,11 +244,11 @@ export function useUpdateProfile() {
 // --- Document Upload ---
 
 export function usePresignUpload() {
-  return useMutation<PresignResponse, ApiError, { filename: string; content_type: string }>({
-    mutationFn: async ({ filename, content_type }) => {
+  return useMutation<PresignResponse, ApiError, { filename: string; content_type: string; file_size: number }>({
+    mutationFn: async ({ filename, content_type, file_size }) => {
       const res = await apiFetch('/api/v1/uploads/presign', {
         method: 'POST',
-        body: JSON.stringify({ filename, content_type }),
+        body: JSON.stringify({ filename, content_type, file_size }),
       });
       if (!res.ok) throw new ApiError(res.status, '获取上传凭证失败');
       return res.json();
