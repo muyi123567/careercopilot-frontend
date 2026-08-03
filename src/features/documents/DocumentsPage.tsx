@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback, type ChangeEvent, type DragEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useEvidenceDocuments, usePresignUpload, useCompleteUpload, useParseResume } from '../../shared/api/hooks';
 import { EmptyEvidence } from '../../shared/components/illustrations/EmptyStates';
 

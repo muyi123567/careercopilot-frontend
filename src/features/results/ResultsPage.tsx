@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useNavigation } from '../../shared/state/navigation';
 import { PathTypeChip, UncertaintyPill, ClassificationTag } from '../../shared/components/ui/Badge';
 import { CoverageBadge } from '../../shared/components/provenance/CoverageBadge';
 import { DataInsufficientState, ErrorState, LoadingState } from '../../shared/components/states/FeedbackStates';
 import { evidenceDimensions } from '../../shared/api/labels';
+import type { CareerPath, Evidence, NavigationResult } from '../../shared/api/contract';
 
 
 type Tab = 'overview' | 'paths' | 'compare' | 'evidence' | 'actions' | 'radar' | 'decisions' | 'privacy';
@@ -99,20 +100,107 @@ const gradeColors: Record<string, string> = {
   U: 'bg-ink-900/5 text-ink-500 border-line',
 };
 
+interface DisplayPath {
+  path_id: string;
+  path_type: 'deepen' | 'adjacent' | 'explore';
+  target: string;
+  summary: string;
+  uncertainty: 'low' | 'medium' | 'high' | 'very_high' | 'unknown';
+  benefits: string[];
+  costs: string[];
+  counterevidence: string[];
+  gaps: string[];
+  actions: { id: string; title: string; signal: string; days: number }[];
+  sources: string[];
+}
+
+interface DisplayEvidence {
+  id: string;
+  grade: 'A' | 'B' | 'C' | 'D' | 'U';
+  classification: 'fact' | 'inference' | 'recommendation';
+  uncertainty: 'low' | 'medium' | 'high' | 'very_high' | 'unknown';
+  claim: string;
+  source: string;
+  confirmed: string | null;
+}
+
+function toDisplayPath(p: CareerPath, result: NavigationResult): DisplayPath {
+  return {
+    path_id: p.path_id,
+    path_type: p.path_type,
+    target: p.target_occupation.name,
+    summary: p.summary,
+    uncertainty: p.uncertainty.level,
+    benefits: p.benefits,
+    costs: p.costs,
+    counterevidence: p.counterevidence,
+    gaps: p.key_gaps,
+    actions: p.minimum_validation_actions.map((a) => ({
+      id: a.action_id,
+      title: a.title,
+      signal: a.expected_signal,
+      days: a.timebox_days,
+    })),
+    sources: result.sources.filter((s) => p.source_ids.includes(s.source_id)).map((s) => s.title),
+  };
+}
+
+function toDisplayEvidence(e: Evidence, result: NavigationResult): DisplayEvidence {
+  const sourceTitles = result.sources
+    .filter((s) => e.source_ids.includes(s.source_id))
+    .map((s) => s.title)
+    .join('；');
+  return {
+    id: e.evidence_id,
+    grade: e.evidence_grade,
+    classification: e.classification,
+    uncertainty: e.uncertainty.level,
+    claim: e.claim,
+    source: sourceTitles || '已发布轨迹聚合',
+    confirmed:
+      e.user_confirmation === 'confirmed'
+        ? 'confirmed'
+        : e.user_confirmation === 'rejected'
+          ? 'rejected'
+          : null,
+  };
+}
+
 export function ResultsPage() {
   const navigate = useNavigate();
   const { phase, response, error } = useNavigation();
   const [tab, setTab] = useState<Tab>('overview');
   const [confirmations, setConfirmations] = useState<Record<string, string>>({});
-  const [useDemo, setUseDemo] = useState(true);
+  const [useDemo, setUseDemo] = useState(false);
 
   if (phase === 'loading') return <LoadingState />;
+  if (phase === 'idle') {
+    return (
+      <div className="flex flex-col items-center rounded-xl border border-dashed border-line bg-surface p-10 text-center">
+        <p className="text-sm font-medium text-ink-600">尚未生成账户态导航</p>
+        <p className="mt-1 text-xs text-ink-400">先在工作台选择当前职业，生成账户态职业导航后再查看结果。</p>
+        <button
+          type="button"
+          onClick={() => navigate('/workspace')}
+          className="mt-4 rounded-full bg-brand-700 px-5 py-2 text-xs font-semibold text-white transition-all hover:bg-brand-800 active:scale-95"
+        >
+          去工作台生成导航
+        </button>
+      </div>
+    );
+  }
   if (phase === 'error') return <ErrorState message={error ?? '无法读取本次职业导航结果'} onBack={() => navigate('/workspace')} />;
   if (response?.status === 'service_failure' && response.error) return <ErrorState message={response.error.message} requestId={response.error.trace_id} onBack={() => navigate('/workspace')} />;
   if (response?.status === 'data_insufficient') return <DataInsufficientState gaps={response.data?.coverage_gaps ?? []} />;
 
   const hasLiveData = response && response.status === 'ok' && response.data;
+  const livePaths = hasLiveData ? response.data!.paths.map((p) => toDisplayPath(p, response.data!)) : [];
+  const liveEvidence = hasLiveData ? response.data!.evidence.map((e) => toDisplayEvidence(e, response.data!)) : [];
   const showDemo = useDemo && !hasLiveData;
+  const activePaths = showDemo ? DEMO_PATHS : livePaths;
+  const activeEvidence = showDemo ? DEMO_EVIDENCE : liveEvidence;
+  const activeRadar = showDemo ? DEMO_RADAR : [];
+  const activeDecisions = showDemo ? DEMO_DECISIONS : [];
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -171,7 +259,7 @@ export function ResultsPage() {
 
             {/* Path cards */}
             <div className="grid gap-4 md:grid-cols-3">
-              {(showDemo ? DEMO_PATHS : []).map((p) => (
+              {activePaths.map((p) => (
                 <div key={p.path_id} className="card card-hover animate-slide-up flex flex-col gap-3 p-5">
                   <div className="flex items-center justify-between">
                     <PathTypeChip type={p.path_type} />
@@ -199,7 +287,7 @@ export function ResultsPage() {
         {/* ===== Paths ===== */}
         {tab === 'paths' && (
           <div className="grid gap-3 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 sm:gap-4">
-            {(showDemo ? DEMO_PATHS : []).map((p) => (
+            {activePaths.map((p) => (
               <div key={p.path_id} className="card card-hover animate-slide-up flex flex-col gap-3 p-5">
                 <div className="flex items-center justify-between"><PathTypeChip type={p.path_type} /><UncertaintyPill level={p.uncertainty} /></div>
                 <h3 className="display text-lg font-semibold">{p.target}</h3>
@@ -216,7 +304,7 @@ export function ResultsPage() {
         {/* ===== Compare ===== */}
         {tab === 'compare' && (
           <div className="grid gap-3 grid-cols-1 lg:grid-cols-3 sm:gap-4">
-            {(showDemo ? DEMO_PATHS : []).map((p) => (
+            {activePaths.map((p) => (
               <div key={p.path_id} className="card animate-slide-up flex flex-col gap-3 p-5">
                 <div className="flex items-center justify-between"><PathTypeChip type={p.path_type} /><UncertaintyPill level={p.uncertainty} /></div>
                 <h3 className="text-sm font-semibold">{p.target}</h3>
@@ -234,7 +322,7 @@ export function ResultsPage() {
         {/* ===== Evidence ===== */}
         {tab === 'evidence' && (
           <div className="space-y-3">
-            {(showDemo ? DEMO_EVIDENCE : []).map((e) => {
+            {activeEvidence.map((e) => {
               const state = confirmations[e.id] ?? e.confirmed;
               return (
                 <div key={e.id} className="card card-hover animate-slide-up p-5">
@@ -261,7 +349,7 @@ export function ResultsPage() {
         {/* ===== Actions ===== */}
         {tab === 'actions' && (
           <div className="space-y-3">
-            {(showDemo ? DEMO_PATHS.flatMap(p => p.actions.map(a => ({ ...a, pathType: p.path_type, target: p.target }))) : []).map((a) => (
+            {activePaths.flatMap(p => p.actions.map(a => ({ ...a, pathType: p.path_type, target: p.target }))).map((a) => (
               <div key={a.id} className="card card-hover animate-slide-up p-5">
                 <div className="flex items-center gap-2">
                   <PathTypeChip type={a.pathType} />
@@ -291,7 +379,7 @@ export function ResultsPage() {
             </div>
             <div className="card p-5">
               <div className="space-y-3">
-                {(showDemo ? DEMO_RADAR : []).map((r) => (
+                {activeRadar.map((r) => (
                   <div key={r.skill} className="flex items-center gap-3">
                     <span className="w-28 shrink-0 text-xs font-medium text-ink-700">{r.skill}</span>
                     <div className="h-5 flex-1 overflow-hidden rounded-full bg-ink-900/5">
@@ -318,7 +406,7 @@ export function ResultsPage() {
             </div>
             <div className="relative space-y-0 pl-6">
               <span className="absolute bottom-2 left-[9px] top-2 w-[2px] bg-[repeating-linear-gradient(180deg,rgba(33,29,26,0.16)_0_5px,transparent_5px_10px)]" />
-              {(showDemo ? DEMO_DECISIONS : []).map((d) => (
+              {activeDecisions.map((d) => (
                 <div key={d.id} className="relative pb-6 last:pb-0">
                   <span className={`absolute -left-6 top-1 flex h-5 w-5 items-center justify-center rounded-full border-[1.5px] ${d.status === 'locked' ? 'border-brand-500 bg-brand-500 text-white' : 'border-line bg-surface text-ink-400'}`}>
                     <span className="h-1.5 w-1.5 rounded-full bg-current" />

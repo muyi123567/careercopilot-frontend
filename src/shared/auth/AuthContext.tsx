@@ -5,6 +5,7 @@
  */
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
 import { getRuntimeConfig } from '../api/client';
+import { getCsrfToken, setCsrfToken, clearCsrfToken } from '../api/csrf';
 
 interface User {
   user_id: string;
@@ -25,11 +26,10 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-let csrfToken: string | null = null;
-
 function getApiBase(): string {
   const apiBase = getRuntimeConfig().apiBase?.replace(/\/$/, '');
-  if (!apiBase) throw new Error('后端地址未配置');
+  // 未配置时默认同源（/api/* 由 Vercel 重写），保持会话 Cookie 一方化
+  if (apiBase === undefined || apiBase === null || apiBase === 'null') return '';
   return apiBase;
 }
 
@@ -39,14 +39,15 @@ async function fetchCreds(url: string, options: RequestInit = {}): Promise<Respo
 
 async function fetchCsrf(url: string, options: RequestInit = {}): Promise<Response> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json', ...(options.headers as Record<string, string> || {}) };
-  if (csrfToken) headers['X-CSRF-Token'] = csrfToken;
+  const token = getCsrfToken();
+  if (token) headers['X-CSRF-Token'] = token;
   return fetch(url, { ...options, credentials: 'include', headers });
 }
 
 async function refreshCsrf(apiBase: string) {
   try {
     const res = await fetchCreds(apiBase + '/api/v1/auth/csrf');
-    if (res.ok) { const d = await res.json(); csrfToken = d.csrf_token; }
+    if (res.ok) { const d = await res.json(); setCsrfToken(d.csrf_token as string); }
   } catch { /* best effort */ }
 }
 
@@ -88,7 +89,7 @@ export function CookieAuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(async () => {
     try { const apiBase = getApiBase(); await fetchCsrf(apiBase + '/api/v1/auth/logout', { method: 'POST' }); } catch { /* best effort */ }
     setUser(null);
-    csrfToken = null;
+    clearCsrfToken();
   }, []);
 
   const clearError = useCallback(() => setError(null), []);

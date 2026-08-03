@@ -3,7 +3,7 @@
  * Shows loading state while auth check is in progress.
  */
 import type { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router';
 import { useCookieAuth } from './AuthContext';
 
 export function RequireAuth({ children }: { children: ReactNode }) {

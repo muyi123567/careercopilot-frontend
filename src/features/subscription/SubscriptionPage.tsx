@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useSubscription, useUpgradeSubscription } from '../../shared/api/hooks-growth';
 
 const TIERS = [
@@ -92,7 +92,8 @@ export function SubscriptionPage() {
           <p className="mb-3 text-sm font-medium text-ink-800">请在下方完成支付</p>
           <iframe
             srcDoc={payHtml}
-            sandbox="allow-scripts allow-forms allow-same-origin"
+            sandbox="allow-scripts allow-forms"
+            referrerPolicy="no-referrer"
             className="h-64 w-full rounded-lg border border-line"
             title="支付表单"
           />

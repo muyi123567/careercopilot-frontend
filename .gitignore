@@ -8,3 +8,18 @@ dist/
 
 # Vercel temp
 .vercel-tmp/
+.vercel
+.env*
+
+# Keep env templates in version control
+!.env.example
+!.env.production
+
+# IDE / tool dirs
+.qoder/
+.vscode/
+
+# Test cache
+.pytest_cache/
+__pycache__/
+*.pyc

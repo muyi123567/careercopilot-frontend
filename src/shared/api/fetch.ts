@@ -3,6 +3,7 @@
  * Dispatches global events for 401/403/429/503 so the router can react.
  */
 import { getRuntimeConfig } from './client';
+import { getCsrfToken } from './csrf';
 
 export class ApiError extends Error {
   status: number;
@@ -14,7 +15,9 @@ export class ApiError extends Error {
 
 export function getApiBaseUrl(): string {
   const apiBase = getRuntimeConfig().apiBase?.replace(/\/$/, '');
-  if (!apiBase) throw new ApiError(0, '后端地址未配置');
+  // 未配置时默认同源：/api/* 由 Vercel 重写到后端，Cookie 一方化，
+  // 避免跨站 Cookie 被浏览器三方 Cookie 策略拦截（登录/会话失效）。
+  if (apiBase === undefined || apiBase === null || apiBase === 'null') return '';
   return apiBase;
 }
 
@@ -25,12 +28,22 @@ export function getApiBaseUrl(): string {
  */
 export async function apiFetch(path: string, options: RequestInit = {}): Promise<Response> {
   const base = getApiBaseUrl();
+  const method = (options.method ?? 'GET').toUpperCase();
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(options.headers as Record<string, string> || {}),
+  };
+  // 不安全方法（POST/PUT/PATCH/DELETE）且已有会话时附加 CSRF token（V7 12.1）
+  if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+    const token = getCsrfToken();
+    if (token && !headers['X-CSRF-Token']) headers['X-CSRF-Token'] = token;
+  }
   let res: Response;
   try {
     res = await fetch(`${base}${path}`, {
       ...options,
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json', ...(options.headers as Record<string, string> || {}) },
+      headers,
     });
   } catch {
     throw new ApiError(0, '网络连接失败，请检查网络后重试');

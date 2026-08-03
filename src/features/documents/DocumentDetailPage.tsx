@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { apiFetch, ApiError } from '../../shared/api/fetch';
 import { useEvidenceItems } from '../../shared/api/hooks';

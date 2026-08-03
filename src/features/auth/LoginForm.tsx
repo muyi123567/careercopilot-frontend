@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router';
 import { useAuth } from './useAuth';
 
 interface LoginFormProps {
@@ -68,7 +69,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
       {/* Agreement */}
       <label className="flex items-start gap-2.5 text-xs text-ink-500 cursor-pointer select-none">
         <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5 h-3.5 w-3.5 rounded border-line text-accent-500 accent-accent-500" />
-        <span>我已阅读并同意<a href="#" className="text-accent-600 underline underline-offset-2 hover:text-accent-700">《用户协议》</a>和<a href="#" className="text-accent-600 underline underline-offset-2 hover:text-accent-700">《隐私政策》</a></span>
+        <span>我已阅读并同意<Link to="/terms" className="text-accent-600 underline underline-offset-2 hover:text-accent-700">《用户协议》</Link>和<Link to="/privacy" className="text-accent-600 underline underline-offset-2 hover:text-accent-700">《隐私政策》</Link></span>
       </label>
 
       {/* Error */}

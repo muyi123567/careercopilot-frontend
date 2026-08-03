@@ -8,7 +8,6 @@ import {
 } from 'react';
 import type { CareerNavigationResponse, NavigationRequestInput } from '../api/contract';
 import { postNavigation } from '../api/client';
-import { useAuth } from '../auth/session';
 
 export type RequestPhase = 'idle' | 'loading' | 'done' | 'error';
 
@@ -26,7 +25,6 @@ interface NavigationState {
 const NavigationContext = createContext<NavigationState | null>(null);
 
 export function NavigationProvider({ children }: { children: ReactNode }) {
-  const { token } = useAuth();
   const [phase, setPhase] = useState<RequestPhase>('idle');
   const [input, setInput] = useState<NavigationRequestInput | null>(null);
   const [response, setResponse] = useState<CareerNavigationResponse | null>(null);
@@ -44,10 +42,7 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
       setInput(reqInput);
       setCompareIds([]);
       try {
-        const res = await postNavigation(reqInput, {
-          token,
-          signal: ctrl.signal,
-        });
+        const res = await postNavigation(reqInput, { signal: ctrl.signal });
         setResponse(res);
         setPhase('done');
       } catch (e) {
@@ -56,7 +51,7 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
         setPhase('error');
       }
     },
-    [token],
+    [],
   );
 
   const reset = useCallback(() => {

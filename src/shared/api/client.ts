@@ -6,6 +6,7 @@
  */
 import type { CareerNavigationResponse, NavigationRequestInput } from './contract';
 import { validateNavigationResponse } from './validate';
+import { apiFetch, ApiError } from './fetch';
 
 export interface RuntimeConfig {
   apiBase?: string;
@@ -30,7 +31,6 @@ export function getRuntimeConfig(): RuntimeConfig {
 }
 
 export interface PostOptions {
-  token?: string;
   signal?: AbortSignal;
 }
 
@@ -39,15 +39,15 @@ export async function postNavigation(
   opts: PostOptions,
 ): Promise<CareerNavigationResponse> {
   const cfg = getRuntimeConfig();
-  const backendConfigured = !!cfg.apiBase && cfg.apiBase !== 'null';
+  // 空字符串 = 同源模式（/api/* 由 Vercel 重写），视为已配置
+  const backendConfigured = cfg.apiBase !== undefined && cfg.apiBase !== null && cfg.apiBase !== 'null';
   if (!backendConfigured) {
     throw new Error('尚未配置职业导航后端地址，无法生成账户态路径。');
   }
-  const apiBase = String(cfg.apiBase).replace(/\/$/, '');
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-  if (opts.token) headers.Authorization = `Bearer ${opts.token}`;
 
-  const res = await fetch(`${apiBase}/api/v2/navigation`, {
+  // 统一走 apiFetch：跨域携带 Cookie 会话 + 自动附加 X-CSRF-Token
+  const res = await apiFetch('/api/v2/navigation', {
     method: 'POST',
     headers,
     body: JSON.stringify({
@@ -57,7 +57,7 @@ export async function postNavigation(
     signal: opts.signal,
   });
   const json = await res.json().catch(() => {
-    throw new Error(`服务返回了非 JSON 响应（HTTP ${res.status}）`);
+    throw new ApiError(res.status, `服务返回了非 JSON 响应（HTTP ${res.status}）`);
   });
   return validateNavigationResponse(json);
 }

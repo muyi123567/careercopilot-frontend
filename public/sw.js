@@ -1,5 +1,5 @@
 // CareerCopilot 最小 Service Worker：离线可装、缓存应用壳与静态资源。
-const CACHE = 'cc-v1';
+const CACHE = 'cc-v2';
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest', './favicon.svg'];
 
 self.addEventListener('install', (event) => {

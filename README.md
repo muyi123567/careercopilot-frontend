@@ -54,7 +54,7 @@ src/
 ### 当前状态
 - 核心流程（首页 → 地图 → 比较 → 证据 → 行动）已实现，使用契约形状 mock 数据演示。
 - 雷达 / 决策 / 隐私为规划骨架，等待后端 F31/F40/F60 就绪后接入。
-- 接真实后端：在 `window.CAREERCOPILOT_CONFIG = { apiBase: 'https://你的域名' }` 注入地址即可切换（demo 模式仍走 mock）。
+- 接真实后端：在 `window.EVIDWAY_CONFIG = { apiBase: 'https://你的域名' }` 注入地址即可切换（demo 模式仍走 mock）。
 
 ## V2 实施顺序
 

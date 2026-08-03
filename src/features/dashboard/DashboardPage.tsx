@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useCookieAuth } from '../../shared/auth/AuthContext';
 import { useNotifications, useEvidenceDocuments, useCredits } from '../../shared/api/hooks';
 import { DonutChart } from '../../shared/components/charts/DonutChart';

@@ -14,12 +14,12 @@ export default defineConfig({
   plugins: [react()],
   build: {
     target: 'es2020',
-    sourcemap: true,
+    sourcemap: false,
     chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
         manualChunks: {
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-react': ['react', 'react-dom', 'react-router'],
           'vendor-query': ['@tanstack/react-query'],
           'vendor-echarts': ['echarts'],
           'vendor-pdf': ['pdfjs-dist'],

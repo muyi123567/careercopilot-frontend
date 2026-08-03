@@ -25,6 +25,12 @@ export interface Occupation {
   esco_code?: string;
 }
 
+export interface NavigationOption {
+  code: string;
+  label: string;
+  edge_count: number;
+}
+
 export interface EvidenceDocument {
   id: string;
   filename: string;
@@ -111,9 +117,43 @@ export function useOccupations() {
       const res = await publicFetch('/api/v1/public/occupations?locale=zh-CN');
       if (!res.ok) throw new ApiError(res.status, '获取职业列表失败');
       const data = await res.json();
-      return Array.isArray(data) ? data : data.items ?? [];
+      const list: unknown[] = Array.isArray(data) ? data : data.data ?? data.items ?? [];
+      const seen = new Set<string>();
+      const out: Occupation[] = [];
+      for (const raw of list as Record<string, unknown>[]) {
+        const slug = typeof raw?.slug === 'string' ? raw.slug : '';
+        if (!slug || seen.has(slug)) continue;
+        seen.add(slug);
+        const label = typeof raw?.label === 'string' ? raw.label : '';
+        const title = typeof raw?.title === 'string' && raw.title ? (raw.title as string) : label.split('\n')[0];
+        out.push({
+          slug,
+          title,
+          group: typeof raw?.group === 'string' ? (raw.group as string) : undefined,
+          description: typeof raw?.description === 'string' ? (raw.description as string) : undefined,
+          esco_code: typeof raw?.esco_code === 'string' && raw.esco_code ? (raw.esco_code as string) : undefined,
+        });
+      }
+      return out;
     },
     staleTime: 5 * 60_000,
+  });
+}
+
+export function useNavigationOptions(q: string) {
+  const trimmed = q.trim();
+  return useQuery<NavigationOption[], ApiError>({
+    queryKey: ['occupations', 'navigation-options', trimmed],
+    queryFn: async () => {
+      const res = await publicFetch(
+        `/api/v1/public/occupations/navigation-options?q=${encodeURIComponent(trimmed)}&limit=50`,
+      );
+      if (!res.ok) throw new ApiError(res.status, '获取可导航职业失败');
+      const data = await res.json();
+      return (Array.isArray(data) ? data : data.data ?? data.items ?? []) as NavigationOption[];
+    },
+    enabled: trimmed.length >= 2,
+    staleTime: 60_000,
   });
 }
 

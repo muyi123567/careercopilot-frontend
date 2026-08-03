@@ -26,7 +26,7 @@ class StructuredConsumerTests(unittest.TestCase):
         )
 
     def test_authenticated_flow_uses_v2_endpoint(self):
-        self.assertIn("`${apiBase}/api/v2/navigation`", CLIENT)
+        self.assertIn("apiFetch('/api/v2/navigation'", CLIENT)
         self.assertIn("validateNavigationResponse(json)", CLIENT)
 
     def test_frontend_does_not_parse_llm_text(self):
@@ -45,6 +45,14 @@ class StructuredConsumerTests(unittest.TestCase):
             for path in (ROOT / "src").rglob("*.tsx")
         )
         self.assertNotIn(".innerHTML", source)
+
+    def test_iframe_sandbox_never_combines_scripts_with_same_origin(self):
+        source = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in (ROOT / "src").rglob("*.tsx")
+        )
+        self.assertNotIn("allow-scripts allow-forms allow-same-origin", source)
+        self.assertNotIn("allow-scripts allow-same-origin", source)
 
 
 if __name__ == "__main__":
