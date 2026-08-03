@@ -60,7 +60,7 @@ export function AnonymousChat({ events, initialQuestion, onClose }: AnonymousCha
     const newMessages = [...history, userMsg];
     setMessages(newMessages); setInput('');
     const apiBase = getRuntimeConfig().apiBase?.replace(/\/$/, '');
-    if (!apiBase) { setError('尚未配置后端地址。'); setBusy(false); return; }
+    if (apiBase === undefined || apiBase === null || apiBase === 'null') { setError('尚未配置后端地址。'); setBusy(false); return; }
     const currentTurn = Math.floor(newMessages.filter(m => m.role === 'user').length);
     try {
       const response = await fetch(`${apiBase}/api/v1/anonymous-chat`, {

@@ -39,7 +39,8 @@ export async function postNavigation(
   opts: PostOptions,
 ): Promise<CareerNavigationResponse> {
   const cfg = getRuntimeConfig();
-  const backendConfigured = !!cfg.apiBase && cfg.apiBase !== 'null';
+  // 空字符串 = 同源模式（/api/* 由 Vercel 重写），视为已配置
+  const backendConfigured = cfg.apiBase !== undefined && cfg.apiBase !== null && cfg.apiBase !== 'null';
   if (!backendConfigured) {
     throw new Error('尚未配置职业导航后端地址，无法生成账户态路径。');
   }

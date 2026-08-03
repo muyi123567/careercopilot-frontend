@@ -28,7 +28,8 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 function getApiBase(): string {
   const apiBase = getRuntimeConfig().apiBase?.replace(/\/$/, '');
-  if (!apiBase) throw new Error('后端地址未配置');
+  // 未配置时默认同源（/api/* 由 Vercel 重写），保持会话 Cookie 一方化
+  if (apiBase === undefined || apiBase === null || apiBase === 'null') return '';
   return apiBase;
 }
 

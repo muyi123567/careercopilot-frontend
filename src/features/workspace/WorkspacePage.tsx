@@ -100,7 +100,7 @@ export function WorkspacePage() {
     if (!events.length) { setError('请先解析简历。'); return; }
     if (!question.trim()) { setError('请写下问题。'); return; }
     const apiBase = getRuntimeConfig().apiBase?.replace(/\/$/, '');
-    if (!apiBase) { setError('尚未配置后端，无法开始临时推演。'); return; }
+    if (apiBase === undefined || apiBase === null || apiBase === 'null') { setError('尚未配置后端，无法开始临时推演。'); return; }
     setBusy(true);
     try {
       const res = await fetch(`${apiBase}/api/v1/anonymous-navigation`, {

@@ -4,6 +4,7 @@ import { HashRouter } from 'react-router';
 import App from './App';
 import { ApiProvider } from './shared/api/query';
 import { CookieAuthProvider } from './shared/auth/AuthContext';
+import { NavigationProvider } from './shared/state/navigation';
 import { Toaster } from './shared/components/ui/toast';
 import './index.css';
 
@@ -20,11 +21,13 @@ createRoot(rootEl).render(
   <StrictMode>
     <ApiProvider>
       <CookieAuthProvider>
-        <HashRouter>
-          <Toaster>
-            <App />
-          </Toaster>
-        </HashRouter>
+        <NavigationProvider>
+          <HashRouter>
+            <Toaster>
+              <App />
+            </Toaster>
+          </HashRouter>
+        </NavigationProvider>
       </CookieAuthProvider>
     </ApiProvider>
   </StrictMode>,

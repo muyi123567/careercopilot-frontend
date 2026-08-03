@@ -15,7 +15,9 @@ export class ApiError extends Error {
 
 export function getApiBaseUrl(): string {
   const apiBase = getRuntimeConfig().apiBase?.replace(/\/$/, '');
-  if (!apiBase) throw new ApiError(0, '后端地址未配置');
+  // 未配置时默认同源：/api/* 由 Vercel 重写到后端，Cookie 一方化，
+  // 避免跨站 Cookie 被浏览器三方 Cookie 策略拦截（登录/会话失效）。
+  if (apiBase === undefined || apiBase === null || apiBase === 'null') return '';
   return apiBase;
 }
 
