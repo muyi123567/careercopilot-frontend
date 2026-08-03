@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { apiFetch } from '../../shared/api/fetch';
 import { BrandMark } from '../../shared/components/BrandMark';
 
@@ -44,7 +44,7 @@ export function ForgotPasswordPage() {
           {state === 'sent' ? (
             <div className="mt-6 rounded-xl border border-success-500/20 bg-success-50 p-4 text-center">
               <p className="text-sm font-medium text-success-700">重置链接已发送</p>
-              <p className="mt-1 text-xs text-success-600">请检查 {email} 的收件箱（含垃圾邮件）</p>
+              <p className="mt-1 text-xs text-success-600">如果该邮箱已注册，你会收到重置链接，请检查收件箱（含垃圾邮件）</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="mt-6 space-y-4">

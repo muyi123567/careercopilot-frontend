@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router';
 import { AppShell } from './shared/components/layout/AppShell';
 import { RequireAuth } from './shared/auth/RequireAuth';
 import { RouteFallback } from './shared/components/RouteFallback';
@@ -7,6 +7,8 @@ import { RouteFallback } from './shared/components/RouteFallback';
 // Lazy-loaded pages (named export -> default adapter)
 const LandingPage = lazy(() => import('./features/landing/LandingPage').then(m => ({ default: m.LandingPage })));
 const LoginPage = lazy(() => import('./features/auth/LoginPage').then(m => ({ default: m.LoginPage })));
+const WorkspacePage = lazy(() => import('./features/workspace/WorkspacePage').then(m => ({ default: m.WorkspacePage })));
+const ResultsPage = lazy(() => import('./features/results/ResultsPage').then(m => ({ default: m.ResultsPage })));
 const ForgotPasswordPage = lazy(() => import('./features/auth/ForgotPasswordPage').then(m => ({ default: m.ForgotPasswordPage })));
 const ResetPasswordPage = lazy(() => import('./features/auth/ResetPasswordPage').then(m => ({ default: m.ResetPasswordPage })));
 const VerifyEmailPage = lazy(() => import('./features/auth/VerifyEmailPage').then(m => ({ default: m.VerifyEmailPage })));
@@ -53,6 +55,8 @@ export default function App() {
         {/* Public pages */}
         <Route index element={<LandingPage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route path="workspace" element={<WorkspacePage />} />
+        <Route path="results" element={<RequireAuth><ResultsPage /></RequireAuth>} />
         <Route path="forgot-password" element={<ForgotPasswordPage />} />
         <Route path="reset-password" element={<ResetPasswordPage />} />
         <Route path="verify-email" element={<VerifyEmailPage />} />

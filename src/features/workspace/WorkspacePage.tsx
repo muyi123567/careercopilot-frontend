@@ -1,9 +1,12 @@
-import { useRef, useState, type ChangeEvent, type DragEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState, type ChangeEvent, type DragEvent } from 'react';
+import { useNavigate } from 'react-router';
 import { getRuntimeConfig } from '../../shared/api/client';
 import { parsePdfLocally, isPdfFile, isDocxFile, isSupportedTextFile } from '../../lib/pdf-parser';
 import { extractStructuredEvents, type StructuredEvent } from '../../shared/privacy/structured-events';
 import { AnonymousChat } from '../console/AnonymousChat';
+import { useNavigation } from '../../shared/state/navigation';
+import { useCookieAuth } from '../../shared/auth/AuthContext';
+import { useNavigationOptions, type NavigationOption } from '../../shared/api/hooks';
 
 type Panel = 'input' | 'signals' | 'infer' | 'chat';
 
@@ -35,6 +38,36 @@ export function WorkspacePage() {
   const [error, setError] = useState('');
   const [result, setResult] = useState<TemporaryResult | null>(null);
   const [chatReady, setChatReady] = useState(false);
+  const { user } = useCookieAuth();
+  const navState = useNavigation();
+  const [occQuery, setOccQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [selectedOption, setSelectedOption] = useState<NavigationOption | null>(null);
+  const [navRegion, setNavRegion] = useState('international');
+  const [navBusy, setNavBusy] = useState(false);
+  const { data: navOptions, isLoading: navLoading } = useNavigationOptions(debouncedQuery);
+
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQuery(occQuery), 400);
+    return () => clearTimeout(t);
+  }, [occQuery]);
+
+  async function runAccountNavigation() {
+    if (!selectedOption) return;
+    setNavBusy(true);
+    setError('');
+    try {
+      await navState.submit({
+        current_occupation: { occupation_id: `trajectory:${selectedOption.code}`, name: selectedOption.code },
+        region: navRegion,
+      });
+      navigate('/results');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '生成账户态导航失败，请重试');
+    } finally {
+      setNavBusy(false);
+    }
+  }
 
   const progress = events.length > 0 ? (result ? 3 : 2) : 1;
 
@@ -227,6 +260,91 @@ export function WorkspacePage() {
           </div>
         )}
       </div>
+
+      {/* 账户态导航（登录用户） */}
+      <section className="card p-4 sm:p-6">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <p className="eyebrow">ACCOUNT-STATE NAVIGATION</p>
+            <h2 className="mt-0.5 text-base font-semibold text-ink-900">账户态职业导航</h2>
+          </div>
+          {user ? (
+            <span className="rounded-full bg-teal-50 px-2.5 py-1 text-[11px] font-medium text-teal-700">已登录</span>
+          ) : (
+            <span className="rounded-full bg-ink-900/5 px-2.5 py-1 text-[11px] font-medium text-ink-500">需登录</span>
+          )}
+        </div>
+        {!user ? (
+          <p className="text-sm text-ink-500">
+            登录后可基于已发布的职业轨迹数据生成账户态导航（当前为国际先验）。{' '}
+            <button type="button" onClick={() => navigate('/login')} className="font-medium text-brand-700 underline underline-offset-2 hover:text-brand-800">
+              去登录
+            </button>
+          </p>
+        ) : (
+          <div className="space-y-3">
+            <div>
+              <label className="mb-1 block text-xs font-medium text-ink-500" htmlFor="nav-occ">当前职业（搜索可导航职业）</label>
+              <input
+                id="nav-occ"
+                type="search"
+                value={occQuery}
+                onChange={(e) => { setOccQuery(e.target.value); setSelectedOption(null); }}
+                placeholder="输入英文职业名或编码，如 teacher / 2330"
+                className="field"
+                autoComplete="off"
+              />
+              {debouncedQuery.trim().length >= 2 && (
+                <div className="mt-1.5 max-h-56 overflow-y-auto rounded-lg border border-line bg-paper">
+                  {navLoading ? (
+                    <p className="px-3 py-2 text-xs text-ink-400">搜索中…</p>
+                  ) : (navOptions?.length ?? 0) === 0 ? (
+                    <p className="px-3 py-2 text-xs text-ink-400">无匹配的可导航职业，换个关键词试试。</p>
+                  ) : (
+                    <ul className="divide-y divide-line">
+                      {navOptions!.map((opt) => (
+                        <li key={opt.code}>
+                          <button
+                            type="button"
+                            onClick={() => { setSelectedOption(opt); setOccQuery(opt.label); }}
+                            className={`flex w-full items-center gap-2 px-3 py-2 text-left text-xs transition-colors hover:bg-brand-50 ${selectedOption?.code === opt.code ? 'bg-brand-50' : ''}`}
+                          >
+                            <span className="min-w-0 flex-1 truncate font-medium text-ink-800">{opt.label}</span>
+                            <span className="shrink-0 rounded bg-ink-900/5 px-1.5 py-0.5 font-mono text-[10px] text-ink-500">{opt.code}</span>
+                            <span className="shrink-0 text-[10px] text-ink-400">{opt.edge_count} 条边</span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
+            </div>
+            <div className="flex flex-wrap items-end gap-3">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-ink-500" htmlFor="nav-region">地区范围</label>
+                <select id="nav-region" value={navRegion} onChange={(e) => setNavRegion(e.target.value)} className="field">
+                  <option value="international">国际先验（当前有数据）</option>
+                  <option value="china-mainland" disabled>中国大陆（数据未发布）</option>
+                </select>
+              </div>
+              <button
+                type="button"
+                disabled={!selectedOption || navBusy}
+                onClick={() => void runAccountNavigation()}
+                className="inline-flex items-center gap-2 rounded-full bg-brand-700 px-5 py-2 text-xs font-semibold text-white transition-all hover:bg-brand-800 disabled:opacity-50"
+              >
+                {navBusy ? '生成中…' : '生成账户态职业导航'}
+              </button>
+            </div>
+            {selectedOption && (
+              <p className="text-[11px] text-ink-400">
+                已选择：{selectedOption.label}（{selectedOption.code}）。将基于 JobHop 已发布轨迹聚合（41,370 条边）生成真实路径，无数据时诚实提示。
+              </p>
+            )}
+          </div>
+        )}
+      </section>
 
       {/* Error */}
       {error && <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">{error}</p>}

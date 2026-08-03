@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 /* ─── Scroll Reveal Hook (AnySearch-style lift + fade) ─── */
 function useScrollReveal() {

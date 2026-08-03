@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useOccupations } from '../../shared/api/hooks';
 import { useGenerateDecision, useCreateDecisionCase, type GeneratedPath } from '../../shared/api/hooks-actions';
 

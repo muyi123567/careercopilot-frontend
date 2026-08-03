@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router';
 import { publicFetch, ApiError } from '../../shared/api/fetch';
 import { useAuth } from '../auth/useAuth';
 

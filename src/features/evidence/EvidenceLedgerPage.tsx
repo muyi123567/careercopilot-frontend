@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useEvidenceDocuments, useEvidenceItems, type EvidenceDocument } from '../../shared/api/hooks';
 import { EmptyEvidence } from '../../shared/components/illustrations/EmptyStates';
 import { FactCandidateCard } from '../../shared/components/FactCandidateCard';

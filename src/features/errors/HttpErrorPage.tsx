@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 function ErrorLayout({ code, title, desc, children }: { code: string; title: string; desc: string; children?: React.ReactNode }) {
   return (

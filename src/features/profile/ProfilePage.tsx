@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useProfile, useResumeSkills } from '../../shared/api/hooks';
 
 function SkillBar({ name, level, category }: { name: string; level: number; category: string }) {

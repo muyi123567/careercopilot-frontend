@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 export function LegalPage({ type }: { type: 'terms' | 'privacy' }) {
   const isTerms = type === 'terms';

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useState } from 'react';
 import { useCookieAuth } from '../../shared/auth/AuthContext';
 import { useCredits } from '../../shared/api/hooks';

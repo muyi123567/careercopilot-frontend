@@ -1,4 +1,4 @@
-import { NavLink, Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, Link, useLocation, useNavigate } from 'react-router';
 import { useState, useRef, useEffect } from 'react';
 import { useCookieAuth } from '../../auth/AuthContext';
 import { useCredits, useUnreadCount } from '../../api/hooks';
