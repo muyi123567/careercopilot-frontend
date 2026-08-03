@@ -75,7 +75,12 @@ export function AnonymousChat({ events, initialQuestion, onClose }: AnonymousCha
         }),
       });
       if (response.status === 429) { setError('请求过于频繁，请稍后再试。'); setBusy(false); return; }
-      if (response.status === 422) { const data = await response.json(); setError(data.detail || '输入内容有误，请检查是否包含个人信息。'); setBusy(false); return; }
+      if (response.status === 422) {
+        const data = await response.json();
+        setError(typeof data.detail === 'string' ? data.detail : '输入内容有误，请检查是否包含个人信息。');
+        setBusy(false);
+        return;
+      }
       if (!response.ok) { setError('服务暂时不可用，请稍后再试。'); setBusy(false); return; }
       const data: ChatResponse = await response.json();
       setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);

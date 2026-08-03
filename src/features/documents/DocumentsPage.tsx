@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback, type ChangeEvent, type DragEvent } from 'react';
 import { Link } from 'react-router';
-import { useEvidenceDocuments, usePresignUpload, useCompleteUpload, useParseResume } from '../../shared/api/hooks';
+import { useEvidenceDocuments, usePresignUpload, useCompleteUpload } from '../../shared/api/hooks';
 import { EmptyEvidence } from '../../shared/components/illustrations/EmptyStates';
 
 const STATUS_MAP: Record<string, { label: string; cls: string }> = {
@@ -17,7 +17,6 @@ export function DocumentsPage() {
   const { data, isLoading, isError, refetch } = useEvidenceDocuments();
   const presign = usePresignUpload();
   const complete = useCompleteUpload();
-  const parse = useParseResume();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragOver, setDragOver] = useState(false);
@@ -35,11 +34,12 @@ export function DocumentsPage() {
       const presignData = await presign.mutateAsync({
         filename: file.name,
         content_type: file.type || 'application/octet-stream',
+        file_size: file.size,
       });
 
       // Step 2: Upload to OSS via presigned URL
       setUploadState('uploading');
-      const putRes = await fetch(presignData.url, {
+      const putRes = await fetch(presignData.presigned_url, {
         method: 'PUT',
         body: file,
         headers: { 'Content-Type': file.type || 'application/octet-stream' },
@@ -50,10 +50,6 @@ export function DocumentsPage() {
       setUploadState('completing');
       await complete.mutateAsync(presignData.upload_id);
 
-      // Step 4: Trigger parse
-      setUploadState('parsing');
-      await parse.mutateAsync(presignData.upload_id);
-
       setUploadState('done');
       void refetch();
       setTimeout(() => setUploadState('idle'), 2000);
@@ -61,7 +57,7 @@ export function DocumentsPage() {
       setUploadState('error');
       setUploadError(err instanceof Error ? err.message : '上传失败，请重试');
     }
-  }, [presign, complete, parse, refetch]);
+  }, [presign, complete, refetch]);
 
   function onFileChange(e: ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
