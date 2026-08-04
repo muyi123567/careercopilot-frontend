@@ -62,4 +62,31 @@ describe('apiFetch', () => {
     expect(response.status).toBe(502);
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
+
+  it('stops after the bounded retry budget for persistent gateway failures', async () => {
+    vi.useFakeTimers();
+    const fetchMock = vi.fn().mockResolvedValue(new Response('', { status: 502 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const request = apiFetch('/api/v1/health');
+    const assertion = expect(request).resolves.toMatchObject({ status: 502 });
+    await vi.runAllTimersAsync();
+
+    await assertion;
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+  });
+
+  it('does not retry a safe read when its caller cancels the request', async () => {
+    const controller = new AbortController();
+    const fetchMock = vi.fn((_url: string, options: RequestInit) => new Promise<Response>((_resolve, reject) => {
+      options.signal?.addEventListener('abort', () => reject(new DOMException('aborted', 'AbortError')));
+    }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const request = apiFetch('/api/v1/health', { signal: controller.signal });
+    controller.abort();
+
+    await expect(request).rejects.toMatchObject({ status: 0 });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
 });
