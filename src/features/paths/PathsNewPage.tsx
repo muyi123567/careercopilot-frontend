@@ -11,7 +11,7 @@ const PATH_KIND_LABELS: Record<string, { label: string; cls: string }> = {
 
 export function PathsNewPage() {
   const navigate = useNavigate();
-  const { data: occupations } = useOccupations();
+  const { data: occupations, isLoading: isLoadingOccupations, isError: isOccupationsError } = useOccupations();
   const generateDecision = useGenerateDecision();
   const createDecisionCase = useCreateDecisionCase();
 
@@ -22,6 +22,10 @@ export function PathsNewPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (isLoadingOccupations || isOccupationsError || !occupations?.length) {
+      setError('职业目录暂不可用，请稍后重试。');
+      return;
+    }
     if (!target.trim()) { setError('请选择目标职业'); return; }
     setError('');
     setPaths(null);
@@ -62,13 +66,24 @@ export function PathsNewPage() {
               id="target-occ"
               value={target}
               onChange={(e) => setTarget(e.target.value)}
+              disabled={isLoadingOccupations || isOccupationsError || !occupations?.length}
               className="w-full rounded-lg border border-line bg-surface px-3.5 py-2.5 text-sm text-ink-800 focus:border-accent-400 focus:outline-none focus:ring-2 focus:ring-accent-500/20"
             >
-              <option value="">请选择...</option>
+              <option value="">
+                {isLoadingOccupations
+                  ? '职业目录加载中...'
+                  : isOccupationsError
+                    ? '职业目录加载失败'
+                    : !occupations?.length
+                      ? '暂无可用职业'
+                      : '请选择...'}
+              </option>
               {occupations?.map((occ) => (
                 <option key={occ.slug} value={occ.title}>{occ.title}</option>
               ))}
             </select>
+            {isOccupationsError && <p className="mt-1.5 text-xs text-red-600">职业目录加载失败，请稍后重试。</p>}
+            {!isLoadingOccupations && !isOccupationsError && !occupations?.length && <p className="mt-1.5 text-xs text-ink-500">当前没有可用于路径分析的职业。</p>}
           </div>
           <div>
             <label className="mb-1.5 block text-xs font-medium text-ink-600" htmlFor="region-select">地区</label>
@@ -86,10 +101,10 @@ export function PathsNewPage() {
           {error && <p className="text-xs text-red-600">{error}</p>}
           <button
             type="submit"
-            disabled={generateDecision.isPending}
+            disabled={generateDecision.isPending || isLoadingOccupations || isOccupationsError || !occupations?.length}
             className="w-full rounded-lg bg-ink-900 py-2.5 text-sm font-medium text-white transition-colors hover:bg-ink-700 disabled:opacity-50"
           >
-            {generateDecision.isPending ? '分析中...' : '生成路径分析'}
+            {generateDecision.isPending ? '分析中...' : isLoadingOccupations ? '职业目录加载中...' : '生成路径分析'}
           </button>
         </form>
       )}

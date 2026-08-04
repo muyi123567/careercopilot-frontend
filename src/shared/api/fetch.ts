@@ -5,11 +5,45 @@
 import { getRuntimeConfig } from './client';
 import { getCsrfToken } from './csrf';
 
+const REQUEST_TIMEOUT_MS = 20_000;
+
 export class ApiError extends Error {
   status: number;
   constructor(status: number, message: string) {
     super(message);
     this.status = status;
+  }
+}
+
+class RequestTimeoutError extends Error {}
+
+async function fetchWithTimeout(url: string, options: RequestInit): Promise<Response> {
+  const { signal: callerSignal, ...requestOptions } = options;
+  const controller = new AbortController();
+  let timedOut = false;
+  const abortFromCaller = () => controller.abort();
+
+  if (callerSignal) {
+    if (callerSignal.aborted) {
+      abortFromCaller();
+    } else {
+      callerSignal.addEventListener('abort', abortFromCaller, { once: true });
+    }
+  }
+
+  const timer = setTimeout(() => {
+    timedOut = true;
+    controller.abort();
+  }, REQUEST_TIMEOUT_MS);
+
+  try {
+    return await fetch(url, { ...requestOptions, signal: controller.signal });
+  } catch (error) {
+    if (timedOut) throw new RequestTimeoutError();
+    throw error;
+  } finally {
+    clearTimeout(timer);
+    callerSignal?.removeEventListener('abort', abortFromCaller);
   }
 }
 
@@ -40,13 +74,13 @@ export async function apiFetch(path: string, options: RequestInit = {}): Promise
   }
   let res: Response;
   try {
-    res = await fetch(`${base}${path}`, {
+    res = await fetchWithTimeout(`${base}${path}`, {
       ...options,
       credentials: 'include',
       headers,
     });
-  } catch {
-    throw new ApiError(0, '网络连接失败，请检查网络后重试');
+  } catch (error) {
+    throw new ApiError(0, error instanceof RequestTimeoutError ? '请求超时，请稍后重试' : '网络连接失败，请检查网络后重试');
   }
   if (res.status === 401) {
     window.dispatchEvent(new CustomEvent('auth:unauthorized'));
@@ -74,13 +108,13 @@ export async function publicFetch(path: string, options: RequestInit = {}): Prom
   const base = getApiBaseUrl();
   let res: Response;
   try {
-    res = await fetch(`${base}${path}`, {
+    res = await fetchWithTimeout(`${base}${path}`, {
       ...options,
       credentials: 'include',
       headers: { 'Content-Type': 'application/json', ...(options.headers as Record<string, string> || {}) },
     });
-  } catch {
-    throw new ApiError(0, '网络连接失败，请检查网络后重试');
+  } catch (error) {
+    throw new ApiError(0, error instanceof RequestTimeoutError ? '请求超时，请稍后重试' : '网络连接失败，请检查网络后重试');
   }
   return res;
 }

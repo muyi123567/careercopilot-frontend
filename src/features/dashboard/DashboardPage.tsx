@@ -2,7 +2,6 @@ import { Link } from 'react-router';
 import { useCookieAuth } from '../../shared/auth/AuthContext';
 import { useNotifications, useEvidenceDocuments, useCredits } from '../../shared/api/hooks';
 import { DonutChart } from '../../shared/components/charts/DonutChart';
-import { TrendChart } from '../../shared/components/charts/TrendChart';
 import { OnboardingGuide } from '../../shared/components/OnboardingGuide';
 import { DailyCheckIn } from '../../shared/components/DailyCheckIn';
 
@@ -18,10 +17,6 @@ export function DashboardPage() {
   const topAction = notifications.data?.[0];
   const evidenceCount = evidence.data?.length ?? 0;
   const processedCount = evidence.data?.filter((d) => d.status === 'processed').length ?? 0;
-
-  // Mock trend data (will come from API later)
-  const trendData = [0, 1, 1, 2, 2, 3, 3, 3, 4, 5, 5, 6];
-  const trendLabels = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
 
   const onboardingSteps = [
     { label: '上传第一份简历', done: evidenceCount > 0, to: '/app/documents' },
@@ -180,7 +175,9 @@ export function DashboardPage() {
         </div>
         <div className="rounded-xl border border-line border-l-[3px] border-l-teal-400 bg-surface p-4 transition-all duration-300 hover:shadow-card hover:border-l-teal-500 hover:-translate-y-0.5">
           <div className="mb-2 flex items-center gap-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4 text-teal-500"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg><p className="text-sm font-semibold text-ink-800">行动趋势</p></div>
-          <TrendChart data={trendData} labels={trendLabels} height={160} />
+          <div className="flex h-40 items-center justify-center rounded-lg border border-dashed border-line px-4 text-center text-sm text-ink-500">
+            暂无行动趋势数据；完成行动并接入趋势数据服务后将显示真实记录。
+          </div>
         </div>
       </section>
 

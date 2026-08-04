@@ -21,76 +21,6 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'privacy', label: '隐私' },
 ];
 
-/* ===== Demo Dataset (契约驱动 mock，后端就绪后切换 apiBase 即可对接) ===== */
-const DEMO_PATHS = [
-  {
-    path_id: 'p1', path_type: 'deepen' as const,
-    target: '高级后端工程师', summary: '在当前技术栈上纵深发展，补齐分布式系统和架构设计能力。',
-    uncertainty: 'medium' as const,
-    benefits: ['薪资涨幅可预期（20-40%）', '已有经验直接复用', '团队内晋升通道清晰'],
-    costs: ['天花板可能在 3-5 年后出现', '技术栈单一化风险', '需要持续跟进技术演进'],
-    counterevidence: ['部分公司高级岗要求管理经验', '纯技术路线在国内晋升空间有限'],
-    gaps: ['分布式系统设计', '大规模数据治理', '技术影响力建设'],
-    actions: [
-      { id: 'a1', title: '主导一个分布式改造项目', signal: '能独立完成技术方案评审', days: 30 },
-      { id: 'a2', title: '在团队内做一次技术分享', signal: '获得同事正面反馈', days: 14 },
-    ],
-    sources: ['脉脉职言 2025 后端薪资报告', '拉勾网高级后端 JD 分析（n=342）'],
-  },
-  {
-    path_id: 'p2', path_type: 'adjacent' as const,
-    target: '技术产品经理', summary: '利用技术背景转向产品岗，补齐产品判断力和用户研究能力。',
-    uncertainty: 'high' as const,
-    benefits: ['技术背景是差异化优势', '产品岗薪资天花板更高', '跨领域复合能力稀缺'],
-    costs: ['需要 6-12 个月转型期', '初期可能降薪', '需要重建专业人脉'],
-    counterevidence: ['技术转产品成功率约 30-40%', '部分 PM 岗位不要求技术背景', '转型期心理压力较大'],
-    gaps: ['产品需求分析方法论', '用户研究实操', '商业思维与 ROI 评估'],
-    actions: [
-      { id: 'a3', title: '完成一个完整的需求闭环', signal: '独立从 0 到 1 交付一个功能', days: 45 },
-      { id: 'a4', title: '做 2 次信息访谈', signal: '确认产品岗日常是否匹配预期', days: 14 },
-    ],
-    sources: ['Boss 直聘技术 PM 岗位分析（n=128）', '在行专家访谈记录'],
-  },
-  {
-    path_id: 'p3', path_type: 'explore' as const,
-    target: '独立开发者 / 自由职业', summary: '利用技术能力直接面向市场，探索产品化或咨询模式。',
-    uncertainty: 'very_high' as const,
-    benefits: ['完全自主的时间和方向', '收入无上限', '直接面对市场反馈'],
-    costs: ['收入不稳定（前 6-12 个月）', '需要自律和时间管理', '缺乏团队支持和社保'],
-    counterevidence: ['独立开发者 3 年存活率约 15%', '需要同时具备产品+营销+技术能力', '心理压力和社会压力较大'],
-    gaps: ['产品化思维', '营销和获客能力', '财务规划和风险缓冲'],
-    actions: [
-      { id: 'a5', title: '用 2 周做一个最小可行产品', signal: '有 10 个真实用户使用', days: 14 },
-      { id: 'a6', title: '在社交平台发布 3 篇技术内容', signal: '获得 50+ 互动', days: 21 },
-    ],
-    sources: ['IndieHackers 社区案例', '即刻独立开发者社群调研'],
-  },
-];
-
-const DEMO_EVIDENCE = [
-  { id: 'e1', grade: 'A' as const, classification: 'fact' as const, uncertainty: 'low' as const, claim: '你有 2 年后端开发经验，熟悉 Python 和分布式系统基础。', source: '简历结构化提取', confirmed: null as string | null },
-  { id: 'e2', grade: 'B' as const, classification: 'inference' as const, uncertainty: 'medium' as const, claim: '你的系统思维能力可以迁移到产品判断中。', source: '职业路径模型推断', confirmed: null as string | null },
-  { id: 'e3', grade: 'C' as const, classification: 'inference' as const, uncertainty: 'high' as const, claim: '技术转产品的成功率约为 30-40%。', source: '脉脉社区统计（样本量有限）', confirmed: null as string | null },
-  { id: 'e4', grade: 'D' as const, classification: 'recommendation' as const, uncertainty: 'very_high' as const, claim: '独立开发者 3 年存活率约 15%。', source: 'IndieHackers 社区（非中国样本）', confirmed: null as string | null },
-  { id: 'e5', grade: 'U' as const, classification: 'fact' as const, uncertainty: 'unknown' as const, claim: '你所在城市的技术 PM 岗位供需比。', source: '数据缺失 — 需要地域化数据源', confirmed: null as string | null },
-];
-
-const DEMO_DECISIONS = [
-  { id: 'd1', day: '第 0 天', event: '选择「邻近迁移：后端→技术PM」作为主探索路径', reason: '系统思维可迁移，时间成本适中', status: 'locked' as const },
-  { id: 'd2', day: '第 7 天', event: '完成 2 次信息访谈', reason: '验证产品岗日常是否匹配预期', status: 'pending' as const },
-  { id: 'd3', day: '第 30 天', event: '提交一个需求闭环作品', reason: '证明「从 0 到 1」的判断力', status: 'pending' as const },
-  { id: 'd4', day: '第 90 天', event: '回填结果与新证据', reason: '重估路径判断，更新置信维度', status: 'pending' as const },
-];
-
-const DEMO_RADAR = [
-  { skill: '产品需求分析', demand: 82, growth: '+12%', region: '一线' },
-  { skill: '数据驱动决策', demand: 74, growth: '+18%', region: '全国' },
-  { skill: '用户研究', demand: 68, growth: '+8%', region: '新一线' },
-  { skill: '项目管理', demand: 91, growth: '+5%', region: '全国' },
-  { skill: 'SQL/数据查询', demand: 77, growth: '+9%', region: '一线' },
-  { skill: 'A/B 测试', demand: 63, growth: '+22%', region: '一线' },
-];
-
 /* ===== Grade Colors ===== */
 const gradeColors: Record<string, string> = {
   A: 'bg-emerald-50 text-emerald-700 border-emerald-200',
@@ -171,7 +101,6 @@ export function ResultsPage() {
   const { phase, response, error } = useNavigation();
   const [tab, setTab] = useState<Tab>('overview');
   const [confirmations, setConfirmations] = useState<Record<string, string>>({});
-  const [useDemo, setUseDemo] = useState(false);
 
   if (phase === 'loading') return <LoadingState />;
   if (phase === 'idle') {
@@ -196,11 +125,6 @@ export function ResultsPage() {
   const hasLiveData = response && response.status === 'ok' && response.data;
   const livePaths = hasLiveData ? response.data!.paths.map((p) => toDisplayPath(p, response.data!)) : [];
   const liveEvidence = hasLiveData ? response.data!.evidence.map((e) => toDisplayEvidence(e, response.data!)) : [];
-  const showDemo = useDemo && !hasLiveData;
-  const activePaths = showDemo ? DEMO_PATHS : livePaths;
-  const activeEvidence = showDemo ? DEMO_EVIDENCE : liveEvidence;
-  const activeRadar = showDemo ? DEMO_RADAR : [];
-  const activeDecisions = showDemo ? DEMO_DECISIONS : [];
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -212,13 +136,6 @@ export function ResultsPage() {
         </div>
         <div className="flex items-center gap-3">
           {hasLiveData && <CoverageBadge gaps={response.data!.coverage_gaps} />}
-          {showDemo && (
-            <span className="rounded-full bg-gold-50 px-3 py-1 text-xs font-medium text-gold-600 border border-gold-100">演示数据</span>
-          )}
-          <button type="button" onClick={() => setUseDemo(!useDemo)}
-            className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${useDemo ? 'bg-brand-50 text-brand-700 border border-brand-200' : 'bg-ink-900/5 text-ink-500 border border-line'}`}>
-            {useDemo ? '演示模式' : '实时数据'}
-          </button>
         </div>
       </div>
 
@@ -243,23 +160,23 @@ export function ResultsPage() {
               <div className="card relative overflow-hidden p-5">
                 <span className="absolute left-0 top-0 h-full w-1 bg-brand-500" />
                 <p className="eyebrow">候选路径</p>
-                <p className="display mt-1 text-3xl font-bold text-brand-800">{showDemo ? DEMO_PATHS.length : (hasLiveData ? response.data!.paths.length : 0)}</p>
+                <p className="display mt-1 text-3xl font-bold text-brand-800">{hasLiveData ? response.data!.paths.length : 0}</p>
               </div>
               <div className="card relative overflow-hidden p-5">
                 <span className="absolute left-0 top-0 h-full w-1 bg-teal-500" />
                 <p className="eyebrow">证据条目</p>
-                <p className="display mt-1 text-3xl font-bold text-teal-700">{showDemo ? DEMO_EVIDENCE.length : (hasLiveData ? response.data!.evidence.length : 0)}</p>
+                <p className="display mt-1 text-3xl font-bold text-teal-700">{hasLiveData ? response.data!.evidence.length : 0}</p>
               </div>
               <div className="card relative overflow-hidden p-5">
                 <span className="absolute left-0 top-0 h-full w-1 bg-gold-500" />
                 <p className="eyebrow">数据覆盖</p>
-                <p className="display mt-1 text-3xl font-bold text-gold-600">{showDemo ? '1 缺口' : (hasLiveData ? (response.data!.coverage_gaps.length === 0 ? '完整' : `${response.data!.coverage_gaps.length} 缺口`) : '—')}</p>
+                <p className="display mt-1 text-3xl font-bold text-gold-600">{hasLiveData ? (response.data!.coverage_gaps.length === 0 ? '完整' : `${response.data!.coverage_gaps.length} 缺口`) : '—'}</p>
               </div>
             </div>
 
             {/* Path cards */}
             <div className="grid gap-4 md:grid-cols-3">
-              {activePaths.map((p) => (
+              {livePaths.map((p) => (
                 <div key={p.path_id} className="card card-hover animate-slide-up flex flex-col gap-3 p-5">
                   <div className="flex items-center justify-between">
                     <PathTypeChip type={p.path_type} />
@@ -287,7 +204,7 @@ export function ResultsPage() {
         {/* ===== Paths ===== */}
         {tab === 'paths' && (
           <div className="grid gap-3 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 sm:gap-4">
-            {activePaths.map((p) => (
+            {livePaths.map((p) => (
               <div key={p.path_id} className="card card-hover animate-slide-up flex flex-col gap-3 p-5">
                 <div className="flex items-center justify-between"><PathTypeChip type={p.path_type} /><UncertaintyPill level={p.uncertainty} /></div>
                 <h3 className="display text-lg font-semibold">{p.target}</h3>
@@ -304,7 +221,7 @@ export function ResultsPage() {
         {/* ===== Compare ===== */}
         {tab === 'compare' && (
           <div className="grid gap-3 grid-cols-1 lg:grid-cols-3 sm:gap-4">
-            {activePaths.map((p) => (
+            {livePaths.map((p) => (
               <div key={p.path_id} className="card animate-slide-up flex flex-col gap-3 p-5">
                 <div className="flex items-center justify-between"><PathTypeChip type={p.path_type} /><UncertaintyPill level={p.uncertainty} /></div>
                 <h3 className="text-sm font-semibold">{p.target}</h3>
@@ -322,7 +239,7 @@ export function ResultsPage() {
         {/* ===== Evidence ===== */}
         {tab === 'evidence' && (
           <div className="space-y-3">
-            {activeEvidence.map((e) => {
+            {liveEvidence.map((e) => {
               const state = confirmations[e.id] ?? e.confirmed;
               return (
                 <div key={e.id} className="card card-hover animate-slide-up p-5">
@@ -349,7 +266,7 @@ export function ResultsPage() {
         {/* ===== Actions ===== */}
         {tab === 'actions' && (
           <div className="space-y-3">
-            {activePaths.flatMap(p => p.actions.map(a => ({ ...a, pathType: p.path_type, target: p.target }))).map((a) => (
+            {livePaths.flatMap(p => p.actions.map(a => ({ ...a, pathType: p.path_type, target: p.target }))).map((a) => (
               <div key={a.id} className="card card-hover animate-slide-up p-5">
                 <div className="flex items-center gap-2">
                   <PathTypeChip type={a.pathType} />
@@ -372,28 +289,9 @@ export function ResultsPage() {
 
         {/* ===== Radar ===== */}
         {tab === 'radar' && (
-          <div className="space-y-4">
-            <div className="card p-5">
-              <p className="eyebrow mb-1">中文职业市场雷达</p>
-              <p className="text-sm text-ink-500">技能需求热度与增长趋势（演示数据，非实时抓取）</p>
-            </div>
-            <div className="card p-5">
-              <div className="space-y-3">
-                {activeRadar.map((r) => (
-                  <div key={r.skill} className="flex items-center gap-3">
-                    <span className="w-28 shrink-0 text-xs font-medium text-ink-700">{r.skill}</span>
-                    <div className="h-5 flex-1 overflow-hidden rounded-full bg-ink-900/5">
-                      <div className="flex h-full items-center rounded-full bg-gradient-to-r from-brand-400 to-brand-600 px-2 transition-all duration-700" style={{ width: `${r.demand}%` }}>
-                        <span className="text-[10px] font-bold text-white">{r.demand}</span>
-                      </div>
-                    </div>
-                    <span className="w-12 text-right text-xs font-semibold text-teal-600">{r.growth}</span>
-                    <span className="w-12 text-right text-[10px] text-ink-400">{r.region}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <p className="text-xs text-ink-400">数据为演示用途。真实版本将标注来源、样本量与截止时间。市场热度不等于个人适合度。</p>
+          <div className="card p-5">
+            <p className="eyebrow mb-1">中文职业市场雷达</p>
+            <p className="text-sm text-ink-500">市场数据暂不可用。数据服务接入后将展示来源、样本量和截止时间。</p>
           </div>
         )}
 
@@ -404,23 +302,8 @@ export function ResultsPage() {
               <p className="eyebrow mb-1">决策复盘</p>
               <p className="text-sm text-ink-500">不可变的决策快照与后续检查点。历史建议不可被覆盖。</p>
             </div>
-            <div className="relative space-y-0 pl-6">
-              <span className="absolute bottom-2 left-[9px] top-2 w-[2px] bg-[repeating-linear-gradient(180deg,rgba(33,29,26,0.16)_0_5px,transparent_5px_10px)]" />
-              {activeDecisions.map((d) => (
-                <div key={d.id} className="relative pb-6 last:pb-0">
-                  <span className={`absolute -left-6 top-1 flex h-5 w-5 items-center justify-center rounded-full border-[1.5px] ${d.status === 'locked' ? 'border-brand-500 bg-brand-500 text-white' : 'border-line bg-surface text-ink-400'}`}>
-                    <span className="h-1.5 w-1.5 rounded-full bg-current" />
-                  </span>
-                  <div className="card ml-2 p-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-brand-700">{d.day}</span>
-                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${d.status === 'locked' ? 'bg-brand-50 text-brand-700' : 'bg-ink-900/5 text-ink-400'}`}>{d.status === 'locked' ? '已锁定' : '待回填'}</span>
-                    </div>
-                    <h4 className="mt-1 text-sm font-semibold text-ink-800">{d.event}</h4>
-                    <p className="mt-0.5 text-xs text-ink-500">{d.reason}</p>
-                  </div>
-                </div>
-              ))}
+            <div className="rounded-xl border border-dashed border-line p-6 text-center text-sm text-ink-500">
+              暂无已保存的决策快照。
             </div>
           </div>
         )}
