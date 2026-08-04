@@ -6,6 +6,10 @@ import { getRuntimeConfig } from './client';
 import { getCsrfToken } from './csrf';
 
 const REQUEST_TIMEOUT_MS = 20_000;
+const MAX_SAFE_RETRIES = 2;
+const RETRY_BACKOFF_MS = 250;
+const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
+const RETRYABLE_STATUSES = new Set([502, 503, 504]);
 
 export class ApiError extends Error {
   status: number;
@@ -47,6 +51,66 @@ async function fetchWithTimeout(url: string, options: RequestInit): Promise<Resp
   }
 }
 
+function isSafeMethod(options: RequestInit): boolean {
+  return SAFE_METHODS.has((options.method ?? 'GET').toUpperCase());
+}
+
+function isCallerAborted(options: RequestInit): boolean {
+  return options.signal?.aborted === true;
+}
+
+async function waitBeforeRetry(options: RequestInit, retryIndex: number): Promise<void> {
+  const delayMs = RETRY_BACKOFF_MS * 2 ** retryIndex;
+  if (delayMs <= 0) return;
+  await new Promise<void>((resolve, reject) => {
+    const signal = options.signal;
+    if (signal?.aborted) {
+      reject(new DOMException('aborted', 'AbortError'));
+      return;
+    }
+    let timer: ReturnType<typeof setTimeout>;
+    const abort = () => {
+      clearTimeout(timer);
+      signal?.removeEventListener('abort', abort);
+      reject(new DOMException('aborted', 'AbortError'));
+    };
+    signal?.addEventListener('abort', abort, { once: true });
+    timer = setTimeout(() => {
+      signal?.removeEventListener('abort', abort);
+      resolve();
+    }, delayMs);
+  });
+}
+
+/**
+ * Retry only idempotent, read-only requests. A write request is never replayed
+ * here because a transient gateway response does not prove that the server did
+ * not already apply the side effect.
+ */
+async function fetchWithSafeRetry(url: string, options: RequestInit): Promise<Response> {
+  if (!isSafeMethod(options)) return fetchWithTimeout(url, options);
+
+  let retryIndex = 0;
+  while (true) {
+    if (isCallerAborted(options)) throw new DOMException('aborted', 'AbortError');
+    try {
+      const response = await fetchWithTimeout(url, options);
+      if (!RETRYABLE_STATUSES.has(response.status) || retryIndex >= MAX_SAFE_RETRIES) {
+        return response;
+      }
+      // Release a transient response before opening the next attempt.
+      void response.body?.cancel();
+    } catch (error) {
+      if (isCallerAborted(options) || error instanceof DOMException && error.name === 'AbortError') {
+        throw error;
+      }
+      if (retryIndex >= MAX_SAFE_RETRIES) throw error;
+    }
+    await waitBeforeRetry(options, retryIndex);
+    retryIndex += 1;
+  }
+}
+
 export function getApiBaseUrl(): string {
   const apiBase = getRuntimeConfig().apiBase?.replace(/\/$/, '');
   // 未配置时默认同源：/api/* 由 Vercel 重写到后端，Cookie 一方化，
@@ -74,7 +138,7 @@ export async function apiFetch(path: string, options: RequestInit = {}): Promise
   }
   let res: Response;
   try {
-    res = await fetchWithTimeout(`${base}${path}`, {
+    res = await fetchWithSafeRetry(`${base}${path}`, {
       ...options,
       credentials: 'include',
       headers,
@@ -108,7 +172,7 @@ export async function publicFetch(path: string, options: RequestInit = {}): Prom
   const base = getApiBaseUrl();
   let res: Response;
   try {
-    res = await fetchWithTimeout(`${base}${path}`, {
+    res = await fetchWithSafeRetry(`${base}${path}`, {
       ...options,
       credentials: 'include',
       headers: { 'Content-Type': 'application/json', ...(options.headers as Record<string, string> || {}) },
