@@ -1,6 +1,6 @@
 # EvidWay 前端接口说明
 
-后端地址：`https://careerc-backend-careercilot-svc-fenhrjvwob.cn-beijing.fcapp.run`
+后端地址：同源模式（`/api/*` 由 Vercel 重写到后端，不直接暴露 FC 地址）
 
 认证方式：HttpOnly Cookie 会话（服务端设置，前端不存 token）
 
