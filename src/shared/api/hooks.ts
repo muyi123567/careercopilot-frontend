@@ -92,8 +92,15 @@ export function useUnreadCount() {
     queryFn: async () => {
       const res = await apiFetch('/api/v1/gps/notifications/unread-count');
       if (!res.ok) throw new ApiError(res.status, '获取未读数失败');
-      const data = await res.json();
-      return typeof data === 'number' ? data : data.count ?? data.unread_count ?? 0;
+      let data: unknown;
+      try {
+        data = await res.json();
+      } catch {
+        throw new ApiError(res.status, '服务返回了非 JSON 响应');
+      }
+      if (typeof data === 'number') return data;
+      const counter = data as { count?: number; unread_count?: number } | null;
+      return counter?.count ?? counter?.unread_count ?? 0;
     },
   });
 }
