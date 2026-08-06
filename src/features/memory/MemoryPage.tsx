@@ -4,7 +4,7 @@ import { useMemorySearch } from '../../shared/api/hooks-growth';
 export function MemoryPage() {
   const [query, setQuery] = useState('');
   const [submitted, setSubmitted] = useState('');
-  const { data, isLoading, isError } = useMemorySearch(submitted);
+  const { data, isLoading, isError, refetch } = useMemorySearch(submitted);
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -66,13 +66,24 @@ export function MemoryPage() {
       {submitted && isError && (
         <div className="rounded-xl border border-line bg-surface p-6 text-center">
           <p className="text-sm text-ink-500">搜索失败，请重试。</p>
+          <button
+            onClick={() => void refetch()}
+            className="mt-2 rounded-lg bg-gradient-to-r from-brand-500 to-brand-600 px-4 py-1.5 text-xs font-medium text-white shadow-sm transition-all duration-200 hover:shadow-[0_4px_12px_rgba(196,85,59,0.25)] hover:scale-[1.02] active:scale-95"
+          >
+            重试
+          </button>
         </div>
       )}
 
       {/* Empty results */}
       {submitted && !isLoading && !isError && data && data.length === 0 && (
-        <div className="rounded-xl border border-dashed border-line p-8 text-center">
-          <p className="text-sm text-ink-500">没有找到匹配「{submitted}」的记忆</p>
+        <div className="rounded-xl border border-dashed border-line bg-surface/50 p-8 text-center">
+          <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto h-16 w-16 text-ink-300" aria-hidden="true">
+            <circle cx="35" cy="35" r="18" />
+            <path d="M48 48l12 12" />
+            <path d="M29 32h12M29 38h8" strokeDasharray="3 2" />
+          </svg>
+          <p className="mt-3 text-sm font-medium text-ink-600">没有找到匹配「{submitted}」的记忆</p>
           <p className="mt-1 text-xs text-ink-400">试试其他关键词</p>
         </div>
       )}
@@ -94,9 +105,12 @@ export function MemoryPage() {
                 ))}
               </div>
               {Object.keys(item.key_fields).length > 0 && (
-                <div className="mt-2 space-y-1">
+                <div className="mt-3 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-line bg-ink-100 sm:grid-cols-2">
                   {Object.entries(item.key_fields).map(([k, v]) => (
-                    <p key={k} className="text-xs text-ink-600"><span className="font-medium text-ink-500">{k}:</span> {v}</p>
+                    <div key={k} className="bg-surface px-3 py-2">
+                      <p className="text-[10px] font-medium uppercase tracking-wide text-ink-400">{k}</p>
+                      <p className="mt-0.5 text-xs text-ink-700">{v}</p>
+                    </div>
                   ))}
                 </div>
               )}

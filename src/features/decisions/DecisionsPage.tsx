@@ -1,5 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router';
 import { apiFetch, ApiError } from '../../shared/api/fetch';
+import { toast } from '../../shared/components/ui/toast';
+import { EmptyDecision } from '../../shared/components/illustrations/EmptyStates';
 
 interface Decision {
   id: string;
@@ -13,6 +16,7 @@ interface Decision {
 }
 
 export function DecisionsPage() {
+  const navigate = useNavigate();
   const { data, isLoading, isError, refetch } = useQuery<Decision[], ApiError>({
     queryKey: ['decisions'],
     queryFn: async () => {
@@ -55,21 +59,24 @@ export function DecisionsPage() {
 
       {/* Empty */}
       {!isLoading && !isError && (!data || data.length === 0) && (
-        <div className="rounded-xl border border-dashed border-line p-10 text-center">
-          <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto h-20 w-20 text-ink-300" aria-hidden="true">
-            <circle cx="40" cy="24" r="8" />
-            <path d="M40 32v10" />
-            <path d="M40 42L28 58" />
-            <path d="M40 42l12 16" />
-            <circle cx="28" cy="60" r="5" strokeDasharray="3 2" />
-            <circle cx="52" cy="60" r="5" strokeDasharray="3 2" />
-          </svg>
+        <div className="rounded-xl border border-dashed border-line bg-surface/50 p-10 text-center">
+          <EmptyDecision className="mx-auto h-20 w-20 text-ink-300" />
           <p className="mt-3 text-sm font-medium text-ink-600">还没有决策记录</p>
           <p className="mt-1 text-xs text-ink-400">
             当你面临职业选择时，在这里记录依据和结果。<br />
             回头看时，你会发现自己的判断模式。
           </p>
-          <button className="mt-4 rounded-lg bg-ink-900 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-ink-700">
+          <button
+            onClick={() => {
+              toast.add({
+                title: '决策录入规划中',
+                description: '先去行动实验，用一次真实行动为决策积累证据。',
+                type: 'info',
+              });
+              navigate('/app/actions');
+            }}
+            className="mt-4 rounded-lg bg-gradient-to-r from-brand-500 to-brand-600 px-4 py-2 text-xs font-medium text-white shadow-sm transition-all duration-200 hover:shadow-[0_4px_12px_rgba(196,85,59,0.25)] hover:scale-[1.02] active:scale-95"
+          >
             记录第一个决策
           </button>
         </div>

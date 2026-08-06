@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router';
 import { useOccupations } from '../../shared/api/hooks';
 import { useGenerateDecision, useCreateDecisionCase, type GeneratedPath } from '../../shared/api/hooks-actions';
 
-const PATH_KIND_LABELS: Record<string, { label: string; cls: string }> = {
-  deepen: { label: '本行深化', cls: 'bg-accent-50 text-accent-700 border-accent-200' },
-  adjacent: { label: '邻近迁移', cls: 'bg-success-50 text-success-600 border-success-500/20' },
-  explore: { label: '跨界探索', cls: 'bg-ink-100 text-ink-600 border-line' },
+const PATH_KIND_LABELS: Record<string, { label: string; cls: string; border: string }> = {
+  deepen: { label: '本行深化', cls: 'bg-accent-50 text-accent-700 border-accent-200', border: 'border-accent-200' },
+  adjacent: { label: '邻近迁移', cls: 'bg-success-50 text-success-600 border-success-500/20', border: 'border-success-500/20' },
+  explore: { label: '跨界探索', cls: 'bg-ink-100 text-ink-600 border-line', border: 'border-line' },
 };
 
 export function PathsNewPage() {
@@ -134,7 +134,7 @@ export function PathsNewPage() {
           {paths.map((path) => {
             const kindInfo = PATH_KIND_LABELS[path.kind] ?? PATH_KIND_LABELS.explore;
             return (
-              <div key={path.kind} className={`rounded-xl border p-5 transition-colors ${kindInfo.cls.split(' ')[2]}`}>
+              <div key={path.kind} className={`rounded-xl border p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-card ${kindInfo.border}`}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-medium ${kindInfo.cls}`}>{kindInfo.label}</span>
@@ -143,7 +143,7 @@ export function PathsNewPage() {
                   <button
                     onClick={() => void handleSelectPath(path)}
                     disabled={createDecisionCase.isPending}
-                    className="rounded-lg bg-ink-900 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-ink-700 disabled:opacity-50"
+                    className="rounded-lg bg-gradient-to-r from-brand-500 to-brand-600 px-3 py-1.5 text-xs font-medium text-white shadow-sm transition-all duration-200 hover:shadow-[0_4px_12px_rgba(196,85,59,0.25)] hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
                   >
                     选择此路径
                   </button>

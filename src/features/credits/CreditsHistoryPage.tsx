@@ -35,32 +35,42 @@ export function CreditsHistoryPage() {
       )}
 
       {!isLoading && !isError && data && data.items.length === 0 && (
-        <div className="rounded-xl border border-dashed border-line p-10 text-center">
-          <p className="text-sm font-medium text-ink-600">还没有积分记录</p>
+        <div className="rounded-xl border border-dashed border-line bg-surface/50 p-10 text-center">
+          <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto h-16 w-16 text-ink-300" aria-hidden="true">
+            <circle cx="40" cy="34" r="16" />
+            <path d="M40 22v24" />
+            <path d="M46 28c-2.5-2-8.5-2-8.5 1.5 0 3 8 2.5 8 5.5 0 3.5-6 3-8.5 1" />
+            <path d="M28 58h24M30 66h20" strokeDasharray="3 2" />
+          </svg>
+          <p className="mt-3 text-sm font-medium text-ink-600">还没有积分记录</p>
           <p className="mt-1 text-xs text-ink-400">完成签到、上传证据等操作后会获得积分。</p>
         </div>
       )}
 
       {!isLoading && !isError && data && data.items.length > 0 && (
         <>
-          <div className="divide-y divide-line rounded-xl border border-line bg-surface">
+          <div className="divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface">
             {data.items.map((item) => (
-              <div key={item.id} className="flex items-center justify-between px-4 py-3.5">
+              <div key={item.id} className="flex items-center justify-between px-4 py-3.5 transition-colors hover:bg-ink-50/40">
                 <div className="min-w-0">
                   <p className="text-sm text-ink-800">{item.reason}</p>
-                  <p className="text-xs text-ink-400">{new Date(item.created_at).toLocaleString('zh-CN')}</p>
+                  <p className="mt-0.5 text-xs text-ink-400">{new Date(item.created_at).toLocaleString('zh-CN')}</p>
                 </div>
-                <span className={`shrink-0 text-sm font-semibold ${item.amount >= 0 ? 'text-success-600' : 'text-red-500'}`}>
+                <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${item.amount >= 0 ? 'bg-success-50 text-success-600' : 'bg-red-50 text-red-500'}`}>
                   {item.amount >= 0 ? `+${item.amount}` : item.amount}
                 </span>
               </div>
             ))}
           </div>
           {/* Pagination */}
-          <div className="flex items-center justify-center gap-4">
-            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1} className="rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-ink-600 disabled:opacity-40">上一页</button>
-            <span className="text-xs text-ink-400">第 {page} 页</span>
-            <button onClick={() => setPage(p => p + 1)} disabled={data.items.length < 20} className="rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-ink-600 disabled:opacity-40">下一页</button>
+          <div className="flex items-center justify-center gap-3">
+            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1} className="rounded-lg border border-line bg-surface px-3.5 py-1.5 text-xs font-medium text-ink-600 shadow-sm transition-all duration-200 hover:border-ink-200 hover:bg-ink-50 disabled:opacity-40 disabled:hover:border-line disabled:hover:bg-transparent">
+              上一页
+            </button>
+            <span className="rounded-lg bg-brand-50 px-3 py-1.5 text-xs font-semibold text-brand-700">第 {page} 页</span>
+            <button onClick={() => setPage(p => p + 1)} disabled={data.items.length < 20} className="rounded-lg border border-line bg-surface px-3.5 py-1.5 text-xs font-medium text-ink-600 shadow-sm transition-all duration-200 hover:border-ink-200 hover:bg-ink-50 disabled:opacity-40 disabled:hover:border-line disabled:hover:bg-transparent">
+              下一页
+            </button>
           </div>
         </>
       )}

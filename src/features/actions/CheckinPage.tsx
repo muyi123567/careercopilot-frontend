@@ -36,12 +36,21 @@ export function CheckinPage() {
 
   if (success) {
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-12 w-12 text-success-500" aria-hidden="true">
-          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <p className="mt-4 text-sm font-medium text-ink-800">签到成功</p>
-        <p className="mt-1 text-xs text-ink-400">正在返回行动列表...</p>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="relative w-full max-w-sm overflow-hidden rounded-2xl border border-success-200 bg-gradient-to-b from-success-50 to-surface p-10 text-center shadow-card animate-[slide-up_0.4s_cubic-bezier(0.16,1,0.3,1)_both]">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-success-500/[0.08] blur-[60px]" />
+          <span className="relative mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-success-500 text-white shadow-[0_8px_24px_-6px_rgba(5,150,105,0.4)] animate-[breathe_3s_ease-in-out_infinite]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6" aria-hidden="true">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </span>
+          <h2 className="mt-5 text-lg font-bold tracking-tight text-ink-900">签到成功</h2>
+          <p className="mt-1.5 text-sm text-ink-500">这次复盘已记入行动记录，为后续决策积累了证据。</p>
+          <div className="mt-6 flex items-center justify-center gap-2 text-xs text-ink-400">
+            <span className="h-1 w-1 animate-pulse rounded-full bg-success-500" />
+            正在返回行动列表...
+          </div>
+        </div>
       </div>
     );
   }
@@ -117,7 +126,7 @@ export function CheckinPage() {
         <button
           type="submit"
           disabled={addCheckin.isPending}
-          className="w-full rounded-lg bg-ink-900 py-2.5 text-sm font-medium text-white transition-colors hover:bg-ink-700 disabled:opacity-50"
+          className="w-full rounded-lg bg-gradient-to-r from-brand-500 to-brand-600 py-2.5 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:shadow-[0_4px_12px_rgba(196,85,59,0.25)] hover:scale-[1.01] active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
         >
           {addCheckin.isPending ? '提交中...' : '提交复盘'}
         </button>
