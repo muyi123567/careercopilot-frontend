@@ -4,7 +4,7 @@
  * CSRF token in memory only. Auth via GET /api/v1/auth/me.
  */
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
-import { getRuntimeConfig } from '../api/client';
+import { getApiBaseUrl } from '../api/fetch';
 import { getCsrfToken, setCsrfToken, clearCsrfToken } from '../api/csrf';
 
 interface User {
@@ -25,13 +25,6 @@ interface AuthContextValue {
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
-
-function getApiBase(): string {
-  const apiBase = getRuntimeConfig().apiBase?.replace(/\/$/, '');
-  // 未配置时默认同源（/api/* 由 Vercel 重写），保持会话 Cookie 一方化
-  if (apiBase === undefined || apiBase === null || apiBase === 'null') return '';
-  return apiBase;
-}
 
 async function fetchCreds(url: string, options: RequestInit = {}): Promise<Response> {
   return fetch(url, { ...options, credentials: 'include', headers: { 'Content-Type': 'application/json', ...(options.headers || {}) } });
@@ -59,7 +52,7 @@ export function CookieAuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     (async () => {
       try {
-        const apiBase = getApiBase();
+        const apiBase = getApiBaseUrl();
         const res = await fetchCreds(apiBase + '/api/v1/auth/me');
         if (res.ok) { setUser(await res.json()); await refreshCsrf(apiBase); }
         else { setUser(null); }
@@ -70,7 +63,7 @@ export function CookieAuthProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(async (email: string, password: string) => {
     setError(null);
-    const apiBase = getApiBase();
+    const apiBase = getApiBaseUrl();
     const res = await fetchCreds(apiBase + '/api/v1/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) });
     if (!res.ok) { const d = await res.json().catch(() => ({})); const msg = typeof d.detail === 'string' ? d.detail : '登录失败'; setError(msg); throw new Error(msg); }
     setUser(await res.json());
@@ -79,7 +72,7 @@ export function CookieAuthProvider({ children }: { children: ReactNode }) {
 
   const register = useCallback(async (email: string, password: string) => {
     setError(null);
-    const apiBase = getApiBase();
+    const apiBase = getApiBaseUrl();
     const res = await fetchCreds(apiBase + '/api/v1/auth/register', { method: 'POST', body: JSON.stringify({ email, password }) });
     if (!res.ok) { const d = await res.json().catch(() => ({})); const msg = typeof d.detail === 'string' ? d.detail : '注册失败'; setError(msg); throw new Error(msg); }
     setUser(await res.json());
@@ -87,7 +80,7 @@ export function CookieAuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = useCallback(async () => {
-    try { const apiBase = getApiBase(); await fetchCsrf(apiBase + '/api/v1/auth/logout', { method: 'POST' }); } catch { /* best effort */ }
+    try { const apiBase = getApiBaseUrl(); await fetchCsrf(apiBase + '/api/v1/auth/logout', { method: 'POST' }); } catch { /* best effort */ }
     setUser(null);
     clearCsrfToken();
   }, []);

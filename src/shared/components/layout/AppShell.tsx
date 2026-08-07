@@ -149,7 +149,6 @@ function CookieBanner() {
           <p className="mt-0.5 text-[11px] text-ink-500">我们使用必要 Cookie 保持网站正常运行，不会追踪你的个人数据。</p>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => { localStorage.setItem('cookie-accepted', '1'); setShow(false); }} className="rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-ink-600 transition-colors hover:bg-ink-100/50">知道了</button>
           <button onClick={() => { localStorage.setItem('cookie-accepted', '1'); setShow(false); }} className="rounded-lg bg-ink-900 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-ink-700">继续</button>
         </div>
       </div>
