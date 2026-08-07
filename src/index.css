@@ -49,6 +49,15 @@
   .visually-hidden {
     @apply sr-only;
   }
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-wider text-brand-700;
+  }
+  .display {
+    @apply font-display tracking-tight;
+  }
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-card hover:-translate-y-0.5 hover:border-brand-200;
+  }
 }
 
 @layer utilities {
