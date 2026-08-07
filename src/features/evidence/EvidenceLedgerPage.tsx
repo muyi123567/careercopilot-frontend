@@ -21,7 +21,7 @@ function TimelineItem({ doc }: { doc: EvidenceDocument }) {
         <span className="w-px flex-1 bg-line" aria-hidden="true" />
       </div>
       <div className="min-w-0 flex-1 -mt-0.5">
-        <Link to={`/app/documents/${doc.id}`} className="block rounded-xl border border-line bg-surface p-3.5 transition-colors hover:border-accent-200">
+        <Link to={`/app/documents/${doc.id}`} className="block rounded-xl border border-line bg-surface p-3.5 transition-colors hover:bg-ink-50/40">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
               <p className="truncate text-sm font-medium text-ink-800">{doc.filename}</p>

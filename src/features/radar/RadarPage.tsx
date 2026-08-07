@@ -80,7 +80,7 @@ export function RadarPage() {
         <div className="space-y-3">
           <p className="text-xs text-ink-400">共 {data.length} 条信号</p>
           {data.map((signal) => (
-            <div key={signal.id} className="rounded-xl border border-line bg-surface p-4 transition-colors hover:border-ink-200">
+            <div key={signal.id} className="rounded-xl border border-line bg-surface p-4 transition-colors hover:bg-ink-50/40">
               <div className="flex items-start gap-3">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent-50">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4 text-accent-600" aria-hidden="true">

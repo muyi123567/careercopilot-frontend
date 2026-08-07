@@ -4,6 +4,7 @@ import { useNotifications, useEvidenceDocuments, useCredits } from '../../shared
 import { DonutChart } from '../../shared/components/charts/DonutChart';
 import { OnboardingGuide } from '../../shared/components/OnboardingGuide';
 import { DailyCheckIn } from '../../shared/components/DailyCheckIn';
+import { EmptyAction } from '../../shared/components/illustrations/EmptyStates';
 
 
 export function DashboardPage() {
@@ -26,22 +27,34 @@ export function DashboardPage() {
   ];
 
   const hasError = notifications.isError || evidence.isError || credits.isError;
+  const retryDashboard = () => {
+    void notifications.refetch();
+    void evidence.refetch();
+    void credits.refetch();
+  };
 
   return (
     <div className="space-y-6">
       {/* Error banner */}
       {hasError && (
-        <div className="flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+        <div className="flex flex-wrap items-center gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4 shrink-0 text-red-500" aria-hidden="true">
             <path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
           </svg>
-          <p className="text-sm text-red-700">部分数据加载失败，显示的可能不是最新状态。</p>
+          <p className="min-w-0 flex-1 text-sm text-red-700">部分数据加载失败，显示的可能不是最新状态。</p>
+          <button
+            type="button"
+            onClick={retryDashboard}
+            className="rounded-lg bg-gradient-to-r from-brand-500 to-brand-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:shadow-[0_4px_12px_rgba(196,85,59,0.25)] hover:scale-[1.02] active:scale-95"
+          >
+            重试
+          </button>
         </div>
       )}
 
 
       {/* Plan usage panel (AnySearch-style) */}
-      <section className="rounded-xl border border-line bg-surface p-5 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(0,0,0,0.04)]">
+      <section className="rounded-xl border border-line bg-surface p-5 transition-all duration-300 hover:shadow-card">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <span className="flex h-6 items-center gap-1.5 rounded-full bg-brand-50 px-2.5 text-[11px] font-semibold text-brand-700">
@@ -95,7 +108,7 @@ export function DashboardPage() {
           ) : (
             <ul className="space-y-2">
               {evidence.data.slice(0, 3).map((doc) => (
-                <li key={doc.id} className="flex items-center gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-ink-50">
+                <li key={doc.id} className="flex items-center gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-ink-50/40">
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-brand-50 text-[9px] font-bold text-brand-600">{doc.doc_type?.slice(0, 3).toUpperCase() ?? 'DOC'}</span>
                   <span className="min-w-0 flex-1 truncate text-sm text-ink-700">{doc.filename}</span>
                   <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium ${doc.status === 'processed' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
@@ -175,8 +188,16 @@ export function DashboardPage() {
         </div>
         <div className="rounded-xl border border-line border-l-[3px] border-l-teal-400 bg-surface p-4 transition-all duration-300 hover:shadow-card hover:border-l-teal-500 hover:-translate-y-0.5">
           <div className="mb-2 flex items-center gap-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4 text-teal-500"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg><p className="text-sm font-semibold text-ink-800">行动趋势</p></div>
-          <div className="flex h-40 items-center justify-center rounded-lg border border-dashed border-line px-4 text-center text-sm text-ink-500">
-            暂无行动趋势数据；完成行动并接入趋势数据服务后将显示真实记录。
+          <div className="flex h-40 flex-col items-center justify-center rounded-lg border border-dashed border-line px-4 text-center">
+            <EmptyAction className="h-14 w-14 text-ink-300" />
+            <p className="mt-2 text-sm font-semibold text-ink-700">还没有行动数据</p>
+            <p className="mt-1 text-xs text-ink-400">完成第一次行动实验后，这里会显示你的行动趋势。</p>
+            <Link
+              to="/app/actions"
+              className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-brand-500 to-brand-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:shadow-[0_4px_12px_rgba(196,85,59,0.25)] hover:scale-[1.02] active:scale-95"
+            >
+              去开始行动
+            </Link>
           </div>
         </div>
       </section>

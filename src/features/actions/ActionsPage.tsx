@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import { useDecisionList, useActions, useUpdateActionStatus, type ActionItem } from '../../shared/api/hooks-actions';
+import { EmptyAction } from '../../shared/components/illustrations/EmptyStates';
 
 const STATUS_LABELS: Record<string, { label: string; cls: string }> = {
   planned: { label: '计划中', cls: 'bg-ink-100 text-ink-600' },
@@ -13,7 +14,7 @@ function ActionCard({ action }: { action: ActionItem }) {
   const statusInfo = STATUS_LABELS[action.status] ?? STATUS_LABELS.planned;
 
   return (
-    <div className="rounded-xl border border-line bg-surface p-4 transition-colors hover:border-ink-200">
+    <div className="rounded-xl border border-line bg-surface p-4 transition-colors hover:bg-ink-50/40">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
@@ -115,11 +116,7 @@ export function ActionsPage() {
       {/* Empty - no decisions yet */}
       {!decisionsLoading && !decisionsError && (!decisions || decisions.length === 0) && (
         <div className="rounded-xl border border-dashed border-line p-10 text-center">
-          <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto h-20 w-20 text-ink-300" aria-hidden="true">
-            <path d="M20 60V20h40v40H20z" strokeDasharray="4 3" />
-            <path d="M30 45l8-8 6 6 10-12" />
-            <circle cx="55" cy="25" r="4" strokeDasharray="2 1" />
-          </svg>
+          <EmptyAction className="mx-auto h-20 w-20 text-ink-300" />
           <p className="mt-3 text-sm font-medium text-ink-600">还没有行动，没关系</p>
           <p className="mt-1 text-xs text-ink-400">先做一次路径分析，系统会为你生成可验证的行动实验。</p>
           <Link to="/app/paths/new" className="mt-4 inline-block rounded-lg bg-ink-900 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-ink-700">
@@ -141,7 +138,8 @@ export function ActionsPage() {
       {/* Has decisions but no actions for active decision */}
       {!decisionsLoading && !decisionsError && decisions && decisions.length > 0 && !actionsLoading && (!actions || actions.length === 0) && (
         <div className="rounded-xl border border-dashed border-line p-8 text-center">
-          <p className="text-sm text-ink-500">当前决策下还没有行动项。</p>
+          <EmptyAction className="mx-auto h-16 w-16 text-ink-300" />
+          <p className="mt-3 text-sm font-medium text-ink-600">当前决策下还没有行动项</p>
           <p className="mt-1 text-xs text-ink-400">路径分析生成的验证行动会显示在这里。</p>
         </div>
       )}

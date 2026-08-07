@@ -10,7 +10,7 @@ const TIERS = [
 ];
 
 export function SubscriptionPage() {
-  const { data: sub, isLoading, isError } = useSubscription();
+  const { data: sub, isLoading, isError, refetch } = useSubscription();
   const upgrade = useUpgradeSubscription();
   const [payHtml, setPayHtml] = useState<string | null>(null);
   const [error, setError] = useState('');
@@ -41,7 +41,18 @@ export function SubscriptionPage() {
 
       {/* Current subscription */}
       {isLoading && <div className="h-16 animate-pulse rounded-xl bg-ink-100/40" />}
-      {isError && <div className="rounded-xl border border-line bg-surface p-4 text-center text-sm text-ink-500">加载订阅信息失败</div>}
+      {isError && (
+        <div className="rounded-xl border border-line bg-surface p-4 text-center text-sm text-ink-500">
+          <p>加载订阅信息失败</p>
+          <button
+            type="button"
+            onClick={() => void refetch()}
+            className="mt-3 rounded-lg bg-gradient-to-r from-brand-500 to-brand-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:shadow-[0_4px_12px_rgba(196,85,59,0.25)] hover:scale-[1.02] active:scale-95"
+          >
+            重试
+          </button>
+        </div>
+      )}
       {!isLoading && !isError && sub && (
         <div className="rounded-xl border border-accent-200 bg-accent-50/50 p-4">
           <div className="flex items-center justify-between">

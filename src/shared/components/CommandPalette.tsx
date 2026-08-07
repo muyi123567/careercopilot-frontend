@@ -95,7 +95,7 @@ export function CommandPalette() {
             <li key={item.to}>
               <button
                 onClick={() => handleSelect(item)}
-                className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${i === selected ? 'bg-accent-50 text-accent-700' : 'text-ink-700 hover:bg-ink-100/50'}`}
+                className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${i === selected ? 'bg-accent-50 text-accent-700' : 'text-ink-700 hover:bg-ink-50/40'}`}
               >
                 <span>{item.label}</span>
                 <span className="text-[10px] text-ink-400">{item.group}</span>

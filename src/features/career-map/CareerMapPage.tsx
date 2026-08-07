@@ -22,7 +22,7 @@ function GroupSection({ group, items, onSetTarget, targetSlug }: { group: string
       {open && (
         <ul className="divide-y divide-line border-t border-line">
           {items.slice(0, 8).map((occ) => (
-            <li key={occ.slug} className="group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-ink-100/30">
+            <li key={occ.slug} className="group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-ink-50/40">
               <span className={`h-2 w-2 shrink-0 rounded-full border ${occ.title === targetSlug ? 'border-accent-500 bg-accent-500' : 'border-ink-300'}`} aria-hidden="true" />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm text-ink-800">{occ.title}</p>

@@ -4,6 +4,7 @@ import { useNavigation } from '../../shared/state/navigation';
 import { PathTypeChip, UncertaintyPill, ClassificationTag } from '../../shared/components/ui/Badge';
 import { CoverageBadge } from '../../shared/components/provenance/CoverageBadge';
 import { DataInsufficientState, ErrorState, LoadingState } from '../../shared/components/states/FeedbackStates';
+import { EmptyDecision, EmptyMap } from '../../shared/components/illustrations/EmptyStates';
 import { evidenceDimensions } from '../../shared/api/labels';
 import type { CareerPath, Evidence, NavigationResult } from '../../shared/api/contract';
 
@@ -106,7 +107,8 @@ export function ResultsPage() {
   if (phase === 'idle') {
     return (
       <div className="flex flex-col items-center rounded-xl border border-dashed border-line bg-surface p-10 text-center">
-        <p className="text-sm font-medium text-ink-600">尚未生成账户态导航</p>
+        <EmptyMap className="h-20 w-20 text-ink-300" />
+        <p className="mt-3 text-sm font-medium text-ink-600">尚未生成账户态导航</p>
         <p className="mt-1 text-xs text-ink-400">先在工作台选择当前职业，生成账户态职业导航后再查看结果。</p>
         <button
           type="button"
@@ -289,9 +291,10 @@ export function ResultsPage() {
 
         {/* ===== Radar ===== */}
         {tab === 'radar' && (
-          <div className="card p-5">
-            <p className="eyebrow mb-1">中文职业市场雷达</p>
-            <p className="text-sm text-ink-500">市场数据暂不可用。数据服务接入后将展示来源、样本量和截止时间。</p>
+          <div className="card flex flex-col items-center p-5 text-center">
+            <EmptyMap className="h-16 w-16 text-ink-300" />
+            <p className="mt-3 text-sm font-semibold text-ink-700">市场数据暂不可用</p>
+            <p className="mt-1 text-sm text-ink-500">数据服务接入后将展示来源、样本量和截止时间。</p>
           </div>
         )}
 
@@ -302,8 +305,10 @@ export function ResultsPage() {
               <p className="eyebrow mb-1">决策复盘</p>
               <p className="text-sm text-ink-500">不可变的决策快照与后续检查点。历史建议不可被覆盖。</p>
             </div>
-            <div className="rounded-xl border border-dashed border-line p-6 text-center text-sm text-ink-500">
-              暂无已保存的决策快照。
+            <div className="flex flex-col items-center rounded-xl border border-dashed border-line p-6 text-center">
+              <EmptyDecision className="h-16 w-16 text-ink-300" />
+              <p className="mt-3 text-sm font-medium text-ink-600">暂无已保存的决策快照</p>
+              <p className="mt-1 text-xs text-ink-400">完成路径分析和行动实验后，决策快照会在这里沉淀。</p>
             </div>
           </div>
         )}

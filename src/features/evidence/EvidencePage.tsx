@@ -2,19 +2,30 @@ import { useState } from 'react';
 import { useNavigation } from '../../shared/state/navigation';
 import { EvidenceGradeBadge, ClassificationTag, UncertaintyPill } from '../../shared/components/ui/Badge';
 import { SourceList } from '../../shared/components/provenance/SourceList';
-import { EmptyState, LoadingState } from '../../shared/components/states/FeedbackStates';
+import { LoadingState } from '../../shared/components/states/FeedbackStates';
+import { EmptyEvidence } from '../../shared/components/illustrations/EmptyStates';
 import type { UserConfirmation } from '../../shared/api/contract';
+
+function EvidenceEmptyState({ title, hint }: { title: string; hint?: string }) {
+  return (
+    <div className="card p-8 text-center text-ink-500">
+      <EmptyEvidence className="mx-auto h-20 w-20 text-ink-300" />
+      <p className="mt-3 font-medium text-ink-700">{title}</p>
+      {hint && <p className="mt-1 text-sm">{hint}</p>}
+    </div>
+  );
+}
 
 export function EvidencePage() {
   const { phase, response } = useNavigation();
   const [confirmations, setConfirmations] = useState<Record<string, UserConfirmation>>({});
 
   if (phase === 'idle') {
-    return <EmptyState title="还没有证据可确认" hint="先在首页生成职业地图。" />;
+    return <EvidenceEmptyState title="还没有证据可确认" hint="先在首页生成职业地图。" />;
   }
   if (phase === 'loading') return <LoadingState />;
   if (!response || !response.data) {
-    return <EmptyState title="当前响应无证据" />;
+    return <EvidenceEmptyState title="当前响应无证据" hint="完成一次职业导航后，证据会在这里列出。" />;
   }
 
   const { evidence, sources } = response.data;
@@ -30,7 +41,7 @@ export function EvidencePage() {
       </div>
 
       {evidence.length === 0 ? (
-        <EmptyState title="暂无证据" hint="后端返回的数据不足或未包含证据项。" />
+        <EvidenceEmptyState title="暂无证据" hint="后端返回的数据不足或未包含证据项。" />
       ) : (
         <ul className="space-y-3">
           {evidence.map((e) => {

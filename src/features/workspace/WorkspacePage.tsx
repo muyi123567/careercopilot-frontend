@@ -307,7 +307,7 @@ export function WorkspacePage() {
                           <button
                             type="button"
                             onClick={() => { setSelectedOption(opt); setOccQuery(opt.label); }}
-                            className={`flex w-full items-center gap-2 px-3 py-2 text-left text-xs transition-colors hover:bg-brand-50 ${selectedOption?.code === opt.code ? 'bg-brand-50' : ''}`}
+                            className={`flex w-full items-center gap-2 px-3 py-2 text-left text-xs transition-colors hover:bg-ink-50/40 ${selectedOption?.code === opt.code ? 'bg-brand-50' : ''}`}
                           >
                             <span className="min-w-0 flex-1 truncate font-medium text-ink-800">{opt.label}</span>
                             <span className="shrink-0 rounded bg-ink-900/5 px-1.5 py-0.5 font-mono text-[10px] text-ink-500">{opt.code}</span>

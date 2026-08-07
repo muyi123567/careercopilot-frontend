@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
 import { publicFetch, ApiError } from '../../shared/api/fetch';
+import { EmptyEvidence } from '../../shared/components/illustrations/EmptyStates';
 
 interface Skill {
   name: string;
@@ -71,7 +72,10 @@ export function OccupationDetailPage() {
           <div className="flex flex-col items-center text-center">
             <svg className="h-12 w-12 text-red-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
             <p className="mt-3 text-sm text-red-700">{error}</p>
-            <button onClick={() => navigate('/occupations')} className="mt-4 rounded-full bg-ink-900 px-5 py-2 text-xs font-medium text-white hover:bg-ink-700">返回搜索</button>
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+              <button onClick={() => window.location.reload()} className="rounded-full bg-gradient-to-r from-brand-500 to-brand-600 px-5 py-2 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:shadow-[0_4px_12px_rgba(196,85,59,0.25)] hover:scale-[1.02] active:scale-95">重试</button>
+              <button onClick={() => navigate('/occupations')} className="rounded-full bg-ink-900 px-5 py-2 text-xs font-medium text-white hover:bg-ink-700">返回搜索</button>
+            </div>
           </div>
         </main>
       </div>
@@ -109,7 +113,11 @@ export function OccupationDetailPage() {
         <section className="mt-10">
           <h2 className="text-lg font-semibold text-ink-900">技能要求</h2>
           {skills.length === 0 ? (
-            <p className="mt-3 text-sm text-ink-400">暂无技能数据</p>
+            <div className="mt-3 flex flex-col items-center rounded-xl border border-dashed border-line p-8 text-center">
+              <EmptyEvidence className="h-16 w-16 text-ink-300" />
+              <p className="mt-3 text-sm font-medium text-ink-600">暂无技能数据</p>
+              <p className="mt-1 text-xs text-ink-400">该职业的技能要求将在数据服务补充后显示。</p>
+            </div>
           ) : (
             <ul className="mt-4 grid gap-3 sm:grid-cols-2">
               {skills.map((skill, i) => (

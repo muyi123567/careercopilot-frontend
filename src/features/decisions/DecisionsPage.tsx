@@ -87,7 +87,7 @@ export function DecisionsPage() {
         <div className="space-y-3">
           <p className="text-xs text-ink-400">共 {data.length} 条决策记录</p>
           {data.map((d) => (
-            <div key={d.id} className="rounded-xl border border-line bg-surface p-5 transition-colors hover:border-ink-200">
+            <div key={d.id} className="rounded-xl border border-line bg-surface p-5 transition-colors hover:bg-ink-50/40">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <h3 className="text-sm font-semibold text-ink-800">{d.title}</h3>

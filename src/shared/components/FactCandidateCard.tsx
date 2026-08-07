@@ -22,7 +22,7 @@ export function FactCandidateCard({ item }: { item: EvidenceItem }) {
   const status = STATUS_STYLES[item.status] ?? STATUS_STYLES.pending;
 
   return (
-    <div className="rounded-xl border border-line bg-surface p-4 transition-colors hover:border-ink-200">
+    <div className="rounded-xl border border-line bg-surface p-4 transition-colors hover:bg-ink-50/40">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">

@@ -86,7 +86,7 @@ export function SettingsPage() {
       <section>
         <h2 className="mb-3 text-sm font-semibold text-ink-800">订阅与积分</h2>
         <div className="divide-y divide-line rounded-xl border border-line bg-surface">
-          <Link to="/app/subscription" className="flex items-center justify-between px-5 py-4 transition-colors hover:bg-ink-100/30">
+          <Link to="/app/subscription" className="flex items-center justify-between px-5 py-4 transition-colors hover:bg-ink-50/40">
             <span className="text-sm text-ink-700">当前套餐</span>
             <span className="flex items-center gap-2 text-sm font-medium text-brand-600">{credits?.plan ?? 'free'}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4 text-ink-300"><path d="M9 5l7 7-7 7"/></svg></span>
           </Link>
@@ -94,7 +94,7 @@ export function SettingsPage() {
             <span className="text-sm text-ink-700">积分余额</span>
             <span className="text-sm font-semibold text-ink-900">{credits?.balance ?? '—'}</span>
           </div>
-          <Link to="/app/credits/history" className="flex items-center justify-between px-5 py-4 transition-colors hover:bg-ink-100/30">
+          <Link to="/app/credits/history" className="flex items-center justify-between px-5 py-4 transition-colors hover:bg-ink-50/40">
             <span className="text-sm text-ink-700">消费记录</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4 text-ink-300"><path d="M9 5l7 7-7 7"/></svg>
           </Link>
@@ -114,8 +114,8 @@ export function SettingsPage() {
       <section>
         <h2 className="mb-3 text-sm font-semibold text-ink-800">关于</h2>
         <div className="divide-y divide-line rounded-xl border border-line bg-surface">
-          <Link to="/privacy" className="flex items-center justify-between px-5 py-4 transition-colors hover:bg-ink-100/30"><span className="text-sm text-ink-700">隐私政策</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4 text-ink-300"><path d="M9 5l7 7-7 7"/></svg></Link>
-          <Link to="/terms" className="flex items-center justify-between px-5 py-4 transition-colors hover:bg-ink-100/30"><span className="text-sm text-ink-700">用户协议</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4 text-ink-300"><path d="M9 5l7 7-7 7"/></svg></Link>
+          <Link to="/privacy" className="flex items-center justify-between px-5 py-4 transition-colors hover:bg-ink-50/40"><span className="text-sm text-ink-700">隐私政策</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4 text-ink-300"><path d="M9 5l7 7-7 7"/></svg></Link>
+          <Link to="/terms" className="flex items-center justify-between px-5 py-4 transition-colors hover:bg-ink-50/40"><span className="text-sm text-ink-700">用户协议</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4 text-ink-300"><path d="M9 5l7 7-7 7"/></svg></Link>
           <div className="flex items-center justify-between px-5 py-4"><span className="text-sm text-ink-700">联系我们</span><span className="text-xs text-ink-400">support@evidway.cn</span></div>
           <div className="flex items-center justify-between px-5 py-4"><span className="text-sm text-ink-700">版本</span><span className="text-xs text-ink-400">0.1.0</span></div>
         </div>

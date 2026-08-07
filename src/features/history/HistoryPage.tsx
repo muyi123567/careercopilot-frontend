@@ -1,3 +1,5 @@
+import { EmptyDecision } from '../../shared/components/illustrations/EmptyStates';
+
 export function HistoryPage() {
   return (
     <div className="space-y-6">
@@ -7,8 +9,10 @@ export function HistoryPage() {
         <p className="mt-1 text-sm text-ink-500">登录后的持久化会话将在历史服务接入后显示；匿名会话仅存于浏览器内存，关闭后消失。</p>
       </div>
 
-      <div className="rounded-xl border border-dashed border-line p-8 text-center text-sm text-ink-500">
-        暂无已保存的会话记录。
+      <div className="flex flex-col items-center rounded-xl border border-dashed border-line p-8 text-center">
+        <EmptyDecision className="h-20 w-20 text-ink-300" />
+        <p className="mt-3 text-sm font-medium text-ink-700">暂无已保存的会话记录</p>
+        <p className="mt-1 text-xs text-ink-400">登录后的持久化会话将在历史服务接入后显示；匿名会话关闭后即消失。</p>
       </div>
 
       <p className="text-xs text-ink-400">生产数据不可用时显示明确空态，不使用隐藏演示数据。</p>

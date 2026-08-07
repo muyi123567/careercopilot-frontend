@@ -93,7 +93,7 @@ export function MemoryPage() {
         <div className="space-y-3">
           <p className="text-xs text-ink-400">找到 {data.length} 条记忆</p>
           {data.map((item) => (
-            <div key={item.id} className="rounded-xl border border-line bg-surface p-4 transition-colors hover:border-ink-200">
+            <div key={item.id} className="rounded-xl border border-line bg-surface p-4 transition-colors hover:bg-ink-50/40">
               <div className="flex items-center gap-2">
                 <span className="rounded-full bg-ink-100 px-2 py-0.5 text-[10px] font-medium text-ink-500">{item.type}</span>
                 <span className="rounded-full bg-accent-50 px-2 py-0.5 text-[10px] font-medium text-accent-600">{item.stage}</span>

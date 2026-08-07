@@ -167,7 +167,7 @@ export function DocumentsPage() {
           {data.map((doc) => {
             const st = STATUS_MAP[doc.status] ?? STATUS_MAP.uploaded;
             return (
-              <li key={doc.id} className="flex items-center gap-3 px-4 py-3.5">
+              <li key={doc.id} className="flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-ink-50/40">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-ink-100 text-[10px] font-bold text-ink-500">
                   {doc.doc_type?.slice(0, 4).toUpperCase() ?? 'FILE'}
                 </span>

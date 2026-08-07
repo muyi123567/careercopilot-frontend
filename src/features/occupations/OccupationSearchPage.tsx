@@ -97,7 +97,16 @@ export function OccupationSearchPage() {
 
         {/* Error */}
         {error && (
-          <div className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">{error}</div>
+          <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+            <p className="min-w-0 flex-1">{error}</p>
+            <button
+              type="button"
+              onClick={() => void doSearch(query)}
+              className="rounded-lg bg-gradient-to-r from-brand-500 to-brand-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:shadow-[0_4px_12px_rgba(196,85,59,0.25)] hover:scale-[1.02] active:scale-95"
+            >
+              重试
+            </button>
+          </div>
         )}
 
         {/* Results */}

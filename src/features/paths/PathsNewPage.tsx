@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useOccupations } from '../../shared/api/hooks';
 import { useGenerateDecision, useCreateDecisionCase, type GeneratedPath } from '../../shared/api/hooks-actions';
+import { EmptyMap } from '../../shared/components/illustrations/EmptyStates';
 
 const PATH_KIND_LABELS: Record<string, { label: string; cls: string; border: string }> = {
   deepen: { label: '本行深化', cls: 'bg-accent-50 text-accent-700 border-accent-200', border: 'border-accent-200' },
@@ -11,7 +12,7 @@ const PATH_KIND_LABELS: Record<string, { label: string; cls: string; border: str
 
 export function PathsNewPage() {
   const navigate = useNavigate();
-  const { data: occupations, isLoading: isLoadingOccupations, isError: isOccupationsError } = useOccupations();
+  const { data: occupations, isLoading: isLoadingOccupations, isError: isOccupationsError, refetch: refetchOccupations } = useOccupations();
   const generateDecision = useGenerateDecision();
   const createDecisionCase = useCreateDecisionCase();
 
@@ -82,7 +83,18 @@ export function PathsNewPage() {
                 <option key={occ.slug} value={occ.title}>{occ.title}</option>
               ))}
             </select>
-            {isOccupationsError && <p className="mt-1.5 text-xs text-red-600">职业目录加载失败，请稍后重试。</p>}
+            {isOccupationsError && (
+              <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                <p className="text-xs text-red-600">职业目录加载失败，请稍后重试。</p>
+                <button
+                  type="button"
+                  onClick={() => void refetchOccupations()}
+                  className="rounded-lg bg-gradient-to-r from-brand-500 to-brand-600 px-3 py-1 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:shadow-[0_4px_12px_rgba(196,85,59,0.25)] hover:scale-[1.02] active:scale-95"
+                >
+                  重试
+                </button>
+              </div>
+            )}
             {!isLoadingOccupations && !isOccupationsError && !occupations?.length && <p className="mt-1.5 text-xs text-ink-500">当前没有可用于路径分析的职业。</p>}
           </div>
           <div>
@@ -182,7 +194,9 @@ export function PathsNewPage() {
       {/* Empty result */}
       {paths && paths.length === 0 && (
         <div className="rounded-xl border border-dashed border-line p-8 text-center">
-          <p className="text-sm text-ink-500">未能生成路径分析，请尝试其他目标职业。</p>
+          <EmptyMap className="mx-auto h-16 w-16 text-ink-300" />
+          <p className="mt-3 text-sm font-medium text-ink-600">未能生成路径分析</p>
+          <p className="mt-1 text-xs text-ink-400">请尝试其他目标职业，或稍后重新分析。</p>
           <button onClick={() => setPaths(null)} className="mt-3 text-xs font-medium text-accent-600 hover:text-accent-700">重新选择</button>
         </div>
       )}
