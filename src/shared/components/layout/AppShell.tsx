@@ -160,14 +160,17 @@ function CookieBanner() {
 export function AppShell() {
   const { data: credits } = useCredits();
   const { data: unreadCount } = useUnreadCount();
+  const { user } = useCookieAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const allItems = NAV_GROUPS.flatMap((g) => g.items);
-  const currentLabel = location.pathname === '/app'
-    ? '工作台'
-    : allItems.find((i) => i.to === location.pathname)?.label ?? '';
+  const currentLabel =
+    location.pathname === '/app'
+      ? '工作台'
+      : allItems.find((i) => i.to === location.pathname || location.pathname.startsWith(i.to + '/'))?.label
+        ?? (location.pathname.startsWith('/app/check-ins') ? '行动实验' : '');
 
   return (
     <div className="flex min-h-[100dvh] bg-paper">
@@ -292,7 +295,7 @@ export function AppShell() {
 
             {/* Avatar (mobile - simple) */}
             <div className="flex h-7 w-7 items-center justify-center rounded-full bg-ink-900 text-[10px] font-medium text-white lg:hidden" aria-hidden="true">
-              {((() => { try { return ''; } catch { return 'U'; } })())}
+              {(user?.display_name ?? 'U').charAt(0).toUpperCase()}
             </div>
           </div>
         </header>
