@@ -89,7 +89,7 @@ export function LoginPage() {
           </button>
 
           {/* QQ login */}
-          <button type="button" onClick={() => showToast('QQ互联登录即将开放，敬请期待')} className="mb-4 flex w-full items-center justify-center gap-2 rounded-full border-[1.5px] border-[#12B7F5]/30 py-[0.7rem] text-sm font-medium text-[#12B7F5] transition-all duration-200 hover:border-[#12B7F5]/50 hover:bg-[#12B7F5]/[0.04] hover:shadow-[0_2px_12px_-3px_rgba(18,183,245,0.18)] hover:-translate-y-px active:scale-[0.97]">
+          <button type="button" onClick={() => showToast('QQ互联登录即将开放，敬请期待')} className="mb-4 flex w-full items-center justify-center gap-2 rounded-full border-[1.5px] border-[#12B7F5]/30 py-[0.7rem] text-sm font-medium text-[#12B7F5] transition-all duration-200 hover:border-[#12B7F5]/50 hover:bg-[#12B7F5]/[0.04] hover:shadow-[0_2px_12px_-3px_rgba(18,183,245,0.18)] hover:-translate-y-px">
             <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4"><path d="M12.003 2c-2.265 0-6.29 1.364-6.29 7.325v1.195S3.55 14.96 3.55 17.474c0 .665.17 1.025.281 1.025.114 0 .902-.484 1.748-2.072 0 0-.18 2.197 1.904 3.967 0 0-1.77.495-1.77 1.182 0 .686 4.078.43 6.29.43 2.215 0 6.293.256 6.293-.43 0-.687-1.772-1.182-1.772-1.182 2.087-1.77 1.906-3.967 1.906-3.967.847 1.588 1.634 2.072 1.746 2.072.111 0 .283-.36.283-1.025 0-2.514-2.166-6.954-2.166-6.954V9.325C18.293 3.364 14.268 2 12.003 2z"/></svg>
             QQ登录
           </button>

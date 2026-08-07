@@ -140,7 +140,7 @@ export function WorkspacePage() {
           const isDone = (p.id === 'input' && events.length > 0) || (p.id === 'signals' && events.length > 0) || (p.id === 'infer' && !!result);
           return (
             <button key={p.id} type="button" onClick={() => setActive(p.id)}
-              className={`flex min-w-[140px] flex-1 items-center gap-2.5 rounded-xl border px-3 py-2.5 text-left transition-all duration-300 active:scale-[0.97] sm:min-w-0 sm:px-4 sm:py-3 ${isActive ? 'border-brand-400 bg-brand-50/60 shadow-[0_2px_12px_-4px_rgba(226,114,91,0.2)]' : 'border-line bg-surface hover:border-brand-200 hover:bg-paper hover:shadow-sm'}`}>
+              className={`flex min-w-[140px] flex-1 items-center gap-2.5 rounded-xl border px-3 py-2.5 text-left transition-all duration-300 sm:min-w-0 sm:px-4 sm:py-3 ${isActive ? 'border-brand-400 bg-brand-50/60 shadow-[0_2px_12px_-4px_rgba(226,114,91,0.2)]' : 'border-line bg-surface hover:border-brand-200 hover:bg-paper hover:shadow-sm'}`}>
               <span className={`flex h-7 w-7 flex-none items-center justify-center rounded-full font-display text-xs font-bold transition-colors ${isActive ? 'bg-brand-600 text-white' : isDone ? 'bg-teal-600 text-white' : 'bg-ink-900/5 text-ink-500'}`}>
                 {isDone && !isActive ? '✓' : p.num}
               </span>
@@ -192,7 +192,7 @@ export function WorkspacePage() {
                   ))}
                 </ul>
                 <button type="button" onClick={() => setActive('infer')}
-                  className="group mt-auto inline-flex items-center justify-center gap-2 self-center rounded-full bg-brand-700 px-6 py-2.5 text-sm font-semibold text-white shadow-[0_4px_14px_-4px_rgba(181,71,46,0.3)] transition-all duration-300 hover:bg-brand-800 hover:shadow-[0_8px_24px_-6px_rgba(181,71,46,0.35)] hover:-translate-y-px active:scale-[0.97]">
+                  className="group mt-auto inline-flex items-center justify-center gap-2 self-center rounded-full bg-brand-700 px-6 py-2.5 text-sm font-semibold text-white shadow-[0_4px_14px_-4px_rgba(181,71,46,0.3)] transition-all duration-300 hover:bg-brand-800 hover:shadow-[0_8px_24px_-6px_rgba(181,71,46,0.35)] hover:-translate-y-px">
                   信号就绪，开始推演
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4 transition-transform group-hover:translate-x-[3px]"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
                 </button>
