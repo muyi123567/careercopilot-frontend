@@ -5,6 +5,16 @@
 @layer base {
   :root {
     color-scheme: light;
+    --primary:#C4553B;
+    --primary-foreground:#FFFFFF;
+    --secondary:#F0ECE6;
+    --secondary-foreground:#211D1A;
+    --foreground:#211D1A;
+    --muted:#F0ECE6;
+    --muted-foreground:#9A9088;
+    --destructive:#DC2626;
+    --destructive-foreground:#FFFFFF;
+    --radius-md:0.625rem;
   }
   html {
     -webkit-text-size-adjust: 100%;

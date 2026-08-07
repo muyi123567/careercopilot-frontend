@@ -39,6 +39,32 @@ export default {
           600: '#B45309',
           700: '#92400E',
         },
+        'accent-foreground': '#211D1A',
+        primary: {
+          DEFAULT: '#C4553B',
+          foreground: '#FFFFFF',
+        },
+        background: '#FFFFFF',
+        foreground: '#211D1A',
+        secondary: {
+          DEFAULT: '#F0ECE6',
+          foreground: '#211D1A',
+        },
+        muted: {
+          DEFAULT: '#F0ECE6',
+          foreground: '#9A9088',
+        },
+        destructive: {
+          DEFAULT: '#DC2626',
+          foreground: '#FFFFFF',
+        },
+        border: 'rgba(33,29,26,0.10)',
+        ring: '#D97706',
+        input: 'rgba(33,29,26,0.10)',
+        card: {
+          DEFAULT: '#FFFFFF',
+          foreground: '#211D1A',
+        },
         success: {
           50: '#ECFDF5',
           100: '#D1FAE5',
