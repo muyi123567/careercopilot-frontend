@@ -68,6 +68,18 @@ export function CookieAuthProvider({ children }: { children: ReactNode }) {
     })();
   }, []);
 
+  // Session expires mid-use: apiFetch dispatches 'auth:unauthorized'.
+  // Clear in-memory state + CSRF token so the app does not keep showing a
+  // stale authenticated shell after being redirected to /login.
+  useEffect(() => {
+    function handleUnauthorized() {
+      setUser(null);
+      clearCsrfToken();
+    }
+    window.addEventListener('auth:unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
+  }, []);
+
   const login = useCallback(async (email: string, password: string) => {
     setError(null);
     const apiBase = getApiBase();
