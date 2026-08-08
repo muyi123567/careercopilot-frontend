@@ -19,6 +19,10 @@ describe("C-EDU-01 private RAG UI", () => {
     expect(initialState().enabledIds).toEqual([]);
   });
 
+  it("treats undefined enabled as off by default", () => {
+    expect(defaultIsOff({ ...doc(), enabled: undefined as unknown as boolean })).toBe(true);
+  });
+
   it("requires explicit owner action to enable", () => {
     let state = initialState();
     state = { ...state, documents: [doc(false)] };

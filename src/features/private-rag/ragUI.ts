@@ -40,7 +40,7 @@ export function toggleEnable(state: RAGUiState, documentId: string): RAGUiState 
 }
 
 export function defaultIsOff(doc: PrivateDocSummary): boolean {
-  return doc.enabled === false;
+  return doc.enabled !== true;
 }
 
 export function citationLabels(citation: PrivateCitationView): string {
