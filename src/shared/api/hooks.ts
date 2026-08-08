@@ -226,7 +226,7 @@ export function useProfile() {
   return useQuery<UserProfile, ApiError>({
     queryKey: ['profile'],
     queryFn: async () => {
-      const res = await apiFetch('/api/v1/memory/profile');
+      const res = await apiFetch('/api/v1/profile');
       if (!res.ok) throw new ApiError(res.status, '获取档案失败');
       return res.json();
     },
@@ -237,7 +237,7 @@ export function useUpdateProfile() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (data: Partial<UserProfile>) => {
-      const res = await apiFetch('/api/v1/memory/profile', {
+      const res = await apiFetch('/api/v1/profile', {
         method: 'PUT',
         body: JSON.stringify(data),
       });
