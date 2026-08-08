@@ -49,6 +49,19 @@ export default function App() {
     return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
   }, [navigate]);
 
+  // Global api:error listener: navigate to the matching error page so the user
+  // sees a clear prompt for 403 (no permission), 429 (rate limit), 503 (down).
+  useEffect(() => {
+    function handleApiError(e: Event) {
+      const status = (e as CustomEvent<{ status?: number }>).detail?.status;
+      if (status === 403) navigate('/403');
+      else if (status === 429) navigate('/429');
+      else if (status === 503) navigate('/503');
+    }
+    window.addEventListener('api:error', handleApiError);
+    return () => window.removeEventListener('api:error', handleApiError);
+  }, [navigate]);
+
   return (
     <Suspense fallback={<RouteFallback />}>
       <Routes>
